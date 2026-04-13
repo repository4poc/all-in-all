@@ -1,0 +1,11 @@
+frontend:
+  image: myregistry.azurecr.io/frontend:latest
+  replicaCount: 2
+
+backend:
+  image: myregistry.azurecr.io/backend:latest
+  replicaCount: 2
+
+service:
+  type: ClusterIP
+  port: 80
