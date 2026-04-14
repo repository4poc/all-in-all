@@ -89,7 +89,7 @@ terraform destroy
 
 - Preferred: Resource Group level
 - Assign Contributor to a specific Resource Group
-- Use separate resource group per environment (dev/test/prod)
+- Use separate resource group per environment (dev/test/prod) and provide the access at RG level or - For state files, if you are using same storage group for state file, provide access to Service principal of each env. at the storage account level within the storage account. So Dev SP, can't impact tf state file in the stroage account for prod
 - Use separate Service Principal per environment (dev/test/prod)
 - Avoid sharing one SP across all environments
 - Prefer Managed Identity if Terraform runs inside Azure (DevOps, VM, ADO agent)
