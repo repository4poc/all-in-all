@@ -137,7 +137,9 @@ docker build -t frontend ./frontend
 ☸️ Deploy to local
 
 ```bash
-docker run -p 3000:80 frontend
+docker run -d -p 3000:80 frontend
+docker stop container-id
+docker ps (-a)
 ```
 
 ☸️ Deploy to AKS

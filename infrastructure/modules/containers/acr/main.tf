@@ -11,4 +11,9 @@ resource "azurerm_container_registry" "acr" {
   }
 
   tags = var.tags
+
+  # In case you dont't want acr to be delete from terraform 
+  lifecycle {
+    prevent_destroy = true
+  }
 }
