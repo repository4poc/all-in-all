@@ -138,7 +138,7 @@ docker build -t frontend ./frontend
 
 ```bash
 docker run -d -p 3000:80 frontend
-docker stop container-id
+docker stop [containerid]
 docker ps (-a)
 ```
 
@@ -155,4 +155,27 @@ Create .env files for:
 
 Backend
 Frontend
+```
+
+🧠 Enterprise naming principle
+
+Names should encode:
+
+<org/app>-<env>-<region>-<resource>-<instance>
+
+**Your case**
+
+```bash
+App: allinall
+Region: Sweden Central → swedencentral or short se
+Environments: dev / stage / prod
+Resource: AKS
+```
+
+✅ Recommended AKS naming (enterprise style)
+Option 1 — readable (most common)
+
+```bash
+name = "aks-allinall-dev-se-01"
+name = "aks-allinall-prod-se-01"
 ```

@@ -56,6 +56,19 @@ resource "azurerm_role_assignment" "acr_pull" {
 
 🔁 6. CI/CD pipeline design (IMPORTANT)
 
+🧱 Flow overview
+Developer → Git push → CI/CD → Build image → Push to ACR → Deploy
+
+👉 Humans don’t push images — pipelines do for all env.
+
+🟢 DEV environment (what’s acceptable)
+
+- Pipeline-based (recommended)
+  - Dev pushes code
+  - Pipeline builds Docker image
+  - Pipeline pushes to Azure Container Registry
+  - Dev environment deploys
+
 Step 1 — Build & push (dev)
 
 ```bash
@@ -140,6 +153,15 @@ data "azurerm_container_registry" "acr" {
   resource_group_name = "rg-shared-acr"
 }
 ```
+
+🧠 Why enterprises avoid manual pushes
+
+| Risk                   | Explanation                 |
+| ---------------------- | --------------------------- |
+| ❌ No traceability     | Who pushed what?            |
+| ❌ Security risk       | Credentials exposed         |
+| ❌ Inconsistent builds | Works on my machine problem |
+| ❌ No audit trail      | Compliance issue            |
 
 🔥 Final recommended flow
 

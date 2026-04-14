@@ -14,3 +14,15 @@ module "acr" {
     environment = "shared"
   }
 }
+
+module "aks" {
+  source = "../../modules/containers/aks"
+
+  name                = "dev"
+  resource_group_name = data.azurerm_resource_group.rg_acr.name
+  location            = data.azurerm_resource_group.rg_acr.location
+
+  tags = {
+    app = "all-in-all"
+  }
+}
