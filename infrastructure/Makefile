@@ -1,6 +1,6 @@
 dev:
-	cd infrastructure/environments/dev && terraform plan
-
+terraform init -backend-config=backend/dev.hcl
+terraform apply -var-file=envs/dev.tfvars
 staging:
 	cd infrastructure/environments/staging && terraform apply
 
