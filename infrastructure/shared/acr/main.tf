@@ -2,12 +2,22 @@ data "azurerm_resource_group" "rg_acr" {
   name     = "rg-shared"
 }
 
-module "acr" {
-  source = "../../modules/containers/acr"
-
+resource "azurerm_container_registry" "acr" {
   name                = "allinallacr"
   resource_group_name = data.azurerm_resource_group.rg_acr.name
   location            = data.azurerm_resource_group.rg_acr.location
+  sku                 = var.sku
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  admin_enabled = false
+
+  # In case you dont't want acr to be delete from terraform 
+  lifecycle {
+    prevent_destroy = false
+  }
 
   tags = {
     app = "all-in-all"
@@ -15,14 +25,15 @@ module "acr" {
   }
 }
 
-module "aks" {
-  source = "../../modules/containers/aks"
 
-  name                = "dev"
-  resource_group_name = data.azurerm_resource_group.rg_acr.name
-  location            = data.azurerm_resource_group.rg_acr.location
+output "acr_name" {
+  value = azurerm_container_registry.acr.name
+}
 
-  tags = {
-    app = "all-in-all"
-  }
+output "acr_id" {
+  value = azurerm_container_registry.acr.id
+}
+
+output "acr_login_server" {
+  value = azurerm_container_registry.acr.login_server
 }

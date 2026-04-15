@@ -1,3 +1,69 @@
+🧱 0. Prerequisites (DO THIS FIRST)
+
+Install:
+
+- Terraform
+- Azure CLI
+- kubectl
+- Helm
+- Docker
+
+---
+
+Login
+
+```bash
+az login
+az account set --subscription <your-subscription-id>
+
+```
+
+---
+
+🧱 1. Clone / Create Repo
+mkdir infrastructure
+
+cd infrastructure
+
+📁 2. Repository Structure (IMPLEMENT THIS)
+
+```bash
+infrastructure/
+  modules/
+    aks/
+      main.tf
+      variables.tf
+      outputs.tf
+    acr/
+      main.tf
+      variables.tf
+      outputs.tf
+
+  shared/
+    acr/
+      main.tf
+      backend.tf
+
+  envs/
+    dev/
+      main.tf
+      backend.tf
+      dev.tfvars
+    staging/
+    prod/
+
+  global/
+    variables.tf
+```
+
+🧱 2. Deploy Shared ACR (ONE TIME)
+
+infrastructure/shared/acr/main.tf
+
+terraform init -backend-config=backend/dev.hcl
+terraform plan -var-file=envs/dev.tfvars
+terraform apply -var-file=envs/dev.tfvars
+
 ### 🚀 Authenticate
 
 ## As per Best practices
@@ -114,3 +180,443 @@ terraform destroy
 | Prod        | AcrPull           |
 
 ![alt text](docs/ImpFiles.png)
+
+---
+
+🧱 1. Final Architecture
+
+👉 Use separate environments with strong isolation
+
+Best setup:
+
+```bash
+(BEST)
+
+Separate Azure subscriptions per environment specific resource group, shared resources like ACR will be in separate resource group and all Azure subscriptions has access to it with prevent delete restriction
+
+Shared (once)
+  └── ACR
+
+Environments (separate)
+  ├── dev
+  │    └── AKS
+  ├── staging
+  │    └── AKS
+  └── prod
+       └── AKS (private)
+```
+
+👉 CI/CD connects everything
+
+🧠 Should you use Terraform workspaces?
+
+❌ Short answer: NO (for your case)
+
+👉 Workspaces are not recommended for multi-environment infra like AKS
+
+Why enterprises avoid them
+
+```bash
+❌ Hard to manage state
+❌ Risk of deploying to wrong env
+❌ Poor visibility
+❌ Not CI/CD friendly at scale
+```
+
+✅ Instead use:
+
+```
+terraform apply -var-file=envs/dev.tfvars
+terraform apply -var-file=envs/prod.tfvars
+```
+
+👉 Separate:
+
+- state files
+- backend configs
+- pipelines
+
+🧱 3. ACR Module (shared)
+
+modules/acr/main.tf
+
+```bash
+resource "azurerm_container_registry" "acr" {
+  name                = var.name
+  resource_group_name = var.resource_group_name
+  location            = var.location
+  sku                 = "Standard"
+
+  admin_enabled = false
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  tags = var.tags
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
+```
+
+🛡️ 3. Security best practices (CRITICAL)
+
+🔐 Identity & access
+
+- Use Managed Identity (no service principals)
+- Disable local accounts:
+
+```
+local_account_disabled = true
+```
+
+🔐 Network security
+
+✅ Use private cluster (prod mandatory)
+
+```
+private_cluster_enabled = true
+```
+
+✅ Restrict API access
+
+```
+api_server_authorized_ip_ranges = ["your-office-ip"]
+```
+
+🔐 ACR integration
+
+Use kubelet identity:
+
+```
+role_definition_name = "AcrPull"
+```
+
+🔐 Secrets
+
+👉 Never store in Terraform
+
+Use:
+
+- Azure Key Vault
+- CSI driver in AKS
+
+🔐 RBAC
+
+Enable Azure AD RBAC:
+
+```
+role_based_access_control_enabled = true
+```
+
+💰 4. Cost optimization (VERY important)
+
+🟢 Dev cluster
+Small nodes:
+
+```
+Standard_B2s / B4ms
+```
+
+- Auto shutdown (optional)
+- Minimal node count
+
+🟡 Staging
+
+- Medium nodes
+- Autoscaling enabled
+
+🔴 Prod
+
+Autoscaling (MANDATORY)
+
+- enable_auto_scaling = true
+- min_count = 2
+- max_count = 5
+
+Clean unused resources
+
+- Enable cluster autoscaler
+- Remove unused namespaces/images
+
+🧱 5. Cluster design (ENTERPRISE)
+
+✅ Node pools per workload
+
+- system pool → core services
+- user pool → apps
+
+🌍 6. High availability (prod)
+
+- Use multiple availability zones:
+
+📊 7. Monitoring (MANDATORY)
+
+Enable:
+
+- Azure Monitor
+- Log Analytics
+
+🧠 8. ACR + AKS integration (your case)
+
+Since you use shared Azure Container Registry:
+
+👉 Grant only pull
+
+```
+role_definition_name = "AcrPull"
+```
+
+🏢 9. Enterprise Terraform structure
+
+```
+shared/
+  acr/
+
+envs/
+  dev/
+  staging/
+  prod/
+```
+
+👉 Separate:
+
+- state
+- pipelines
+- permissions
+
+🔁 10. CI/CD flow
+
+```bash
+Code → Build → Push to ACR → Deploy to AKS
+
+```
+
+- No manual deploy to prod
+- Use approvals for prod
+
+🚀 Final recommendation for YOU
+
+✔ Do this
+
+- ❌ No Terraform workspaces
+- ✅ Use tfvars per env
+- ✅ Shared ACR
+- ✅ Separate AKS per env
+- ✅ Private cluster (at least prod)
+- ✅ Managed identity
+- ✅ Autoscaling
+
+🔥 Simple blueprint
+
+```bash
+ACR (shared)
+
+AKS-dev     → cheap, flexible
+AKS-staging → realistic
+AKS-prod    → secure, HA
+```
+
+📁 2. Terraform repo structure (enterprise)
+
+```bash
+infrastructure/
+  modules/
+    aks/
+    acr/
+
+  shared/
+    acr/
+
+  envs/
+    dev/
+      main.tf
+      backend.tf
+      dev.tfvars
+    staging/
+    prod/
+
+  global/
+    variables.tf
+
+```
+
+🧱 3. AKS module (production-ready baseline)
+modules/aks/main.tf
+
+```bash
+resource "azurerm_kubernetes_cluster" "aks" {
+  name                = var.name
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  dns_prefix          = var.dns_prefix
+
+  private_cluster_enabled = var.private_cluster_enabled
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  default_node_pool {
+    name                = "system"
+    vm_size             = var.vm_size
+    enable_auto_scaling = true
+    min_count           = var.min_count
+    max_count           = var.max_count
+  }
+
+  role_based_access_control_enabled = true
+
+  oms_agent {
+    log_analytics_workspace_id = var.log_analytics_workspace_id
+  }
+
+  tags = var.tags
+}
+```
+
+🧪 4. Dev vs Prod configuration
+
+🟢 dev.tfvars
+
+```
+name                = "aks-allinall-dev-se-01"
+location            = "swedencentral"
+resource_group_name = "rg-allinall-dev-se"
+dns_prefix          = "allinall-dev-se"
+
+vm_size  = "Standard_B2s"
+min_count = 1
+max_count = 2
+
+private_cluster_enabled = false
+```
+
+🔴 prod.tfvars
+
+```
+name                = "aks-allinall-prod-se-01"
+location            = "swedencentral"
+resource_group_name = "rg-allinall-prod-se"
+dns_prefix          = "allinall-prod-se"
+
+vm_size  = "Standard_DS2_v2"
+min_count = 2
+max_count = 5
+
+private_cluster_enabled = true
+```
+
+🔐 5. ACR ↔ AKS integration (critical)
+
+In AKS module:
+
+```
+resource "azurerm_role_assignment" "acr_pull" {
+  principal_id         = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
+  role_definition_name = "AcrPull"
+  scope                = var.acr_id
+}
+```
+
+👉 Secure, no passwords needed
+
+🚀 6. CI/CD Pipeline (GitHub Actions example)
+
+.github/workflows/deploy.yml
+
+```
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Build & Push Image
+        run: |
+          az acr login --name myacr
+          docker build -t myacr.azurecr.io/myapp:${{ github.sha }} .
+          docker push myacr.azurecr.io/myapp:${{ github.sha }}
+
+      - name: Deploy to AKS
+        run: |
+          az aks get-credentials --name aks-allinall-dev-se-01 --resource-group rg-allinall-dev-se
+          kubectl set image deployment/myapp myapp=myacr.azurecr.io/myapp:${{ github.sha }}
+```
+
+🔁 7. Promotion flow (enterprise)
+
+```
+dev → staging → prod
+```
+
+Use:
+
+```
+az acr import \
+  --name myacr \
+  --source myacr.azurecr.io/myapp:<build-id> \
+  --image myapp:prod-<build-id>
+```
+
+👉 No rebuild → same artifact everywhere
+
+🛡️ 8. Security checklist
+MUST DO:
+
+```
+✅ Private AKS (prod)
+✅ Managed Identity
+✅ Disable admin user on ACR
+✅ Use Azure Key Vault
+✅ Network policies
+✅ RBAC enabled
+```
+
+💰 9. Cost optimization
+
+```
+
+| Env     | Strategy           |
+| ------- | ------------------ |
+| dev     | small nodes, no HA |
+| staging | moderate           |
+| prod    | autoscale + HA      |
+```
+
+🌍 10. Networking (advanced but recommended)
+
+- VNet per environment
+- Private endpoints for ACR
+- Private AKS API server
+
+🚀 Final architecture summary
+
+```
+ACR (shared)
+
+AKS-dev     → cheap + flexible
+AKS-staging → realistic testing
+AKS-prod    → secure + HA + private
+```
+
+```
+
+```

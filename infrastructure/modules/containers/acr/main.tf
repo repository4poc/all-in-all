@@ -1,22 +1,30 @@
+data "azurerm_resource_group" "rg_acr" {
+  name     = "rg-shared"
+}
+
 resource "azurerm_container_registry" "acr" {
   name                = "allinallacr"
-  resource_group_name = var.resource_group_name
-  location            = var.location
+  resource_group_name = data.azurerm_resource_group.rg_acr.name
+  location            = var.region
   sku                 = var.sku
-
-  admin_enabled = false
 
   identity {
     type = "SystemAssigned"
   }
 
-  tags = var.tags
+  admin_enabled = false
 
   # In case you dont't want acr to be delete from terraform 
   lifecycle {
     prevent_destroy = false
   }
+
+  tags = {
+    app = "all-in-all"
+    environment = "shared"
+  }
 }
+
 
 output "acr_name" {
   value = azurerm_container_registry.acr.name

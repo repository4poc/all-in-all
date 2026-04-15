@@ -1,7 +1,8 @@
+appname = "allinall"
 environment = "prod"
-region      = "eu-west-1"
+region      = "swedencentral"
 
-instance_type = "m5.large"
-db_size       = "db.m5.large"
+instance_type = "t3.micro"
+db_size       = "db.t3.micro"
 
 enable_monitoring = true

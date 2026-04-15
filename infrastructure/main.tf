@@ -15,5 +15,16 @@ provider "azurerm" {
 }
 
 module "acr" {
-  source = "./shared/acr"
+  source = "./modules/containers/acr"
+  region = var.region
+  resource_group_name = "rg_shared"
+}
+
+module "aks" {
+  source = "./modules/containers/aks"
+  env = var.environment
+  appname = var.appname
+  region = var.region
+  resource_group_name = var.environment
+  acr_id = module.acr.acr_id
 }

@@ -1,5 +1,6 @@
+appname = "allinall"
 environment = "dev"
-region      = "eu-west-1"
+region      = "swedencentral"
 
 instance_type = "t3.micro"
 db_size       = "db.t3.micro"

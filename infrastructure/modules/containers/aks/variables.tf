@@ -1,10 +1,7 @@
-variable "name" {}
 variable "resource_group_name" {}
-variable "location" {}
-variable "sku" {
-  default = "Basic"
-}
-variable "tags" {
-  type = map(string)
-  default = {}
+variable "region" {}
+variable "appname" {}
+variable "env" {}
+variable "acr_id" {
+  type = string
 }
