@@ -9,14 +9,18 @@ variable "region" {
   type = string
 }
 
-variable "instance_type" {
-  type = string
-}
-
-variable "db_size" {
-  type = string
-}
-
 variable "enable_monitoring" {
   type = bool
 }
+
+variable "system_node_count" {}
+variable "aks_sys_nodepool_vm_size" {}
+
+variable "aks_app_nodepool_vm_size" {}
+variable "apps_min" {}
+variable "apps_max" {}
+variable "backend_min" {}
+variable "backend_max" {}
+
+
+variable "tags" {}

@@ -60,9 +60,21 @@ infrastructure/
 
 infrastructure/shared/acr/main.tf
 
+```bash
 terraform init -backend-config=backend/dev.hcl
 terraform plan -var-file=envs/dev.tfvars
 terraform apply -var-file=envs/dev.tfvars
+```
+
+🧱 4. Connect to AKS
+
+```
+az aks get-credentials \
+  --name aks-allinall-dev-se-01 \
+  --resource-group rg-allinall-dev-se
+
+kubectl get nodes
+```
 
 ### 🚀 Authenticate
 

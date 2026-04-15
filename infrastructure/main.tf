@@ -27,4 +27,12 @@ module "aks" {
   region = var.region
   resource_group_name = var.environment
   acr_id = module.acr.acr_id
+  system_node_count = var.system_node_count
+  aks_sys_nodepool_vm_size = var.aks_sys_nodepool_vm_size
+  aks_app_nodepool_vm_size = var.aks_app_nodepool_vm_size
+  apps_min = var.apps_min
+  apps_max = var.apps_max
+  backend_min = var.backend_min
+  backend_max = var.backend_max
+  tags = var.tags
 }
