@@ -3,3 +3,4 @@ variable "region" {}
 variable "sku" {
   default = "Basic"
 }
+variable "tags" {}

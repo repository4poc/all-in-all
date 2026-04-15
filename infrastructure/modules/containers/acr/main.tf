@@ -20,11 +20,16 @@ resource "azurerm_container_registry" "acr" {
   }
 
   tags = {
-    app = "all-in-all"
     environment = "shared"
   }
 }
 
+resource "azurerm_management_lock" "acr_lock" {
+  name       = "acr-delete-lock"
+  scope      = azurerm_container_registry.acr.id
+  lock_level = "CanNotDelete"
+  notes      = "Prevent accidental deletion of ACR"
+}
 
 output "acr_name" {
   value = azurerm_container_registry.acr.name

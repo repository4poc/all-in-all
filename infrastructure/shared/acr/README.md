@@ -13,7 +13,55 @@ Environments
 
 👉 ACR is provisioned once, everything else consumes it
 
-📁 2. Terraform structure (recommended)
+For shared infra (like your ACR):
+
+✔ Grant:
+
+- Reader at subscription level
+- Contributor at RG level
+
+👉 This avoids these issues entirely
+
+ACR Protection (FIRST line of defense)
+
+```
+✔ Terraform
+✅ 1. Use lifecycle.prevent_destroy
+
+✔ Azure
+🛡️ 2. Azure Resource Lock (STRONG protection) as Terraform can be bypassed — Azure lock cannot.
+
+✔ Architecture
+Separate state for shared infra
+```
+
+Lock Types
+
+```
+| Type         | Effect                 |
+| ------------ | ---------------------- |
+| CanNotDelete | ✅ Prevent delete      |
+| ReadOnly     | 🚫 Prevent all changes |
+
+```
+
+👉 Someone deletes ACR → all envs break
+
+🔥 Pro tip (used in enterprises)
+
+For shared resources:
+
+Separate backend/state
+Separate pipeline
+Restricted RBAC
+
+👉 Treat them like “platform layer”
+
+---
+
+📁 2. Architecture best practice (MOST important)
+
+👉 Separate shared infra from env Terraform
 
 ```bash
 terraform/
