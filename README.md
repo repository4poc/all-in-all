@@ -161,7 +161,21 @@ Frontend
 
 Names should encode:
 
-<org/app>-<env>-<region>-<resource>-<instance>
+```
+<service>-<app>-<env>-<region>-<instance>
+
+name = "aks-allinall-dev-se-01"
+
+```
+
+Azure CAF style (very popular in enterprises)
+
+```
+<app>-<env>-<service>-<region>-<instance>
+
+name = "allinall-dev-aks-se-01"
+
+```
 
 **Your case**
 
