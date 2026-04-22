@@ -1,8 +1,10 @@
 appname = "allinall"
 environment = "dev"
+region = "swedencentral"
 
 # AKS Cluster
 sku_tier = "Free"
+private_cluster_enabled = false
 
 # AKS System node pool
 aks_sys_nodepool_vm_size = "Standard_B2s"

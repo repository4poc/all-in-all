@@ -14,6 +14,9 @@ variable "enable_monitoring" {
 }
 
 variable "sku_tier" {}
+variable "private_cluster_enabled" {
+  type = bool
+}
 
 
 variable "system_node_count" {}

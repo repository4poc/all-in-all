@@ -4,8 +4,7 @@ region      = "swedencentral"
 
 # AKS Cluster
 sku_tier = "Standard"
-vnet_address_space = ["10.244.0.0/16"]
-subnet_address_space = ["10.244.1.0/22"]
+private_cluster_enabled = true
 
 # AKS System node pool
 aks_sys_nodepool_vm_size = "Standard_D2s_v2"
