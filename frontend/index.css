@@ -53,3 +53,55 @@ p {
   list-style: none;
   gap: 2rem;
 }
+
+.pricing-container {
+  color: white;
+  border: 1px solid black;
+  position: relative;
+  top: 100px;
+  display: flex;
+  gap: 50px;
+  flex-basis: 150px;
+  justify-content: center;
+}
+
+@media (max-width: 1250px) {
+  .pricing-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+}
+
+.pricing-plan {
+  border: 1px solid white;
+  border-radius: 5%;
+  background-color: azure;
+  color: black;
+  text-align: center;
+  width: 250px;
+}
+
+.plan-title {
+  font-size: 21px;
+}
+
+.plan-price {
+  font-size: 33px;
+}
+
+.plan-features {
+  list-style: none;
+  text-align: left;
+}
+
+.plan-button {
+  background-color: orange;
+  border: none;
+  width: 40%;
+  border-radius: 10%;
+  text-align: center;
+  color: white;
+}
