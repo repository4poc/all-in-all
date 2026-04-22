@@ -47,6 +47,9 @@ p {
 
 #navbar > ul {
   display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+
   list-style: none;
   gap: 2rem;
 }
