@@ -18,6 +18,8 @@ az account set --subscription <your-subscription-id>
 
 ```
 
+- Separate Azure subscriptions per env
+
 ---
 
 🧱 1. Clone / Create Repo

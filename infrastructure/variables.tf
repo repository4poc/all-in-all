@@ -14,6 +14,8 @@ variable "enable_monitoring" {
 }
 
 variable "sku_tier" {}
+
+
 variable "system_node_count" {}
 variable "aks_sys_nodepool_vm_size" {}
 

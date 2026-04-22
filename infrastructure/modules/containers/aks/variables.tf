@@ -11,6 +11,7 @@ variable "acr_id" {
 
 ## AKS
 variable "sku_tier" {}
+
 variable "aks_sys_nodepool_vm_size" {}
 variable "aks_app_nodepool_vm_size" {}
 variable "system_node_count" {}

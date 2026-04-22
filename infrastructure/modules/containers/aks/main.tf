@@ -13,6 +13,9 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
   sku_tier = var.sku_tier
 
+  # Infrastructure Resource Group
+  node_resource_group = "rg-${var.appname}-${var.env}-aks-infra"
+
   # Automatically upgrades Kubernetes minor versions
   automatic_upgrade_channel = var.kube_version_upgrade
   #Automatically updates node OS and VM image

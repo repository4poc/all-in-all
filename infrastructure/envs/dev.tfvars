@@ -1,11 +1,14 @@
 appname = "allinall"
 environment = "dev"
-region      = "swedencentral"
 
+# AKS Cluster
+sku_tier = "Free"
+
+# AKS System node pool
 aks_sys_nodepool_vm_size = "Standard_B2s"
 system_node_count = 1
-sku_tier        = "Free"
 
+# AKS User node pool (app node pool)
 aks_app_nodepool_vm_size = "Standard_B2s"
 apps_min     = 1
 apps_max     = 1
