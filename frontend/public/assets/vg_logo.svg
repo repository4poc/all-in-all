@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-label="Readable gold VG logo">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#111111"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7a3f00"/>
+      <stop offset="18%" stop-color="#f3bd45"/>
+      <stop offset="38%" stop-color="#fff3a8"/>
+      <stop offset="58%" stop-color="#d88b13"/>
+      <stop offset="78%" stop-color="#ffd76a"/>
+      <stop offset="100%" stop-color="#8b4800"/>
+    </linearGradient>
+
+    <linearGradient id="shine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="45%" stop-color="#ffffff" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+
+    <pattern id="hearts" width="72" height="72" patternUnits="userSpaceOnUse">
+      <text x="10" y="24" font-size="22" fill="#ffffff" opacity="0.13">♥</text>
+      <text x="44" y="58" font-size="20" fill="#ffffff" opacity="0.08">♥</text>
+    </pattern>
+
+    <filter id="dropShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="16" stdDeviation="14" flood-color="#000000" flood-opacity="0.75"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="800" fill="url(#bg)"/>
+  <rect width="1200" height="800" fill="url(#hearts)"/>
+
+  <!-- Decorative background diamonds -->
+  <g opacity="0.12" fill="#ffffff">
+    <rect x="146" y="98" width="42" height="42" transform="rotate(24 167 119)"/>
+    <rect x="962" y="118" width="34" height="34" transform="rotate(24 979 135)"/>
+    <rect x="192" y="615" width="32" height="32" transform="rotate(24 208 631)"/>
+    <rect x="1005" y="618" width="46" height="46" transform="rotate(24 1028 641)"/>
+  </g>
+
+  <!-- Main readable VG lettering -->
+  <g filter="url(#dropShadow)">
+    <text x="600" y="530"
+          text-anchor="middle"
+          font-family="Georgia, 'Times New Roman', serif"
+          font-size="520"
+          font-style="italic"
+          font-weight="700"
+          letter-spacing="-18"
+          fill="url(#gold)"
+          stroke="#2b1600"
+          stroke-width="10"
+          paint-order="stroke fill">
+      VG
+    </text>
+
+    <!-- thin bright edge for clarity -->
+    <text x="600" y="530"
+          text-anchor="middle"
+          font-family="Georgia, 'Times New Roman', serif"
+          font-size="520"
+          font-style="italic"
+          font-weight="700"
+          letter-spacing="-18"
+          fill="none"
+          stroke="#ffe995"
+          stroke-width="2"
+          opacity="0.9">
+      VG
+    </text>
+  </g>
+
+  <!-- subtle shine band across letters -->
+  <text x="600" y="530"
+        text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="520"
+        font-style="italic"
+        font-weight="700"
+        letter-spacing="-18"
+        fill="url(#shine)"
+        opacity="0.35">
+    VG
+  </text>
+</svg>
