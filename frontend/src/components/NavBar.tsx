@@ -6,13 +6,13 @@ function NavBar() {
         data-bs-theme="dark"
       >
         <div className="container-fluid">
-          <a class="navbar-brand" href="#">
+          <a className="navbar-brand" href="#">
             <img
               src="/public/assets/vg_logo.svg"
               alt="Logo"
               width="30"
               height="25"
-              class="d-inline-block align-text-top"
+              className="d-inline-block align-text-top"
             />
           </a>
 
@@ -31,7 +31,7 @@ function NavBar() {
           <div className="collapse navbar-collapse" id="navbarNavDropdown">
             <ul className="navbar-nav">
               <li className="nav-item">
-                <a className="nav-link active" aria-current="page" href="#">
+                <a className="nav-link active" aria-current="page" href="/">
                   Home
                 </a>
               </li>
@@ -61,8 +61,8 @@ function NavBar() {
 
                 <ul className="dropdown-menu">
                   <li>
-                    <a className="dropdown-item" href="#">
-                      Action
+                    <a className="dropdown-item" href="/dice">
+                      Dice Game
                     </a>
                   </li>
                   <li>
