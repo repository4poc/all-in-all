@@ -1,24 +1,24 @@
 import NavBar from "./components/NavBar";
-import Carousel from "./components/Carousel";
-import Feature from "./components/Feature";
-import Hero from "./components/Hero";
 import Footer from "./components/Footer";
-import Mozac from "./components/Mozaic";
-import Poster from "./components/Poster";
-import PricingBox from "./components/PricingBox";
-import Card from "./components/Card";
+import { Route, Routes } from "react-router-dom";
+import Home from "./components/Home";
+import Dice from "./components/Dice";
+import Drum from "./components/Drum";
 
 function App() {
   return (
     <>
       <NavBar />
-      <Hero />
-      <Feature />
-      <Carousel />
-      <Mozac />
-      <Poster />
-      <PricingBox />
-      <Card />
+
+      <main>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/dice" element={<Dice />} />
+          <Route path="/drum" element={<Drum />} />
+          <Route path="/contact" element={<Home />} />
+        </Routes>
+      </main>
+
       <br></br>
       <br></br>
       <br></br>

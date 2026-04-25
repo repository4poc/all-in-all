@@ -10,8 +10,8 @@ function NavBar() {
             <img
               src="/public/assets/vg_logo.svg"
               alt="Logo"
-              width="30"
-              height="25"
+              width="40"
+              height="40"
               className="d-inline-block align-text-top"
             />
           </a>
@@ -56,7 +56,7 @@ function NavBar() {
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  Dropdown link
+                  Games
                 </a>
 
                 <ul className="dropdown-menu">
@@ -66,8 +66,8 @@ function NavBar() {
                     </a>
                   </li>
                   <li>
-                    <a className="dropdown-item" href="#">
-                      Another action
+                    <a className="dropdown-item" href="/drum">
+                      Drump Game
                     </a>
                   </li>
                   <li>

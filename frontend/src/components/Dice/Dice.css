@@ -1,0 +1,26 @@
+#dice-container {
+  text-align: center;
+  width: 70%;
+}
+
+h1 {
+  font-family: "Lobster", cursive;
+  font-size: 8rem;
+  color: #42ce9f;
+  margin-top: 50px;
+}
+
+.dice {
+  display: inline-block;
+  gap: 20px;
+}
+
+p {
+  font-size: 2rem;
+  color: #4ecca3;
+  font-family: "Indie Flower", cursive;
+}
+
+img {
+  width: 50%;
+}
