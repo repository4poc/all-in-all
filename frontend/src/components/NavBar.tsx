@@ -71,8 +71,8 @@ function NavBar() {
                     </a>
                   </li>
                   <li>
-                    <a className="dropdown-item" href="#">
-                      Something else here
+                    <a className="dropdown-item" href="/qrcode">
+                      QR Code Generator
                     </a>
                   </li>
                 </ul>

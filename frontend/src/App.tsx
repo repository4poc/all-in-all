@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./components/Home";
 import Dice from "./components/Dice";
 import Drum from "./components/Drum";
+import QRGenerator from "./components/QRGenerator";
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/dice" element={<Dice />} />
           <Route path="/drum" element={<Drum />} />
-          <Route path="/contact" element={<Home />} />
+          <Route path="/qrcode" element={<QRGenerator />} />
         </Routes>
       </main>
 

@@ -217,3 +217,19 @@ img {
   object-fit: cover; /* fills button nicely */
   border-radius: 10px; /* optional */
 }
+
+.qr-container {
+  text-align: center;
+}
+
+.qrcode {
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  margin-bottom: 20px;
+}
+
+.qrcode img {
+  width: 200px;
+  height: 200px;
+}
