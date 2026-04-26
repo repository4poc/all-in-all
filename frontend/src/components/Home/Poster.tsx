@@ -1,7 +1,10 @@
 function Poster() {
   return (
-    <div class="poster">
-      <img src="/assets/img1.jpg" alt="My image"></img>
+    <div className="poster">
+      <img
+        src="\assets\shiraito-waterfall-autumn-japan.jpg"
+        alt="My image"
+      ></img>
       <h1>Vision</h1>
       <p>
         A clear vision, backed by definite plans, gives you a tremendous feeling

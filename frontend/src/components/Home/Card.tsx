@@ -10,7 +10,7 @@ function Card() {
           backgroundColor: "lightgrey",
         }}
       >
-        <img src="..." className="card-img-top" alt="..." />
+        <img src="/assets/img1.jpg" className="card-img-top" alt="..." />
 
         <div className="card-body">
           <h5 className="card-title">Card title</h5>
@@ -20,7 +20,7 @@ function Card() {
             bulk of the card’s content.
           </p>
           <div id="flex-container-button">
-            <a href="#" className="btn btn-success">
+            <a href="/assets/img1.jpg" className="btn btn-success">
               Submit
             </a>
             <button type="button" className="btn btn-danger">
