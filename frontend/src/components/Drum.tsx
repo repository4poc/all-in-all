@@ -1,4 +1,7 @@
 function Drum() {
+  document.addEventListener("keypress", function (e) {
+    console.log(e);
+  });
   const keys = ["crash", "kick", "snare", "tom1", "tom2", "tom3", "tom4"];
 
   const handleClick = (key: string) => {
