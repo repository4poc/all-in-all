@@ -1,6 +1,6 @@
 function Mozac() {
   return (
-    <div class="mozaic">
+    <div className="mozaic">
       <div id="div1">1</div>
       <div id="div2">2</div>
       <div id="3">3</div>
