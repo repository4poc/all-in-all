@@ -117,7 +117,7 @@ jobs:
       - name: Docker login to ACR
         uses: azure/docker-login@v2
         with:
-          login-server: ${{ env.ACR_LOGIN_SERVER }}
+          login-server: ${{ secrets.ACR_LOGIN_SERVER }}
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
 
@@ -132,12 +132,12 @@ jobs:
           push: false
           load: true
           tags: |
-            ${{ env.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+            ${{ secrets.ACR_LOGIN_SERVER }}/frontend:${{ github.sha }}
 
       - name: Scan image with Trivy
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ env.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          image-ref: ${{ secrets.ACR_LOGIN_SERVER }}/frontend:${{ github.sha }}
           format: sarif
           output: trivy-results.sarif
           severity: CRITICAL,HIGH
@@ -156,8 +156,8 @@ jobs:
           file: frontend/Dockerfile
           push: true
           tags: |
-            ${{ env.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
-            ${{ env.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:main
+            ${{ secrets.ACR_LOGIN_SERVER }}/frontend:${{ github.sha }}
+            ${{ secrets.ACR_LOGIN_SERVER }}/frontend:main
           labels: |
             org.opencontainers.image.source=${{ github.repository }}
             org.opencontainers.image.revision=${{ github.sha }}
