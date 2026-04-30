@@ -14,6 +14,13 @@ provider "azurerm" {
   features {}
 }
 
+
+# Create a resource group
+resource "azurerm_resource_group" "rg" {
+  name     = var.environment
+  location = "West Europe"
+}
+
 module "acr" {
   source              = "./modules/containers/acr"
   region              = var.region
@@ -26,7 +33,7 @@ module "aks" {
   env                      = var.environment
   appname                  = var.appname
   region                   = var.region
-  resource_group_name      = var.environment
+  resource_group_name      = azurerm_resource_group.rg.name
   acr_id                   = module.acr.acr_id
   system_node_count        = var.system_node_count
   aks_sys_nodepool_vm_size = var.aks_sys_nodepool_vm_size
