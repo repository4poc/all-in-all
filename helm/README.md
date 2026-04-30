@@ -78,3 +78,10 @@ For ArgoCD
 
 helm repo add argo https://argoproj.github.io/argo-helm
 ```
+
+### How to use Kustomization.yaml, but when using ArgoCD we donot use Kustomization
+
+To execute kustomization.yaml
+
+1. cd all-in-all/helm/frontend/templates
+2. $ kubectl apply -k .
