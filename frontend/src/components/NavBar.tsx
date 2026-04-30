@@ -8,7 +8,7 @@ function NavBar() {
         <div className="container-fluid">
           <a className="navbar-brand" href="#">
             <img
-              src="/public/assets/vg_logo.svg"
+              src="/assets/vg_logo.svg"
               alt="Logo"
               width="40"
               height="40"
