@@ -1,5 +1,5 @@
 # ---------- Build stage ----------
-FROM node:22-alpine AS build
+FROM node:22-alpine3.22 AS build
 
 WORKDIR /app
 
@@ -11,7 +11,7 @@ RUN npm run build
 
 
 # ---------- Runtime stage ----------
-FROM nginx:1.27-alpine
+FROM nginx:1.29-alpine3.22
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
