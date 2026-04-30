@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apps-deployment
+  namespace: apps
+  labels:
+    app: apps
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: apps
+
+  template:
+    metadata:
+      labels:
+        app: apps
+        workload: apps
+
+    spec:
+      nodeSelector:
+        workload: apps
+
+      tolerations:
+        - key: "workload"
+          operator: "Equal"
+          value: "apps"
+          effect: "NoSchedule"
+
+      containers:
+        - name: apps-container
+          image: myacr.azurecr.io/apps:latest
+
+          ports:
+            - containerPort: 80
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 15
+            periodSeconds: 20

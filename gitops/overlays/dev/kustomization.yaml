@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base/namespaces
+  - ../../base/apps
+  - ../../base/backend
+
+images:
+  - name: myacr.azurecr.io/apps
+    newTag: dev-latest
+  - name: myacr.azurecr.io/backend
+    newTag: dev-latest

@@ -1,0 +1,6 @@
+namespace: all-in-all
+
+resources:
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
