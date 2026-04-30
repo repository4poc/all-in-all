@@ -4,16 +4,16 @@ function Dice() {
   const [result, setResult] = useState("");
 
   const handleClick = () => {
-    var randomNumber1 = Math.floor(Math.random() * 6) + 1; //1-6
-    var randomDiceImage = "dice" + randomNumber1 + ".png"; //dice1.png - dice6.png
-    var randomImageSource = "/assets/dices/" + randomDiceImage; //images/dice1.png - images/dice6.png
-    var image1 = document.querySelectorAll("#dice1")[0];
+    const randomNumber1 = Math.floor(Math.random() * 6) + 1; //1-6
+    const randomDiceImage = "dice" + randomNumber1 + ".png"; //dice1.png - dice6.png
+    const randomImageSource = "/assets/dices/" + randomDiceImage; //images/dice1.png - images/dice6.png
+    const image1 = document.querySelectorAll("#dice1")[0];
     image1.setAttribute("src", randomImageSource);
 
-    var randomNumber2 = Math.floor(Math.random() * 6) + 1;
-    var randomDiceImage2 = "dice" + randomNumber2 + ".png";
-    var randomImageSource2 = "/assets/dices/" + randomDiceImage2;
-    var image2 = document.querySelectorAll("#dice2")[0];
+    const randomNumber2 = Math.floor(Math.random() * 6) + 1;
+    const randomDiceImage2 = "dice" + randomNumber2 + ".png";
+    const randomImageSource2 = "/assets/dices/" + randomDiceImage2;
+    const image2 = document.querySelectorAll("#dice2")[0];
     image2.setAttribute("src", randomImageSource2);
 
     //If player 1 wins
