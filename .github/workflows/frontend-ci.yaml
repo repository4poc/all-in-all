@@ -16,9 +16,9 @@ jobs:
       - uses: actions/checkout@v2
       - uses: azure/docker-login@v1
         with:
-          login-server: cloudquicklabs.azureacr.io
+          login-server: allinallacr.azurecr.io
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - run: |
-          docker build . -t cloudquicklabs.azureacr.io/frontend:${{ github.sha }}
-          docker push cloudquicklabs.azureacr.io/frontend:${{ github.sha }}
+          docker build ../../frontend/Dockerfile -t allinallacr.azurecr.io/frontend:${{ github.sha }}
+          docker push allinallacr.azurecr.io/frontend:${{ github.sha }}
