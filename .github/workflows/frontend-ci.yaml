@@ -20,5 +20,5 @@ jobs:
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - run: |
-          docker build -f frontend/Dockerfile -t allinallacr.azurecr.io/frontend:${{ github.sha }}
+          docker build -f frontend/Dockerfile -t allinallacr.azurecr.io/frontend:${{ github.sha }} frontend
           docker push allinallacr.azurecr.io/frontend:${{ github.sha }}
