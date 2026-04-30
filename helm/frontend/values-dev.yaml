@@ -1,0 +1,11 @@
+replicaCount: 1
+
+image:
+  tag: "dev"
+
+ingress:
+  host: frontend-dev.example.com
+
+pdb:
+  enabled: true
+  minAvailable: 1

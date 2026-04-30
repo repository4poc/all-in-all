@@ -85,3 +85,56 @@ To execute kustomization.yaml
 
 1. cd all-in-all/helm/frontend/templates
 2. $ kubectl apply -k .
+
+### How to use helm for manual deployment
+
+```
+For Dev
+
+helm upgrade --install frontend ./helm/frontend -n apps -f ./helm/frontend/values-dev.yaml
+
+For Prod
+
+helm upgrade --install frontend ./helm/frontend -n apps -f ./helm/frontend/values-prod.yaml
+
+
+helm uninstall frontend -n apps
+```
+
+### ArgoCD Implementation
+
+```
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: frontend
+  namespace: argocd
+spec:
+  source:
+    repoURL: https://github.com/your-org/gitops-repo.git
+    targetRevision: main
+    path: apps/frontend
+    helm:
+      valueFiles:
+        - values-dev.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: apps
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+```
+
+Your helm chart contains
+
+```
+apps/frontend/
+  Chart.yaml
+  values-dev.yaml
+  templates/
+    deployment.yaml
+    service.yaml
+    ingress.yaml
+    pdb.yaml
+```
