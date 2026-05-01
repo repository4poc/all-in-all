@@ -51,6 +51,17 @@ resource "azurerm_kubernetes_cluster" "aks" {
   tags = var.tags
 }
 
+resource "kubernetes_namespace_v1" "apps" {
+  metadata {
+    name = "apps"
+  }
+
+  depends_on = [
+    azurerm_kubernetes_cluster.aks
+  ]
+}
+
+
 resource "azurerm_kubernetes_cluster_node_pool" "apps" {
   name                  = "apps"
   kubernetes_cluster_id = azurerm_kubernetes_cluster.aks.id
@@ -97,9 +108,9 @@ resource "azurerm_kubernetes_cluster_node_pool" "backend" {
 
   mode = "User"
 
-  node_labels = {
-    workload = "backend"
-  }
+  #  node_labels = {
+  #   workload = "backend"
+  #}
 
   lifecycle {
     ignore_changes = [
@@ -111,9 +122,9 @@ resource "azurerm_kubernetes_cluster_node_pool" "backend" {
     max_surge = "33%"
   }
 
-  node_taints = [
-    "workload=backend:NoSchedule"
-  ]
+  #node_taints = [
+  #  "workload=backend:NoSchedule"
+  #]
 
   zones = (var.sku_tier == "standard") ? ["1", "2", "3"] : null
 

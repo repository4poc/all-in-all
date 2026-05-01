@@ -29,7 +29,7 @@ spec:
 
       containers:
         - name: apps-container
-          image: myacr.azurecr.io/apps:latest
+          image: allinallacr.azurecr.io/frontend:main
 
           ports:
             - containerPort: 80

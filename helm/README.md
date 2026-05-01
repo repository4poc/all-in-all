@@ -66,7 +66,7 @@ On Windows:
 
 4. helm repo list
 
-5. helm search repo bitnami | findstr nginx (grep for linux)
+5. helm search repo bitnami | findstr argocd (grep for linux)
 
 6. helm install my-nginx bitnami/nginx -n <namespace> (my-nginx = release)
 
@@ -76,7 +76,13 @@ On Windows:
 ```
 For ArgoCD
 
-helm repo add argo https://argoproj.github.io/argo-helm
+1. helm repo add argo https://argoproj.github.io/argo-helm
+
+2. helm search repo argo | findstr argocd
+
+3. helm install argocd-deployment argo/argocd-apps -n argocd
+
+4. kubectl port-forward service/argocd-server 8080:443 -n argocd
 ```
 
 ### How to use Kustomization.yaml, but when using ArgoCD we donot use Kustomization

@@ -14,8 +14,9 @@ Login
 
 ```bash
 az login
+az acccount list
 az account set --subscription <your-subscription-id>
-
+az account show
 ```
 
 - Separate Azure subscriptions per env
@@ -66,6 +67,7 @@ infrastructure/shared/acr/main.tf
 terraform init -backend-config=backend/dev.hcl
 terraform plan -var-file=envs/dev.tfvars
 terraform apply -var-file=envs/dev.tfvars
+terraform destroy -var-file=envs/dev.tfvars
 ```
 
 🧱 4. Connect to AKS

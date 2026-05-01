@@ -4,7 +4,7 @@ metadata:
   name: apps-service
   namespace: apps
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: apps
   ports:
