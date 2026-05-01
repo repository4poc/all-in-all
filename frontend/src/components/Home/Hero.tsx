@@ -5,7 +5,8 @@ function Hero() {
 
       <div className="col-lg-8 mx-auto">
         <p className="lead mb-4">
-          In every walk with nature, one receives far more than he seeks more...
+          In every walk with nature, one receives far more than he seeks more
+          and more...
         </p>
       </div>
 
