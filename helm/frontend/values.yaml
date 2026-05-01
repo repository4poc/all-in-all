@@ -1,6 +1,6 @@
 image:
   repository: allinallacr.azurecr.io/frontend
-  tag: "latest"
+  tag: "main"
 
 service:
   port: 80
