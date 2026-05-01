@@ -1,7 +1,8 @@
-replicaCount: 1
-
 image:
-  tag: "dev"
+  repository: allinallacr.azurecr.io/frontend
+  tag: "main"
+
+replicaCount: 1
 
 ingress:
   host: frontend-dev.example.com
