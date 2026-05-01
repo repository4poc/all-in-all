@@ -29,8 +29,8 @@ spec:
 
       containers:
         - name: apps-container
-          image: allinallacr.azurecr.io/frontend:main
-
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
 
