@@ -14,21 +14,6 @@ provider "azurerm" {
   features {}
 }
 
-provider "kubernetes" {
-  host                   = module.aks.kube_config[0].host
-  client_certificate     = base64decode(module.aks.kube_config[0].client_certificate)
-  client_key             = base64decode(module.aks.kube_config[0].client_key)
-  cluster_ca_certificate = base64decode(module.aks.kube_config[0].cluster_ca_certificate)
-}
-
-provider "helm" {
-  kubernetes = {
-    host                   = module.aks.kube_config[0].host
-    client_certificate     = base64decode(module.aks.kube_config[0].client_certificate)
-    client_key             = base64decode(module.aks.kube_config[0].client_key)
-    cluster_ca_certificate = base64decode(module.aks.kube_config[0].cluster_ca_certificate)
-  }
-}
 
 
 # Create a resource group
@@ -38,6 +23,7 @@ resource "azurerm_resource_group" "rg" {
 }
 
 module "acr" {
+  count               = 0 # Skipped , put it to 1
   source              = "./modules/containers/acr"
   region              = var.region
   resource_group_name = "rg_shared"
@@ -45,12 +31,13 @@ module "acr" {
 }
 
 module "aks" {
+  count                    = 0 # Skipped , put it to 1
   source                   = "./modules/containers/aks"
   env                      = var.environment
   appname                  = var.appname
   region                   = var.region
   resource_group_name      = azurerm_resource_group.rg.name
-  acr_id                   = module.acr.acr_id
+  acr_id                   = module.acr[0].acr_id
   system_node_count        = var.system_node_count
   aks_sys_nodepool_vm_size = var.aks_sys_nodepool_vm_size
   aks_app_nodepool_vm_size = var.aks_app_nodepool_vm_size
@@ -63,3 +50,12 @@ module "aks" {
   tags                     = var.tags
 }
 
+module "databricks" {
+  source              = "./modules/dataanalytics/databricks"
+  appname             = var.appname
+  environment         = var.environment
+  tags                = var.tags
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = var.region
+  sku_tier            = "premium"
+}
