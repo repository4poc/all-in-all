@@ -4,7 +4,7 @@ image:
   tag: "PROD_IMAGE_TAG_REPLACED_BY_CI"
 
 ingress:
-  host: frontend.example.com
+  host: backendexpress.example.com
 
 resources:
   requests:

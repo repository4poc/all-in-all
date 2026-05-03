@@ -1,11 +1,11 @@
 image:
-  repository: allinallacr.azurecr.io/backend/express
+  repository: allinallacr.azurecr.io/backendexpress
   tag: "main"
 
 replicaCount: 1
 
 ingress:
-  host: backendapp-dev.example.com
+  host: backendexpress-dev.example.com
 
 pdb:
   enabled: true

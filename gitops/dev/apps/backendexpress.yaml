@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: backend
+  name: backendexpress
   namespace: argocd
 spec:
   project: default
@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: https://github.com/repository4poc/all-in-all.git
     targetRevision: main
-    path: helm/backend
+    path: helm/backendexpress
     helm:
       valueFiles:
         - values-dev.yaml
