@@ -57,9 +57,6 @@ jobs:
       - name: Run tests
         run: npm test --if-present -- --watch=false
 
-      - name: Build backend/express
-        run: npm run start
-
       - name: Run npm audit
         run: npm audit --audit-level=high
 
