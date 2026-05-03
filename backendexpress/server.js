@@ -25,6 +25,12 @@ app.get("/", (req, res) => {
   res.json({ message: "API is running" });
 });
 
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "healthy",
+  });
+});
+
 // Get all questions
 app.get("/api/questions", (req, res) => {
   res.json(questions);
