@@ -1,5 +1,4 @@
 resource "kubernetes_namespace_v1" "argocd" {
-  count = 1 # Skipped , put it to 1
   metadata {
     name = "argocd"
   }
@@ -10,10 +9,8 @@ resource "kubernetes_namespace_v1" "argocd" {
 }
 
 resource "helm_release" "argocd" {
-  count = 1 # Skipped , put it to 1
-
   name      = "argocd"
-  namespace = kubernetes_namespace_v1.argocd[0].metadata[0].name
+  namespace = kubernetes_namespace_v1.argocd.metadata[0].name
 
   repository = "https://argoproj.github.io/argo-helm"
   chart      = "argo-cd"
