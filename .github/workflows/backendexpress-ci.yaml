@@ -1,18 +1,18 @@
-name: Backend CI
+name: backendexpress CI
 
 on:
   pull_request:
     branches: ["main"]
     paths:
-      - "backend/express/**"
-      - ".github/workflows/backend-express-ci.yaml"
-      - "helm/**"
+      - "backendexpress/**"
+      - ".github/workflows/backendexpress-ci.yaml"
+      - "helm/backendexpress/**"
 
   push:
     branches: ["main"]
     paths:
-      - "backend/**"
-      - ".github/workflows/backend-express-ci.yaml"
+      - "backendexpress/**"
+      - ".github/workflows/backendexpress-ci.yaml"
 
 permissions:
   contents: read
@@ -21,7 +21,7 @@ permissions:
 
 env:
   ACR_LOGIN_SERVER: allinallacr.azurecr.io
-  IMAGE_NAME: backend-express
+  IMAGE_NAME: backendexpress
   NODE_VERSION: "20"
 
 jobs:
@@ -31,7 +31,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: backend/express
+        working-directory: backendexpress
         shell: bash
 
     steps:
@@ -43,7 +43,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
-          cache-dependency-path: backend/express/package-lock.json
+          cache-dependency-path: backendexpress/package-lock.json
 
       - name: Install dependencies
         run: npm ci
@@ -125,17 +125,17 @@ jobs:
       - name: Build Docker image locally
         uses: docker/build-push-action@v6
         with:
-          context: backend/express
-          file: backend/express/Dockerfile
+          context: backendexpress
+          file: backendexpress/Dockerfile
           push: false
           load: true
           tags: |
-            ${{ secrets.ACR_LOGIN_SERVER }}/backend/express:${{ github.sha }}
+            ${{ secrets.ACR_LOGIN_SERVER }}/backendexpress:${{ github.sha }}
 
       #      - name: Scan image with Trivy
       #        uses: aquasecurity/trivy-action@master
       #        with:
-      #          image-ref: ${{ secrets.ACR_LOGIN_SERVER }}/backend/express:${{ github.sha }}
+      #          image-ref: ${{ secrets.ACR_LOGIN_SERVER }}/backendexpress:${{ github.sha }}
       #          format: sarif
       #          output: trivy-results.sarif
       #          severity: CRITICAL,HIGH
@@ -150,12 +150,12 @@ jobs:
       - name: Push Docker image
         uses: docker/build-push-action@v6
         with:
-          context: backend
-          file: backend/express/Dockerfile
+          context: backendexpress
+          file: backendexpress/Dockerfile
           push: true
           tags: |
-            ${{ secrets.ACR_LOGIN_SERVER }}/backend/express:${{ github.sha }}
-            ${{ secrets.ACR_LOGIN_SERVER }}/backend/express:main
+            ${{ secrets.ACR_LOGIN_SERVER }}/backendexpress:${{ github.sha }}
+            ${{ secrets.ACR_LOGIN_SERVER }}/backendexpress:main
           labels: |
             org.opencontainers.image.source=${{ github.repository }}
             org.opencontainers.image.revision=${{ github.sha }}
