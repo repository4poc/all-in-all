@@ -125,7 +125,7 @@ jobs:
       - name: Build Docker image locally
         uses: docker/build-push-action@v6
         with:
-          context: backend
+          context: backend/express
           file: backend/express/Dockerfile
           push: false
           load: true
