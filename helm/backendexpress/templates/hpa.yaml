@@ -1,16 +1,16 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: backendapp-hpa
+  name: backendexpress-hpa
   namespace: apps
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: backendapp-deployment
+    name: backendexpress-deployment
 
-  minReplicas: 3
-  maxReplicas: 10
+  minReplicas: 1
+  maxReplicas: 1
 
   metrics:
     - type: Resource

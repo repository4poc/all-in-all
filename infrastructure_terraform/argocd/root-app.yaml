@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: https://github.com/repository4poc/all-in-all.git
     targetRevision: main
-    path: gitops/base/apps
+    path: gitops/dev/apps
 
   destination:
     server: https://kubernetes.default.svc

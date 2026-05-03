@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: apps-deployment
+  name: backendexpress-deployment
   namespace: apps
   labels:
-    app: apps
+    app: backendexpress
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: apps
+      app: backendexpress
 
   template:
     metadata:
       labels:
-        app: apps
+        app: backendexpress
         workload: apps
 
     spec:
@@ -28,7 +28,7 @@ spec:
           effect: "NoSchedule"
 
       containers:
-        - name: apps-container
+        - name: backendexpress-container
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: Always
           ports:
