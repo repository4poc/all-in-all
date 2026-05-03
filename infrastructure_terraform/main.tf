@@ -23,7 +23,7 @@ resource "azurerm_resource_group" "rg" {
 }
 
 module "acr" {
-  count               = 0 # Skipped , put it to 1
+  count               = 1 # Skipped , put it to 1
   source              = "./modules/containers/acr"
   region              = var.region
   resource_group_name = "rg_shared"
@@ -51,6 +51,7 @@ module "aks" {
 }
 
 module "databricks" {
+  count               = 0 # Skipped , put it to 1
   source              = "./modules/dataanalytics/databricks"
   appname             = var.appname
   environment         = var.environment
