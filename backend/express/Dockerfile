@@ -1,10 +1,10 @@
-FROM node:20-alpine
+# ---------- Build stage ----------
+FROM node:22-alpine3.22
 
 WORKDIR /app
 
 COPY package*.json ./
-
-RUN npm install
+RUN npm ci --only=production
 
 COPY . .
 
