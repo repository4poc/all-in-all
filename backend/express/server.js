@@ -48,7 +48,7 @@ app.post("/api/submit", (req, res) => {
   const question = questions.find((q) => q.id === Number(questionId));
 
   if (!question) {
-    return res.status(404).json({ message: "Question not found" });
+    return res.status(404).json({ message: "Question is not found" });
   }
 
   const isCorrect =
