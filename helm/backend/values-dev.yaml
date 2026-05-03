@@ -1,0 +1,12 @@
+image:
+  repository: allinallacr.azurecr.io/backend/express
+  tag: "main"
+
+replicaCount: 1
+
+ingress:
+  host: backendapp-dev.example.com
+
+pdb:
+  enabled: true
+  minAvailable: 1
