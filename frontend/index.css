@@ -233,3 +233,11 @@ img {
   width: 200px;
   height: 200px;
 }
+
+#capitalquiz-div {
+  background-image: url(/assets/background.jpg);
+  width: 100%;
+  text-align: center;
+  background-repeat: no-repeat;
+  background-size: auto;
+}

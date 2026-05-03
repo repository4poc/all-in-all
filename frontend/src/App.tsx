@@ -5,6 +5,8 @@ import Home from "./components/Home";
 import Dice from "./components/Dice";
 import Drum from "./components/Drum";
 import QRGenerator from "./components/QRGenerator";
+import CapitalQuizGame from "./components/CapitalQuiz";
+import CapitalQuiz from "./components/CapitalQuiz";
 
 function App() {
   return (
@@ -17,6 +19,7 @@ function App() {
           <Route path="/dice" element={<Dice />} />
           <Route path="/drum" element={<Drum />} />
           <Route path="/qrcode" element={<QRGenerator />} />
+          <Route path="/capitalquiz" element={<CapitalQuiz />} />
         </Routes>
       </main>
 

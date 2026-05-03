@@ -75,6 +75,11 @@ function NavBar() {
                       QR Code Generator
                     </a>
                   </li>
+                  <li>
+                    <a className="dropdown-item" href="/capitalquiz">
+                      Capital Quiz Game
+                    </a>
+                  </li>
                 </ul>
               </li>
             </ul>
