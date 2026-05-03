@@ -31,7 +31,7 @@ module "acr" {
 }
 
 module "aks" {
-  count                    = 0 # Skipped , put it to 1
+  count                    = 1 # Skipped , put it to 1
   source                   = "./modules/containers/aks"
   env                      = var.environment
   appname                  = var.appname
