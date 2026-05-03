@@ -5,7 +5,6 @@ import Home from "./components/Home";
 import Dice from "./components/Dice";
 import Drum from "./components/Drum";
 import QRGenerator from "./components/QRGenerator";
-import CapitalQuizGame from "./components/CapitalQuiz";
 import CapitalQuiz from "./components/CapitalQuiz";
 
 function App() {
