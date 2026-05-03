@@ -11,8 +11,8 @@ on:
   push:
     branches: ["main"]
     paths:
-      - "frontend/**"
-      - ".github/workflows/frontend-ci.yaml"
+      - "backend/**"
+      - ".github/workflows/backend-express-ci.yaml"
 
 permissions:
   contents: read
@@ -21,7 +21,7 @@ permissions:
 
 env:
   ACR_LOGIN_SERVER: allinallacr.azurecr.io
-  IMAGE_NAME: frontend
+  IMAGE_NAME: backend-express
   NODE_VERSION: "20"
 
 jobs:
@@ -31,7 +31,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: frontend
+        working-directory: backend/express
         shell: bash
 
     steps:
@@ -43,7 +43,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
-          cache-dependency-path: frontend/package-lock.json
+          cache-dependency-path: backend/express/package-lock.json
 
       - name: Install dependencies
         run: npm ci
@@ -57,7 +57,7 @@ jobs:
       - name: Run tests
         run: npm test --if-present -- --watch=false
 
-      - name: Build frontend
+      - name: Build backend/express
         run: npm run build
 
       - name: Run npm audit
@@ -128,17 +128,17 @@ jobs:
       - name: Build Docker image locally
         uses: docker/build-push-action@v6
         with:
-          context: frontend
-          file: frontend/Dockerfile
+          context: backend
+          file: backend/express/Dockerfile
           push: false
           load: true
           tags: |
-            ${{ secrets.ACR_LOGIN_SERVER }}/frontend:${{ github.sha }}
+            ${{ secrets.ACR_LOGIN_SERVER }}/backend/express:${{ github.sha }}
 
       #      - name: Scan image with Trivy
       #        uses: aquasecurity/trivy-action@master
       #        with:
-      #          image-ref: ${{ secrets.ACR_LOGIN_SERVER }}/frontend:${{ github.sha }}
+      #          image-ref: ${{ secrets.ACR_LOGIN_SERVER }}/backend/express:${{ github.sha }}
       #          format: sarif
       #          output: trivy-results.sarif
       #          severity: CRITICAL,HIGH
@@ -153,12 +153,12 @@ jobs:
       - name: Push Docker image
         uses: docker/build-push-action@v6
         with:
-          context: frontend
-          file: frontend/Dockerfile
+          context: backend
+          file: backend/express/Dockerfile
           push: true
           tags: |
-            ${{ secrets.ACR_LOGIN_SERVER }}/frontend:${{ github.sha }}
-            ${{ secrets.ACR_LOGIN_SERVER }}/frontend:main
+            ${{ secrets.ACR_LOGIN_SERVER }}/backend/express:${{ github.sha }}
+            ${{ secrets.ACR_LOGIN_SERVER }}/backend/express:main
           labels: |
             org.opencontainers.image.source=${{ github.repository }}
             org.opencontainers.image.revision=${{ github.sha }}
