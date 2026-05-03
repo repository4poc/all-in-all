@@ -1,10 +1,10 @@
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
-  name: backendapp-pdb
+  name: backendexpress-pdb
   namespace: apps
 spec:
   minAvailable: 1
   selector:
     matchLabels:
-      app: backendapp
+      app: backendexpress
