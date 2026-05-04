@@ -1,10 +1,18 @@
-const express = require("express");
-const cors = require("cors");
+import express from "express";
+import bodyParser from "body-parser";
+import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = 3000;
 
 app.use(cors());
+
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 let questions = [
@@ -21,51 +29,31 @@ let questions = [
 ];
 
 // Health check
-app.get("/", (req, res) => {
-  res.json({ message: "API is running" });
-});
-
 app.get("/health", (req, res) => {
   res.status(200).json({
     status: "healthy",
   });
 });
 
-// Get all questions
-app.get("/api/questions", (req, res) => {
-  res.json(questions);
-});
-
-// Get one question
-app.get("/api/questions/:id", (req, res) => {
-  const question = questions.find((q) => q.id === Number(req.params.id));
-
-  if (!question) {
-    return res.status(404).json({ message: "Question not found" });
-  }
-
-  res.json(question);
-});
-
 // Submit answer
 app.post("/api/submit", (req, res) => {
-  const { questionId, answer } = req.body;
+  const { country, capital } = req.body;
 
-  const question = questions.find((q) => q.id === Number(questionId));
+  const isCountryPresent = questions.find((q) => q.country === country);
 
-  if (!question) {
-    return res.status(404).json({ message: "Question is not found" });
+  if (!isCountryPresent) {
+    return res.status(404).json({ message: "country is not found" });
   }
 
-  const isCorrect =
-    question.capital.toLowerCase() === answer.trim().toLowerCase();
+  const isCapitalPresent = questions.find((q) => q.capital === capital);
 
-  res.json({
-    correct: isCorrect,
-    correctAnswer: question.capital,
-  });
+  if (!isCapitalPresent) {
+    return res.status(404).json({ message: "country - capital mismatch" });
+  }
+
+  return res.status(200).json({ message: "You won" });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+app.listen(3000, "0.0.0.0", () => {
+  console.log("Backend running on port 3000");
 });

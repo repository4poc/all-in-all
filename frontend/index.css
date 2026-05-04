@@ -241,3 +241,17 @@ img {
   background-repeat: no-repeat;
   background-size: auto;
 }
+
+#quiz-form {
+  background-color: #ce425c;
+  width: 50%;
+  margin-left: 25%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+}
+
+.form-signin {
+  max-width: 330px;
+  padding: 1rem;
+}

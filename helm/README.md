@@ -83,6 +83,8 @@ For ArgoCD
 3. helm install argocd-deployment argo/argocd-apps -n argocd
 
 4. kubectl port-forward service/argocd-server 8080:443 -n argocd
+
+5. kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d && echo
 ```
 
 ### How to use Kustomization.yaml, but when using ArgoCD we donot use Kustomization
@@ -98,6 +100,8 @@ To execute kustomization.yaml
 For Dev
 
 helm upgrade --install frontend ./helm/frontend -n apps -f ./helm/frontend/values-dev.yaml
+
+helm upgrade --install backendexpress ./helm/backendexpress -n apps -f ./helm/backendexpress/values-dev.yaml
 
 For Prod
 

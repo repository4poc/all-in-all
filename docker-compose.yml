@@ -1,0 +1,18 @@
+services:
+  backend:
+    build:
+      context: ./backendexpress
+    container_name: backendexpress
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
