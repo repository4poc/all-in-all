@@ -10,7 +10,7 @@ spec:
     name: apps-deployment
 
   minReplicas: 1
-  maxReplicas: 10
+  maxReplicas: 1
 
   metrics:
     - type: Resource
