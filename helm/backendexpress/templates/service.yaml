@@ -4,7 +4,7 @@ metadata:
   name: backendexpress-service
   namespace: apps
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: backendexpress
   ports:

@@ -133,6 +133,8 @@ jobs:
           file: frontend/Dockerfile
           push: false
           load: true
+          build-args: |
+            NGINX_CONF=nginx.aks.conf
           tags: |
             ${{ secrets.ACR_LOGIN_SERVER }}/frontend:${{ github.sha }}
 
@@ -157,6 +159,8 @@ jobs:
           context: frontend
           file: frontend/Dockerfile
           push: true
+          build-args: |
+            NGINX_CONF=nginx.aks.conf
           tags: |
             ${{ secrets.ACR_LOGIN_SERVER }}/frontend:${{ github.sha }}
             ${{ secrets.ACR_LOGIN_SERVER }}/frontend:main

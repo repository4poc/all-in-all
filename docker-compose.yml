@@ -1,5 +1,5 @@
 services:
-  backend:
+  backendexpress:
     build:
       context: ./backendexpress
     container_name: backendexpress
@@ -10,9 +10,11 @@ services:
   frontend:
     build:
       context: ./frontend
+      args:
+        NGINX_CONF: nginx.local.conf
     container_name: frontend
     ports:
       - "80:80"
     depends_on:
-      - backend
+      - backendexpress
     restart: unless-stopped
