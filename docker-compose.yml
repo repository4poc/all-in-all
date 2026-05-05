@@ -1,3 +1,6 @@
+# Run Insrtuctions
+# docker compose up/down/build
+# docker compose build backendexpres (Only backendexpress)
 services:
   backendexpress:
     build:

@@ -1,9 +1,16 @@
 import express from "express";
-import bodyParser from "body-parser";
+//import bodyParser from "body-parser";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
 import morgan from "morgan";
+import axios from "axios";
+import {
+  getCachedUsers,
+  startUsersCacheRefresh,
+} from "./middleware/dataCache.js";
+import LoggerMiddleware from "./middleware/logger.js";
+import errorHandler from "./middleware/errorHandler.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,20 +28,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // for logging middleware
-app.use(morgan("tiny"));
+//app.use(morgan("tiny"));
 
-// for custom middleware
-app.use((req, res, next) => {
-  console.log("CustomMiddleware1 logic comes here..." + req.body);
-  next();
-});
-app.use((req, res, next) => {
-  console.log(
-    "CustomMiddleware2 following CustomMiddleware1 logic comes here..." +
-      req.body,
-  );
-  next();
-});
+// use logger middleware
+app.use(LoggerMiddleware);
+
+// start cache loading when app starts
+await startUsersCacheRefresh();
 
 let questions = [
   {
@@ -56,24 +56,44 @@ app.get("/health", (req, res) => {
   });
 });
 
-// Submit answer
-app.post("/api/submit", (req, res) => {
-  const { country, capital } = req.body;
-
-  const isCountryPresent = questions.find((q) => q.country === country);
-
-  if (!isCountryPresent) {
-    return res.status(404).json({ message: "country is not found" });
-  }
-
-  const isCapitalPresent = questions.find((q) => q.capital === capital);
-
-  if (!isCapitalPresent) {
-    return res.status(404).json({ message: "country - capital mismatch" });
-  }
-
-  return res.status(200).json({ message: "You won" });
+app.get("/data", (req, res) => {
+  res.json(getCachedUsers());
 });
+
+app.post("/api/submit", (req, res, next) => {
+  try {
+    const { country, capital } = req.body;
+
+    const isCountryPresent = questions.find(
+      (q) => q.country.toLowerCase() === country?.toLowerCase(),
+    );
+
+    if (!isCountryPresent) {
+      const err = new Error("country is not found");
+      err.status = 404;
+      return next(err);
+    }
+
+    const isCapitalPresent = questions.find(
+      (q) =>
+        q.country.toLowerCase() === country?.toLowerCase() &&
+        q.capital.toLowerCase() === capital?.toLowerCase(),
+    );
+
+    if (!isCapitalPresent) {
+      const err = new Error("country - capital mismatch");
+      err.status = 400;
+      return next(err);
+    }
+
+    return res.status(200).json({ message: "You won" });
+  } catch (error) {
+    next(error); // send unexpected errors to middleware
+  }
+});
+
+// error middleware (must be last)
+app.use(errorHandler);
 
 app.listen(3000, "0.0.0.0", () => {
   console.log("Backendexpress running on port 3000");
