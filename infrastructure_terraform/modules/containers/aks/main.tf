@@ -7,6 +7,12 @@ resource "azurerm_kubernetes_cluster" "aks" {
   oidc_issuer_enabled               = true
   role_based_access_control_enabled = true
 
+  // AKS and EntraID integration
+  azure_active_directory_role_based_access_control {
+    tenant_id          = var.tenant_id
+    azure_rbac_enabled = true
+  }
+
   identity {
     type = "SystemAssigned"
   }

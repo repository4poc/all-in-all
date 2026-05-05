@@ -30,3 +30,7 @@ variable "backend_max" {}
 variable "kube_version_upgrade" {}
 
 variable "tags" {}
+
+variable "tenant_id" {
+  type = string
+}

@@ -26,3 +26,4 @@ tags = {
     "env": "dev"
 }
 
+tenant_id = "be6f99f0-eabe-46e9-8b0a-6a270e401649"

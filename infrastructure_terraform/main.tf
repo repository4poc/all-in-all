@@ -2,12 +2,19 @@
 # Azure Provider source and version being used
 terraform {
   required_providers {
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = "~> 3.0"
+    }
+
     azurerm = {
       source  = "hashicorp/azurerm"
       version = "~> 4.0"
     }
   }
 }
+
+provider "azuread" {}
 
 # Configure the Microsoft Azure Provider
 provider "azurerm" {
@@ -62,6 +69,7 @@ module "aks" {
   sku_tier                 = var.sku_tier
   kube_version_upgrade     = var.kube_version_upgrade
   tags                     = var.tags
+  tenant_id                = var.tenant_id
 }
 
 module "databricks" {
