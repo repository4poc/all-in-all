@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
+import morgan from "morgan";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,6 +15,15 @@ app.use(cors());
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(morgan("tiny"));
+app.use((req, res, next) => {
+  console.log("CustomMiddleware1 logic comes here...");
+});
+app.use((req, res, next) => {
+  console.log(
+    "CustomMiddleware2 following CustomMiddleware1 logic comes here...",
+  );
+});
 
 let questions = [
   {
@@ -55,5 +65,5 @@ app.post("/api/submit", (req, res) => {
 });
 
 app.listen(3000, "0.0.0.0", () => {
-  console.log("Backend running on port 3000");
+  console.log("Backendexpress running on port 3000");
 });
