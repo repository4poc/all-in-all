@@ -13,16 +13,25 @@ const PORT = 3000;
 
 app.use(cors());
 
+// You don’t actually need the separate body-parser package anymore—Express.js has it built-in.
+// bodyparser - for HTML form submissions, else req.body will be undefined
 app.use(express.urlencoded({ extended: true }));
+
+// bodyparser - for JSON (Postman / API calls), else req.body will be undefined
 app.use(express.json());
+
+// for logging middleware
 app.use(morgan("tiny"));
+
+// for custom middleware
 app.use((req, res, next) => {
-  console.log("CustomMiddleware1 logic comes here...");
+  console.log("CustomMiddleware1 logic comes here..." + req.body);
   next();
 });
 app.use((req, res, next) => {
   console.log(
-    "CustomMiddleware2 following CustomMiddleware1 logic comes here...",
+    "CustomMiddleware2 following CustomMiddleware1 logic comes here..." +
+      req.body,
   );
   next();
 });
