@@ -18,11 +18,13 @@ app.use(express.json());
 app.use(morgan("tiny"));
 app.use((req, res, next) => {
   console.log("CustomMiddleware1 logic comes here...");
+  next();
 });
 app.use((req, res, next) => {
   console.log(
     "CustomMiddleware2 following CustomMiddleware1 logic comes here...",
   );
+  next();
 });
 
 let questions = [
