@@ -109,6 +109,23 @@ resource "azurerm_cognitive_account_project" "project" {
   }
 }
 
+resource "azurerm_cognitive_deployment" "gpt5_mini" {
+  name                 = "gpt-5.4-mini-deployment"
+  cognitive_account_id = azurerm_cognitive_account.foundry.id
+
+  sku {
+    name     = "GlobalStandard"
+    capacity = 1
+
+  }
+
+  model {
+    format  = "OpenAI"
+    name    = "gpt-5.4-mini"
+    version = "2026-03-17"
+  }
+}
+
 module "databricks" {
   count               = 0 # Skipped , put it to 1
   source              = "./modules/dataanalytics/databricks"
