@@ -19,7 +19,14 @@ interface PageLayoutProps {
 const ProfileContent = () => {
   const { instance, accounts } = useMsal();
 
-  const [graphData, setGraphData] = useState<unknown>(null);
+  type GraphData = {
+    givenName?: string;
+    surname?: string;
+    userPrincipalName?: string;
+    id?: string;
+  };
+
+  const [graphData, setGraphData] = useState<GraphData>({});
 
   function RequestProfileData() {
     // Silently acquires an access token which is then attached to a request for MS Graph data
