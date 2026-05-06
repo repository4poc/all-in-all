@@ -6,9 +6,12 @@ import { fileURLToPath } from "url";
 import morgan from "morgan";
 import axios from "axios";
 import {
+  getCachedTodos,
   getCachedUsers,
   startUsersCacheRefresh,
 } from "./middleware/dataCache.js";
+import { ApolloServer } from "@apollo/server";
+import { expressMiddleware } from "@as-integrations/express5";
 import LoggerMiddleware from "./middleware/logger.js";
 import errorHandler from "./middleware/errorHandler.js";
 
@@ -17,6 +20,93 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = 3000;
+const typeDefs = `#graphql
+  type Geo {
+    lat: String
+    lng: String
+  }
+
+  type Address {
+    street: String
+    suite: String
+    city: String
+    zipcode: String
+    geo: Geo
+  }
+
+  type Company {
+    name: String
+    catchPhrase: String
+    bs: String
+  }
+
+  type User {
+    id: ID!
+    name: String!
+    username: String
+    email: String
+    address: Address
+    phone: String
+    website: String
+    company: Company
+  }
+
+  type Query {
+    getUsers: [User!]!
+    getUser(id: ID!): User
+  }
+`;
+const server = new ApolloServer({
+  typeDefs: `
+  type Geo {
+    lat: String
+    lng: String
+  }
+
+  type Address {
+    street: String
+    suite: String
+    city: String
+    zipcode: String
+    geo: Geo
+  }
+
+  type Company {
+    name: String
+    catchPhrase: String
+    bs: String
+  }
+
+  type User {
+    id: ID!
+    name: String!
+    username: String
+    email: String
+    address: Address
+    phone: String
+    website: String
+    company: Company
+  }
+
+  type Todo {
+    id: ID!
+    title: String!
+    completed: Boolean
+  }
+  
+  type Query {
+    getTodos : [Todo]
+    getUsers: [User!]
+    getUser(id: ID!): User    
+  }
+  `,
+  resolvers: {
+    Query: {
+      getTodos: () => getCachedUsers(),
+      getUsers: () => getCachedTodos(),
+    },
+  },
+});
 
 app.use(cors());
 
@@ -26,6 +116,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // bodyparser - for JSON (Postman / API calls), else req.body will be undefined
 app.use(express.json());
+
+await server.start();
+app.use("/graphql", expressMiddleware(server));
 
 // for logging middleware
 //app.use(morgan("tiny"));
