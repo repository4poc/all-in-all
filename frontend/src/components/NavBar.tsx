@@ -1,4 +1,10 @@
+import { useIsAuthenticated } from "@azure/msal-react";
+import { SignOutButton } from "./SignOutButton";
+import { SignInButton } from "./SignInButton";
+
 function NavBar() {
+  const isAuthenticated = useIsAuthenticated();
+
   return (
     <div>
       <nav
@@ -80,10 +86,18 @@ function NavBar() {
                       Capital Quiz Game
                     </a>
                   </li>
+                  <li>
+                    <a className="dropdown-item" href="/bookshop">
+                      Book Shop
+                    </a>
+                  </li>
                 </ul>
               </li>
             </ul>
           </div>
+        </div>
+        <div className="collapse navbar-collapse justify-content-end">
+          {isAuthenticated ? <SignOutButton /> : <SignInButton />}
         </div>
       </nav>
     </div>

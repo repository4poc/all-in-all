@@ -1,0 +1,30 @@
+.book-card {
+  border-radius: 1rem;
+  overflow: hidden; /* keeps rounded corners */
+  border: none;
+  background-color: #ffffff;
+  transition: transform 0.2s ease;
+}
+
+.book-card:hover {
+  transform: translateY(-5px);
+}
+
+.book-img {
+  width: 70%;
+  height: 200px;
+  object-fit: cover;
+  margin-left: 15%;
+  margin-top: 5%;
+}
+
+.card-title {
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+  color: #777;
+}
+
+.card-text {
+  font-size: 0.85rem;
+  color: #777;
+}
