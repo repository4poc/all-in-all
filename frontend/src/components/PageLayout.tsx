@@ -36,16 +36,18 @@ const ProfileContent = () => {
         account: accounts[0],
       })
       .then((response) => {
-        callMsGraph(response.accessToken).then((response) =>
-          setGraphData(response),
-        );
+        callMsGraph(response.accessToken).then((response) => {
+          if (response) {
+            setGraphData(response);
+          }
+        });
       });
   }
 
   return (
     <>
-      {graphData ? (
-        <ProfileData graphData={graphData} />
+      {graphData && graphData.givenName ? (
+        <ProfileData graphData={graphData as Required<GraphData>} />
       ) : (
         <Button variant="secondary" onClick={RequestProfileData}>
           {accounts[0].name
