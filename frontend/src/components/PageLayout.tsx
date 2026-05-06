@@ -1,8 +1,12 @@
-import Navbar from "react-bootstrap/Navbar";
-
 import { useIsAuthenticated } from "@azure/msal-react";
 import { SignInButton } from "./SignInButton";
 import { SignOutButton } from "./SignOutButton";
+import { useMsal } from "@azure/msal-react";
+import Button from "react-bootstrap/Button";
+import { useState } from "react";
+import { loginRequest } from "../authConfig";
+import { callMsGraph } from "../graph";
+import { ProfileData } from "./ProfileData";
 
 /**
  * Renders the navbar component with a sign-in or sign-out button depending on whether or not a user is authenticated
@@ -11,6 +15,39 @@ import { SignOutButton } from "./SignOutButton";
 interface PageLayoutProps {
   children: React.ReactNode;
 }
+
+const ProfileContent = () => {
+  const { instance, accounts } = useMsal();
+  const [graphData, setGraphData] = useState<any>(null);
+
+  function RequestProfileData() {
+    // Silently acquires an access token which is then attached to a request for MS Graph data
+    instance
+      .acquireTokenSilent({
+        ...loginRequest,
+        account: accounts[0],
+      })
+      .then((response) => {
+        callMsGraph(response.accessToken).then((response) =>
+          setGraphData(response),
+        );
+      });
+  }
+
+  return (
+    <>
+      {graphData ? (
+        <ProfileData graphData={graphData} />
+      ) : (
+        <Button variant="secondary" onClick={RequestProfileData}>
+          {accounts[0].name
+            ?.split(" ")[0]
+            ?.replace(/^./, (c) => c.toUpperCase())}
+        </Button>
+      )}
+    </>
+  );
+};
 
 export const PageLayout = (props: PageLayoutProps) => {
   const isAuthenticated = useIsAuthenticated();
@@ -101,6 +138,11 @@ export const PageLayout = (props: PageLayoutProps) => {
                         Book Shop
                       </a>
                     </li>
+                    <li>
+                      <a className="dropdown-item" href="/chatwindow">
+                        AI Chat
+                      </a>
+                    </li>
                   </ul>
                 </li>
               </ul>
@@ -110,7 +152,15 @@ export const PageLayout = (props: PageLayoutProps) => {
           )}
         </div>
         <div className="collapse navbar-collapse justify-content-end">
-          {isAuthenticated ? <SignOutButton /> : <SignInButton />}
+          {isAuthenticated ? (
+            <>
+              &nbsp;
+              <ProfileContent /> &nbsp;
+              <SignOutButton />
+            </>
+          ) : (
+            <SignInButton />
+          )}
         </div>
       </nav>
       <div className="profileContent">{props.children}</div>
