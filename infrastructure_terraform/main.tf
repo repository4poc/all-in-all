@@ -83,6 +83,32 @@ module "aks" {
   aks_reader_group_object_id    = module.identity.aks_reader_group_object_id
 }
 
+resource "azurerm_cognitive_account" "foundry" {
+  name                = "foundrydev001"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+
+  kind     = "AIServices"
+  sku_name = "S0"
+
+  custom_subdomain_name      = "foundrydev001"
+  project_management_enabled = true
+
+  identity {
+    type = "SystemAssigned"
+  }
+}
+
+resource "azurerm_cognitive_account_project" "project" {
+  name                 = "myproject"
+  cognitive_account_id = azurerm_cognitive_account.foundry.id
+  location             = azurerm_resource_group.rg.location
+
+  identity {
+    type = "SystemAssigned"
+  }
+}
+
 module "databricks" {
   count               = 0 # Skipped , put it to 1
   source              = "./modules/dataanalytics/databricks"
