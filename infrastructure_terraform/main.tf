@@ -51,6 +51,12 @@ module "acr" {
   tags                = var.tags
 }
 
+module "identity" {
+  source = "./modules/identity"
+
+  # pass any required inputs here if your module needs them
+}
+
 module "aks" {
   count                    = 1 # Skipped , put it to 1
   source                   = "./modules/containers/aks"
@@ -70,6 +76,11 @@ module "aks" {
   kube_version_upgrade     = var.kube_version_upgrade
   tags                     = var.tags
   tenant_id                = var.tenant_id
+
+
+  aks_admin_group_object_id     = module.identity.aks_admin_group_object_id
+  aks_developer_group_object_id = module.identity.aks_developer_group_object_id
+  aks_reader_group_object_id    = module.identity.aks_reader_group_object_id
 }
 
 module "databricks" {
