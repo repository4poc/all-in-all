@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: statefulset
+metadata:
+  name: postgresql-statefulset
+  namespace: apps
+  labels:
+    app: postgresql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgresql
+
+  template:
+    metadata:
+      labels:
+        app: postgresql
+        workload: apps
+
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - postgresql
+              topologyKey: "kubernetes.io/hostname"
+
+      nodeSelector:
+        workload: apps
+
+      tolerations:
+        - key: "workload"
+          operator: "Equal"
+          value: "apps"
+          effect: "NoSchedule"
+
+      containers:
+        - name: postgresql-container
+          image: "postgres:13"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5432
+
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5432
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5432
+            initialDelaySeconds: 15
+            periodSeconds: 20
