@@ -13,8 +13,6 @@ resource "azurerm_kubernetes_cluster" "aks" {
     azure_rbac_enabled = true
   }
 
-  local_account_disabled = true
-
   identity {
     type = "SystemAssigned"
   }
@@ -47,7 +45,6 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
   }
 
-
   # Maintenance Window
   maintenance_window {
     allowed {
@@ -57,16 +54,6 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 
   tags = var.tags
-}
-
-resource "kubernetes_namespace_v1" "apps" {
-  metadata {
-    name = "apps"
-  }
-
-  depends_on = [
-    azurerm_kubernetes_cluster.aks
-  ]
 }
 
 
@@ -103,6 +90,10 @@ resource "azurerm_kubernetes_cluster_node_pool" "apps" {
   }
 
   zones = (var.sku_tier == "standard") ? ["1", "2", "3"] : null
+
+  depends_on = [
+    azurerm_kubernetes_cluster.aks
+  ]
 }
 
 resource "azurerm_kubernetes_cluster_node_pool" "backend" {
@@ -136,11 +127,70 @@ resource "azurerm_kubernetes_cluster_node_pool" "backend" {
 
   zones = (var.sku_tier == "standard") ? ["1", "2", "3"] : null
 
+  depends_on = [
+    azurerm_kubernetes_cluster.aks,
+    azurerm_kubernetes_cluster_node_pool.apps
+  ]
+
 }
+
+
+resource "kubernetes_namespace_v1" "apps" {
+  metadata {
+    name = "apps"
+  }
+
+  depends_on = [
+    azurerm_role_assignment.aks_rbac_cluster_admin
+  ]
+}
+
+resource "kubernetes_namespace_v1" "argocd" {
+  metadata {
+    name = "argocd"
+  }
+
+  depends_on = [
+    azurerm_role_assignment.aks_rbac_cluster_admin
+  ]
+}
+
+resource "helm_release" "argocd" {
+  name      = "argocd"
+  namespace = kubernetes_namespace_v1.argocd.metadata[0].name
+
+  repository = "https://argoproj.github.io/argo-helm"
+  chart      = "argo-cd"
+
+  values = [
+    file("${path.root}/argocd/values.yaml")
+  ]
+
+  depends_on = [
+    kubernetes_namespace_v1.argocd,
+    azurerm_role_assignment.aks_rbac_cluster_admin
+  ]
+}
+
+data "azurerm_client_config" "current" {}
 
 resource "azurerm_role_assignment" "kubernetes_registry" {
   scope                            = var.acr_id
   role_definition_name             = "AcrPull"
   principal_id                     = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
   skip_service_principal_aad_check = true
+
+  depends_on = [azurerm_kubernetes_cluster.aks]
+}
+
+resource "azurerm_role_assignment" "aks_cluster_user" {
+  scope                = azurerm_kubernetes_cluster.aks.id
+  role_definition_name = "Azure Kubernetes Service Cluster User Role"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
+
+resource "azurerm_role_assignment" "aks_rbac_cluster_admin" {
+  scope                = azurerm_kubernetes_cluster.aks.id
+  role_definition_name = "Azure Kubernetes Service RBAC Cluster Admin"
+  principal_id         = data.azurerm_client_config.current.object_id
 }

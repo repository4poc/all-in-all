@@ -26,16 +26,3 @@ variable "tags" {}
 variable "tenant_id" {
   type = string
 }
-
-
-variable "aks_admin_group_object_id" {
-  type = string
-}
-
-variable "aks_developer_group_object_id" {
-  type = string
-}
-
-variable "aks_reader_group_object_id" {
-  type = string
-}

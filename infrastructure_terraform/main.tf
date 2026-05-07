@@ -22,18 +22,18 @@ provider "azurerm" {
 }
 
 provider "kubernetes" {
-  host                   = module.aks[0].kube_config[0].host
-  client_certificate     = base64decode(module.aks[0].kube_config[0].client_certificate)
-  client_key             = base64decode(module.aks[0].kube_config[0].client_key)
-  cluster_ca_certificate = base64decode(module.aks[0].kube_config[0].cluster_ca_certificate)
+  host                   = module.aks.kube_admin_config[0].host
+  client_certificate     = base64decode(module.aks.kube_admin_config[0].client_certificate)
+  client_key             = base64decode(module.aks.kube_admin_config[0].client_key)
+  cluster_ca_certificate = base64decode(module.aks.kube_admin_config[0].cluster_ca_certificate)
 }
 
 provider "helm" {
   kubernetes = {
-    host                   = module.aks[0].kube_config[0].host
-    client_certificate     = base64decode(module.aks[0].kube_config[0].client_certificate)
-    client_key             = base64decode(module.aks[0].kube_config[0].client_key)
-    cluster_ca_certificate = base64decode(module.aks[0].kube_config[0].cluster_ca_certificate)
+    host                   = module.aks.kube_admin_config[0].host
+    client_certificate     = base64decode(module.aks.kube_admin_config[0].client_certificate)
+    client_key             = base64decode(module.aks.kube_admin_config[0].client_key)
+    cluster_ca_certificate = base64decode(module.aks.kube_admin_config[0].cluster_ca_certificate)
   }
 }
 
@@ -41,30 +41,23 @@ provider "helm" {
 resource "azurerm_resource_group" "rg" {
   name     = var.environment
   location = "West Europe"
+  tags     = var.tags
 }
 
 module "acr" {
-  count               = 1 # Skipped , put it to 1
   source              = "./modules/containers/acr"
+  resource_group_name = azurerm_resource_group.rg.name
   region              = var.region
-  resource_group_name = "rg_shared"
   tags                = var.tags
 }
 
-module "identity" {
-  source = "./modules/identity"
-
-  # pass any required inputs here if your module needs them
-}
-
 module "aks" {
-  count                    = 1 # Skipped , put it to 1
   source                   = "./modules/containers/aks"
   env                      = var.environment
   appname                  = var.appname
   region                   = var.region
   resource_group_name      = azurerm_resource_group.rg.name
-  acr_id                   = module.acr[0].acr_id
+  acr_id                   = module.acr.acr_id
   system_node_count        = var.system_node_count
   aks_sys_nodepool_vm_size = var.aks_sys_nodepool_vm_size
   aks_app_nodepool_vm_size = var.aks_app_nodepool_vm_size
@@ -77,21 +70,21 @@ module "aks" {
   tags                     = var.tags
   tenant_id                = var.tenant_id
 
+  depends_on = [
+    module.acr
+  ]
 
-  aks_admin_group_object_id     = module.identity.aks_admin_group_object_id
-  aks_developer_group_object_id = module.identity.aks_developer_group_object_id
-  aks_reader_group_object_id    = module.identity.aks_reader_group_object_id
 }
 
 resource "azurerm_cognitive_account" "foundry" {
-  name                = "foundrydev001"
+  name                = "foundry${var.appname}${var.environment}007"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 
   kind     = "AIServices"
   sku_name = "S0"
 
-  custom_subdomain_name      = "foundrydev001"
+  custom_subdomain_name      = "foundry${var.appname}${var.environment}007"
   project_management_enabled = true
 
   identity {
@@ -107,6 +100,9 @@ resource "azurerm_cognitive_account_project" "project" {
   identity {
     type = "SystemAssigned"
   }
+  depends_on = [
+    azurerm_cognitive_account.foundry
+  ]
 }
 
 resource "azurerm_cognitive_deployment" "gpt5_mini" {
@@ -124,6 +120,11 @@ resource "azurerm_cognitive_deployment" "gpt5_mini" {
     name    = "gpt-5.4-mini"
     version = "2026-03-17"
   }
+
+  depends_on = [
+    azurerm_cognitive_account.foundry,
+    azurerm_cognitive_account_project.project
+  ]
 }
 
 module "databricks" {
