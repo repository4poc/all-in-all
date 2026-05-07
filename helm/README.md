@@ -101,7 +101,15 @@ For Dev
 
 helm upgrade --install frontend ./helm/frontend -n apps -f ./helm/frontend/values-dev.yaml
 
+---For AI Application---
+
+kubectl create secret generic frontend-secret \
+  -n apps \
+  --from-literal=VITE_AZURE_API_KEY="<real-api-key>"
+
 helm upgrade --install backendexpress ./helm/backendexpress -n apps -f ./helm/backendexpress/values-dev.yaml
+
+
 
 For Prod
 

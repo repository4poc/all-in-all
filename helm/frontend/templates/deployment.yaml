@@ -43,6 +43,24 @@ spec:
       containers:
         - name: apps-container
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          env:
+            - name: VITE_AZURE_API_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: frontend-config
+                  key: VITE_AZURE_API_URL
+
+            - name: VITE_AZURE_MODEL_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: frontend-config
+                  key: VITE_AZURE_MODEL_NAME
+
+            - name: VITE_AZURE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: frontend-secret
+                  key: VITE_AZURE_API_KEY
           imagePullPolicy: Always
           ports:
             - containerPort: 80

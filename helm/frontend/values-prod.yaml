@@ -22,3 +22,9 @@ autoscaling:
 pdb:
   enabled: true
   minAvailable: 1
+
+namespace: apps
+
+config:
+  azureApiUrl: "https://foundryallinalldev007.services.ai.azure.com/openai/v1/chat/completions"
+  azureModelName: "gpt-5.4-mini-deployment"
