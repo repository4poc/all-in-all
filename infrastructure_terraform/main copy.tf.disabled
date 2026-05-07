@@ -44,6 +44,38 @@ resource "azurerm_resource_group" "rg" {
   tags     = var.tags
 }
 
+module "acr" {
+  source              = "./modules/containers/acr"
+  resource_group_name = azurerm_resource_group.rg.name
+  region              = var.region
+  tags                = var.tags
+}
+
+module "aks" {
+  source                   = "./modules/containers/aks"
+  env                      = var.environment
+  appname                  = var.appname
+  region                   = var.region
+  resource_group_name      = azurerm_resource_group.rg.name
+  acr_id                   = module.acr.acr_id
+  system_node_count        = var.system_node_count
+  aks_sys_nodepool_vm_size = var.aks_sys_nodepool_vm_size
+  aks_app_nodepool_vm_size = var.aks_app_nodepool_vm_size
+  apps_min                 = var.apps_min
+  apps_max                 = var.apps_max
+  backend_min              = var.backend_min
+  backend_max              = var.backend_max
+  sku_tier                 = var.sku_tier
+  kube_version_upgrade     = var.kube_version_upgrade
+  tags                     = var.tags
+  tenant_id                = var.tenant_id
+
+  depends_on = [
+    module.acr
+  ]
+
+}
+
 resource "azurerm_cognitive_account" "foundry" {
   name                = "foundry${var.appname}${var.environment}007"
   location            = azurerm_resource_group.rg.location

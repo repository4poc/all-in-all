@@ -12,7 +12,7 @@ resource "azurerm_container_registry" "acr" {
 
   # In case of prod env. make sure it is false to avoid accidental deletion of registry and images
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 
   tags = var.tags

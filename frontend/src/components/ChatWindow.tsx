@@ -18,7 +18,6 @@ function ChatWindow() {
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setLoading(true);
-
     try {
       const response = await fetch(import.meta.env.VITE_AZURE_API_URL, {
         method: "POST",
@@ -28,14 +27,15 @@ function ChatWindow() {
         },
         body: JSON.stringify({
           messages: [...messages, userMessage],
-          max_tokens: 4096,
-          temperature: 1,
-          top_p: 1,
+          max_completion_tokens: 4096,
           model: import.meta.env.VITE_AZURE_MODEL_NAME,
         }),
       });
 
       const data = await response.json();
+      console.log("API Response:", data);
+
+      alert(data);
       const botMessage = data.choices[0].message;
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
