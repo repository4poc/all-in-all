@@ -1,0 +1,15 @@
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: frontend-vpa-recommender
+  namespace: apps
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: frontend
+  updatePolicy:
+    updateMode: "Off"
+
+#You will see suggested CPU/memory values, but VPA will not modify pods. This is useful for monitoring and manual adjustments.
+# kubectl describe vpa frontend-vpa-recommender -n apps

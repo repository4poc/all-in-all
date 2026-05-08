@@ -156,3 +156,17 @@ apps/frontend/
     ingress.yaml
     pdb.yaml
 ```
+
+| Workload          | Recommended    |
+| ----------------- | -------------- |
+| Stateless APIs    | HPA            |
+| Memory-heavy apps | VPA            |
+| Databases         | Usually manual |
+| AI inference      | Sometimes VPA  |
+| Java apps         | VPA helpful    |
+| Batch jobs        | KEDA + VPA     |
+
+| Autoscaler | Scales What        |
+| ---------- | ------------------ |
+| HPA        | Number of pods     |
+| VPA        | Pod size/resources |

@@ -2,6 +2,14 @@
 # docker compose up/down/build
 # docker compose build backendexpres (Only backendexpress)
 services:
+  qdrant:
+    build:
+      context: ./database/qdrant
+    container_name: qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    restart: unless-stopped
   backendexpress:
     build:
       context: ./backendexpress

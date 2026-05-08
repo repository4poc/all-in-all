@@ -22,6 +22,12 @@ resource "azurerm_kubernetes_cluster" "aks" {
   # Infrastructure Resource Group
   node_resource_group = "rg-${var.appname}-${var.env}-aks-infra"
 
+  # Enable Keda and VPA for workload autoscaling
+  workload_autoscaler_profile {
+    keda_enabled                    = true
+    vertical_pod_autoscaler_enabled = true # Need min 2 replicas for VPA to work, so set system node pool to 2 if you want to use VPA on system node pool as well.
+  }
+
   # Automatically upgrades Kubernetes minor versions
   automatic_upgrade_channel = var.kube_version_upgrade
   #Automatically updates node OS and VM image
