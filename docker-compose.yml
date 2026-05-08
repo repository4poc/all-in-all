@@ -10,12 +10,24 @@ services:
       - "3000:3000"
     restart: unless-stopped
 
+  backendpython:
+    build:
+      context: ./backendpython
+    container_name: backendpython
+    env_file:
+      - ./backendpython/.env
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+
   frontend:
     build:
       context: ./frontend
       args:
         NGINX_CONF: nginx.local.conf
     container_name: frontend
+    env_file:
+      - ./frontend/.env
     ports:
       - "80:80"
     depends_on:

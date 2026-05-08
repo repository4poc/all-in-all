@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backendpython-deployment
+  namespace: apps
+  labels:
+    app: backendpython
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backendpython
+
+  template:
+    metadata:
+      labels:
+        app: backendpython
+        workload: apps
+
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - backendpython
+              topologyKey: "kubernetes.io/hostname"
+
+      nodeSelector:
+        workload: apps
+
+      tolerations:
+        - key: "workload"
+          operator: "Equal"
+          value: "apps"
+          effect: "NoSchedule"
+
+      containers:
+        - name: backendpython-container
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          env:
+            - name: AZURE_OPENAI_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: backendpython-config
+                  key: AZURE_OPENAI_ENDPOINT
+
+            - name: AZURE_MODEL_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: backendpython-config
+                  key: AZURE_MODEL_NAME
+
+            - name: AZURE_OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: backendpython-secret
+                  key: AZURE_OPENAI_API_KEY
+
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 20

@@ -1,0 +1,16 @@
+image:
+  repository: allinallacr.azurecr.io/backendexpress
+  tag: "main"
+
+replicaCount: 1
+
+ingress:
+  host: backendexpress-dev.example.com
+
+pdb:
+  enabled: true
+  minAvailable: 1
+
+config:
+  AZURE_OPENAI_ENDPOINT: "https://foundryallinalldev007.services.ai.azure.com/openai/v1"
+  AZURE_MODEL_NAME: "gpt-5.4-mini-deployment"
