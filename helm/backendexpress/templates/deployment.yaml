@@ -23,13 +23,13 @@ spec:
           preferredDuringSchedulingIgnoredDuringExecution:
             - weight: 100
               podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                  - key: app
-                    operator: In
-                    values:
-                      - backendexpress
-              topologyKey: "kubernetes.io/hostname"
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - backendexpress
+                topologyKey: "kubernetes.io/hostname"
 
       nodeSelector:
         workload: apps

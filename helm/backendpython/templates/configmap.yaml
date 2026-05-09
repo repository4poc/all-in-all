@@ -4,5 +4,6 @@ metadata:
   name: backendpython-config
   namespace: apps
 data:
-  AZURE_OPENAI_ENDPOINT: { { .Values.config.AZURE_OPENAI_ENDPOINT | quote } }
-  AZURE_MODEL_NAME: { { .Values.config.AZURE_MODEL_NAME | quote } }
+  VITE_AZURE_API_URL: "{{ .Values.config.azureApiUrl }}"
+  VITE_AZURE_MODEL_NAME: "{{ .Values.config.azureModelName }}"
+  VITE_AZURE_API_KEY: "{{ .Values.config.azureApiKey }}"

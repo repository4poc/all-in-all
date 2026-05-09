@@ -5,8 +5,10 @@ metadata:
   namespace: apps
   labels:
     app: apps
+
 spec:
   replicas: 2
+
   selector:
     matchLabels:
       app: apps
@@ -23,26 +25,31 @@ spec:
           preferredDuringSchedulingIgnoredDuringExecution:
             - weight: 100
               podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                  - key: app
-                    operator: In
-                    values:
-                      - apps
-              topologyKey: "kubernetes.io/hostname"
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - apps
+                topologyKey: kubernetes.io/hostname
 
       nodeSelector:
         workload: apps
 
       tolerations:
-        - key: "workload"
-          operator: "Equal"
-          value: "apps"
-          effect: "NoSchedule"
+        - key: workload
+          operator: Equal
+          value: apps
+          effect: NoSchedule
 
       containers:
         - name: apps-container
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 80
+
           env:
             - name: VITE_AZURE_API_URL
               valueFrom:
@@ -56,19 +63,11 @@ spec:
                   name: frontend-config
                   key: VITE_AZURE_MODEL_NAME
 
-            - name: VITE_AZURE_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: frontend-secret
-                  key: VITE_AZURE_API_KEY
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 80
-          # Resource requests and limits for better scheduling and resource management
           resources:
             requests:
               cpu: "250m"
               memory: "256Mi"
+
             limits:
               cpu: "1000m"
               memory: "1Gi"
