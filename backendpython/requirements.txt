@@ -1,3 +1,13 @@
+# Requirements for the backend Python application
+# OpenAI Python client library for interacting with OpenAI's API
 openai
+# Web framework for building the backend API
 flask
+# For loading environment variables from a .env file
 python-dotenv
+# Microsoft Azure AI Projects SDK (Foundry SDK)
+azure-ai-projects
+# Required for authentication with Azure services
+azure-identity
+# Anthropic Python client library for interacting with Anthropic's API
+anthropic
