@@ -35,7 +35,6 @@ function ChatWindow() {
       const data = await response.json();
       console.log("API Response:", data);
 
-      alert(data);
       const botMessage = data.choices[0].message;
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {

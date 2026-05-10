@@ -11,16 +11,26 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "~> 4.0"
     }
+
+    azapi = {
+      source  = "Azure/azapi"
+      version = "~> 2.0"
+    }
   }
 }
 
+# Configure the Microsoft Azure Active Directory Provider
 provider "azuread" {}
+
+# Configure the Azure API Management Provider
+provider "azapi" {}
 
 # Configure the Microsoft Azure Provider
 provider "azurerm" {
   features {}
 }
 
+# Configure the Kubernetes Provider
 provider "kubernetes" {
   host                   = module.aks.kube_admin_config[0].host
   client_certificate     = base64decode(module.aks.kube_admin_config[0].client_certificate)
@@ -28,6 +38,7 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(module.aks.kube_admin_config[0].cluster_ca_certificate)
 }
 
+# Configure the Helm Provider
 provider "helm" {
   kubernetes = {
     host                   = module.aks.kube_admin_config[0].host
@@ -40,10 +51,11 @@ provider "helm" {
 # Create a resource group
 resource "azurerm_resource_group" "rg" {
   name     = var.environment
-  location = "West Europe"
+  location = var.region
   tags     = var.tags
 }
 
+# Create a Cognitive Account with kind AIServices which will enable Foundry capabilities
 resource "azurerm_cognitive_account" "foundry" {
   name                = "foundry${var.appname}${var.environment}007"
   location            = azurerm_resource_group.rg.location
@@ -60,6 +72,7 @@ resource "azurerm_cognitive_account" "foundry" {
   }
 }
 
+# Create a Cognitive Account Project which will be the container for all AI assets like models, agents, etc. This is required to deploy models in Foundry.
 resource "azurerm_cognitive_account_project" "project" {
   name                 = "myproject"
   cognitive_account_id = azurerm_cognitive_account.foundry.id
@@ -73,6 +86,8 @@ resource "azurerm_cognitive_account_project" "project" {
   ]
 }
 
+
+# Deploying GPT-5.4 Mini model using native azurerm provider support
 resource "azurerm_cognitive_deployment" "gpt5_mini" {
   name                 = "gpt-5.4-mini-deployment"
   cognitive_account_id = azurerm_cognitive_account.foundry.id
@@ -87,6 +102,41 @@ resource "azurerm_cognitive_deployment" "gpt5_mini" {
     format  = "OpenAI"
     name    = "gpt-5.4-mini"
     version = "2026-03-17"
+  }
+
+  depends_on = [
+    azurerm_cognitive_account.foundry,
+    azurerm_cognitive_account_project.project
+  ]
+}
+
+
+resource "azapi_resource" "claude_opus_4_7_deployment" {
+  type      = "Microsoft.CognitiveServices/accounts/deployments@2025-10-01-preview"
+  name      = "claude-opus-4-7-deployment"
+  parent_id = azurerm_cognitive_account.foundry.id
+
+  schema_validation_enabled = false
+
+  body = {
+    properties = {
+      model = {
+        format  = "Anthropic"
+        name    = "claude-opus-4-7"
+        version = "1"
+      }
+
+      modelProviderData = {
+        organizationName = "Varinder"
+        industry         = "consulting"
+        countryCode      = "FI"
+      }
+    }
+
+    sku = {
+      name     = "GlobalStandard"
+      capacity = 1
+    }
   }
 
   depends_on = [

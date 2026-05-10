@@ -82,7 +82,7 @@ For ArgoCD
 
 3. helm install argocd-deployment argo/argocd-apps -n argocd
 
-4. kubectl port-forward service/argocd-server 8080:443 -n argocd
+4.kubectl port-forward service/argocd-server 8080:443 -n argocd
 
 5. kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d && echo
 ```
