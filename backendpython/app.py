@@ -5,10 +5,11 @@ from dotenv import load_dotenv
 from azure.identity import DefaultAzureCredential
 from azure.ai.projects import AIProjectClient
 from anthropic import AnthropicFoundry
-from azure.ai.projects.models import WebSearchPreviewTool, PromptAgentDefinition
+from azure.ai.projects.models import WebSearchPreviewTool, PromptAgentDefinition, MCPTool, Tool, BrowserAutomationPreviewTool, BrowserAutomationToolParameters, BrowserAutomationToolConnectionParameters
 import requests
 import jsonref
 from typing import Any, cast
+
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -79,6 +80,20 @@ def foundry_responses_chat():
 project_client = AIProjectClient(credential=DefaultAzureCredential(), endpoint=FOUNDRY_PROJECT_ENDPOINT)
 openai_client = project_client.get_openai_client()
 
+connection_id = ""
+
+mcp_server_name = os.getenv("MCP_SERVER_NAME")
+
+connection_id = None
+if mcp_server_name:
+    for connection in project_client.connections.list():
+        if connection.name == mcp_server_name:
+            connection_id = connection.id
+            break
+
+print(f"MCP connection name={mcp_server_name}, id={connection_id}")
+
+
 # OpanAI Agent API endpoint
 @app.route('/api/openAI/agent', methods=['POST'])
 def foundry_openAI_Agent():
@@ -102,18 +117,45 @@ def foundry_openAI_Agent():
         }
     }
 
+    MCPServerTool = MCPTool(
+        server_label="microsoft_learn_server",
+        server_url="https://learn.microsoft.com/api/mcp",
+        server_description="Microsoft Learn documentation MCP server",
+        require_approval="never"
+    )
+
+    MCPServerTool = MCPTool(
+        server_label="microsoft_learn_server",
+        server_url="https://learn.microsoft.com/api/mcp",
+        require_approval="never",
+        # Do NOT pass project_connection_id for Microsoft Learn MCP
+    )
+
+    BROWSER_CONNECTION_ID = os.getenv("BROWSER_CONNECTION_ID")
+
+    if not BROWSER_CONNECTION_ID:
+        raise ValueError("BROWSER_CONNECTION_ID is missing")
+
+    browser_tool = BrowserAutomationPreviewTool(
+        browser_automation_preview=BrowserAutomationToolParameters(
+            connection=BrowserAutomationToolConnectionParameters(
+                project_connection_id=BROWSER_CONNECTION_ID
+            )
+        )
+    )
+
     agent =  project_client.agents.create_version(
         agent_name = "web-search-agent",
         definition = PromptAgentDefinition(
             model = MODEL_DEPLOYMENT_NAME,
-            instructions = "An agent that can perform petstore3 order information by orderID and web search capabilities.",
+            instructions = "An agent that can perform petstore3 order information by orderID, mslearn mcp server and web search capabilities.You can use web search, Petstore OpenAPI, and Microsoft Learn MCP. Use Microsoft Learn MCP only for Microsoft documentation questions.Use the browser tool when the user asks to open websites, click buttons, fill forms, inspect pages, or perform UI workflows.Do not enter passwords, payment details, or sensitive personal data.",
             tools = [
-                WebSearchPreviewTool(),petstore_tool
-                ]
+                WebSearchPreviewTool(),petstore_tool, MCPServerTool,browser_tool]
         )
     )
 
-    print(f"Created agent with ID: {agent.id} and name: {agent.name}")
+    print(f"Created agent with ID: {agent.id} and name: {agent.name} and tools: {[tool['type'] for tool in agent.definition.tools]}")
+    
 
     data = request.get_json(silent=True) or {}
 

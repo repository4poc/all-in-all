@@ -28,6 +28,15 @@ resource "azurerm_kubernetes_cluster" "aks" {
     vertical_pod_autoscaler_enabled = true # Need min 2 replicas for VPA to work, so set system node pool to 2 if you want to use VPA on system node pool as well.
   }
 
+  # Enable Private Cluster if specified
+  private_cluster_enabled = false
+
+  # Service Mesh add-on with Istio mode and specific revision
+  service_mesh_profile {
+    mode      = "Istio"
+    revisions = ["1.17.2"]
+  }
+
   # Automatically upgrades Kubernetes minor versions
   automatic_upgrade_channel = var.kube_version_upgrade
   #Automatically updates node OS and VM image
@@ -144,6 +153,11 @@ resource "azurerm_kubernetes_cluster_node_pool" "backend" {
 resource "kubernetes_namespace_v1" "apps" {
   metadata {
     name = "apps"
+
+    # Add label for Istio sidecar injection based on the revision of Istio installed by the service mesh add-on
+    labels = {
+      "istio.io/rev" = "asm-1.17.2"
+    }
   }
 
   depends_on = [

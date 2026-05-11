@@ -11,3 +11,4 @@ azure-ai-projects
 azure-identity
 # Anthropic Python client library for interacting with Anthropic's API
 anthropic
+# Browser automation tool for handling web browser interactions

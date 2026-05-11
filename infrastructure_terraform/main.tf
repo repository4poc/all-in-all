@@ -86,7 +86,6 @@ resource "azurerm_cognitive_account_project" "project" {
   ]
 }
 
-
 # Deploying GPT-5.4 Mini model using native azurerm provider support
 resource "azurerm_cognitive_deployment" "gpt5_mini" {
   name                 = "gpt-5.4-mini-deployment"
