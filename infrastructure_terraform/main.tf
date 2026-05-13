@@ -55,6 +55,118 @@ resource "azurerm_resource_group" "rg" {
   tags     = var.tags
 }
 
+resource "azurerm_storage_account" "input_data_storage" {
+  name                = "allinallinputstorage007"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+
+  account_kind = "StorageV2"
+
+  # Enable anonymous blob access
+  allow_nested_items_to_be_public = true
+
+  access_tier = "Hot"
+
+  min_tls_version = "TLS1_2"
+
+  public_network_access_enabled = true
+
+  shared_access_key_enabled = true
+
+  infrastructure_encryption_enabled = false
+
+  cross_tenant_replication_enabled = false
+
+  blob_properties {
+    versioning_enabled = false
+
+    delete_retention_policy {
+      days = 7
+    }
+  }
+
+  tags = var.tags
+}
+
+# Public Blob Container
+resource "azurerm_storage_container" "input_data_container" {
+  name                  = "input"
+  storage_account_id    = azurerm_storage_account.input_data_storage.id
+  container_access_type = "container"
+}
+
+resource "azurerm_storage_account" "output_data_storage" {
+  name                = "allinalloutputstorage007"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+
+  account_kind = "StorageV2"
+
+  # Enable anonymous blob access
+  allow_nested_items_to_be_public = true
+
+  access_tier = "Hot"
+
+  min_tls_version = "TLS1_2"
+
+  public_network_access_enabled = true
+
+  shared_access_key_enabled = true
+
+  infrastructure_encryption_enabled = false
+
+  cross_tenant_replication_enabled = false
+
+  blob_properties {
+    versioning_enabled = false
+
+    delete_retention_policy {
+      days = 7
+    }
+  }
+
+  tags = var.tags
+}
+# Public Blob Container
+resource "azurerm_storage_container" "output_container" {
+  name                  = "output"
+  storage_account_id    = azurerm_storage_account.output_data_storage.id
+  container_access_type = "container"
+}
+
+resource "random_string" "suffix" {
+  length  = 6
+  upper   = false
+  special = false
+}
+
+
+# Azure AI Search - cheap/dev configuration
+resource "azurerm_search_service" "ai_search" {
+  name                = "srch-poc-${random_string.suffix.result}"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+
+  sku             = "free"
+  replica_count   = 1
+  partition_count = 1
+
+  public_network_access_enabled = true
+
+  tags = var.tags
+}
+
+
+
+
+
+
 # Create a Cognitive Account with kind AIServices which will enable Foundry capabilities
 resource "azurerm_cognitive_account" "foundry" {
   name                = "foundry${var.appname}${var.environment}007"
@@ -87,8 +199,8 @@ resource "azurerm_cognitive_account_project" "project" {
 }
 
 # Deploying GPT-5.4 Mini model using native azurerm provider support
-resource "azurerm_cognitive_deployment" "gpt5_mini" {
-  name                 = "gpt-5.4-mini-deployment"
+resource "azurerm_cognitive_deployment" "gpt5" {
+  name                 = "gpt-5-deployment"
   cognitive_account_id = azurerm_cognitive_account.foundry.id
 
   sku {
@@ -99,8 +211,30 @@ resource "azurerm_cognitive_deployment" "gpt5_mini" {
 
   model {
     format  = "OpenAI"
-    name    = "gpt-5.4-mini"
-    version = "2026-03-17"
+    name    = "gpt-5"
+    version = "2025-08-07"
+  }
+
+  depends_on = [
+    azurerm_cognitive_account.foundry,
+    azurerm_cognitive_account_project.project
+  ]
+}
+
+# Recommended newer embedding model
+resource "azurerm_cognitive_deployment" "text_embedding_ada_002" {
+  name                 = "text-embedding-ada-002-deployment"
+  cognitive_account_id = azurerm_cognitive_account.foundry.id
+
+  sku {
+    name     = "GlobalStandard"
+    capacity = 1
+  }
+
+  model {
+    format  = "OpenAI"
+    name    = "text-embedding-ada-002"
+    version = "2"
   }
 
   depends_on = [
@@ -143,6 +277,7 @@ resource "azapi_resource" "claude_opus_4_7_deployment" {
     azurerm_cognitive_account_project.project
   ]
 }
+
 
 module "databricks" {
   count               = 0 # Skipped , put it to 1

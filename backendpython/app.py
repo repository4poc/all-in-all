@@ -5,7 +5,17 @@ from dotenv import load_dotenv
 from azure.identity import DefaultAzureCredential
 from azure.ai.projects import AIProjectClient
 from anthropic import AnthropicFoundry
-from azure.ai.projects.models import WebSearchPreviewTool, PromptAgentDefinition, MCPTool, Tool, BrowserAutomationPreviewTool, BrowserAutomationToolParameters, BrowserAutomationToolConnectionParameters
+from azure.ai.projects.models import (
+    WebSearchPreviewTool,
+    PromptAgentDefinition,
+    MCPTool,
+    AzureAISearchTool,
+    AzureAISearchToolResource,
+    AISearchIndexResource,
+    AzureAISearchQueryType,
+)
+
+
 import requests
 import jsonref
 from typing import Any, cast
@@ -83,6 +93,8 @@ openai_client = project_client.get_openai_client()
 connection_id = ""
 
 mcp_server_name = os.getenv("MCP_SERVER_NAME")
+ai_search_connection_name = os.getenv("AI_SEARCH_CONNECTION_NAME")
+ai_search_index_name = os.getenv("AI_SEARCH_INDEX_NAME")
 
 connection_id = None
 if mcp_server_name:
@@ -92,6 +104,15 @@ if mcp_server_name:
             break
 
 print(f"MCP connection name={mcp_server_name}, id={connection_id}")
+
+connection_id = ""
+
+for connection in project_client.connections.list():
+    if connection.name == ai_search_connection_name:
+        connection_id = connection.id
+        break
+
+print(f"The AI Search Connection ID is: {connection_id}")
 
 
 # OpanAI Agent API endpoint
@@ -124,23 +145,16 @@ def foundry_openAI_Agent():
         require_approval="never"
     )
 
-    MCPServerTool = MCPTool(
-        server_label="microsoft_learn_server",
-        server_url="https://learn.microsoft.com/api/mcp",
-        require_approval="never",
-        # Do NOT pass project_connection_id for Microsoft Learn MCP
-    )
-
-    BROWSER_CONNECTION_ID = os.getenv("BROWSER_CONNECTION_ID")
-
-    if not BROWSER_CONNECTION_ID:
-        raise ValueError("BROWSER_CONNECTION_ID is missing")
-
-    browser_tool = BrowserAutomationPreviewTool(
-        browser_automation_preview=BrowserAutomationToolParameters(
-            connection=BrowserAutomationToolConnectionParameters(
-                project_connection_id=BROWSER_CONNECTION_ID
-            )
+    azure_ai_search_tool = AzureAISearchTool(
+        azure_ai_search=AzureAISearchToolResource(
+            indexes=[
+                AISearchIndexResource(
+                    project_connection_id=connection_id,
+                    index_name=ai_search_index_name,
+                    query_type=AzureAISearchQueryType.VECTOR_SEMANTIC_HYBRID,
+                    top_k=3,
+                )
+            ]
         )
     )
 
@@ -148,9 +162,8 @@ def foundry_openAI_Agent():
         agent_name = "web-search-agent",
         definition = PromptAgentDefinition(
             model = MODEL_DEPLOYMENT_NAME,
-            instructions = "An agent that can perform petstore3 order information by orderID, mslearn mcp server and web search capabilities.You can use web search, Petstore OpenAPI, and Microsoft Learn MCP. Use Microsoft Learn MCP only for Microsoft documentation questions.Use the browser tool when the user asks to open websites, click buttons, fill forms, inspect pages, or perform UI workflows.Do not enter passwords, payment details, or sensitive personal data.",
-            tools = [
-                WebSearchPreviewTool(),petstore_tool, MCPServerTool,browser_tool]
+            instructions = "An agent that can perform petstore3 order information by orderID, mslearn mcp server and web search capabilities.You can use web search, Petstore OpenAPI, and Microsoft Learn MCP. Use Microsoft Learn MCP only for Microsoft documentation questions.Use the browser tool when the user asks to open websites, click buttons, fill forms, inspect pages, or perform UI workflows.Do not enter passwords, payment details, or sensitive personal data. Use azure_ai_search_tool to  answer cagpemini or varinder varinder related queries",
+            tools = [petstore_tool,MCPServerTool, azure_ai_search_tool]
         )
     )
 
