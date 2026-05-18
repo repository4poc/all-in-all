@@ -6,8 +6,8 @@ IaaS
 
 - [Azure Virtual Machine](./docs/VM.md)
 
-PaaS
+PaaS: No access to internal infrastructure
 
-- [Azure Web Apps](./docs/VM.md)
+- [Azure Web Apps](./docs/WebApps.md)
 
 [Best Practices](./docs/bestpractices.md)
