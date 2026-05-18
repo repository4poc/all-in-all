@@ -72,3 +72,123 @@ No need to patch and upgrade server
       - Disabled
 
 - Tags : Will be applied to all the related resources created with App Service like App Service Plan / Application Insight / App Service
+
+## Public Endpoint
+
+### When Public Access = ON
+
+Your app is reachable publicly:
+
+Internet Users --> https://myapp.azurewebsites.net
+
+Anyone who has: the URL DNS entry allowed authentication can access the app over the internet.
+
+You can still restrict access using:
+
+- IP restrictions
+- Authentication
+- WAF
+- Front Door
+- API Management
+
+But the app still has a public endpoint.
+
+### What is a Private Endpoint?
+
+A Private Endpoint gives your App Service:
+
+- a private IP address inside your Azure VNet
+
+Example:
+
+App Service
+Private IP: 10.1.2.4
+
+Now access happens privately over:
+
+- Azure VNets
+- VPN
+- ExpressRoute
+- peered networks
+
+—not through the public internet.
+
+Enterprise Use Case
+
+This is common for:
+
+- internal enterprise APIs
+- banking systems
+- healthcare apps
+- backend services
+- zero-trust architectures
+
+Example architecture:
+
+User --> VPN --> Corporate Network --> Azure VNet --> App Service (Private Endpoint)
+
+No public exposure.
+
+| Feature              | Purpose                                | Traffic Direction |
+| -------------------- | -------------------------------------- | ----------------- |
+| **VNet Integration** | App Service accesses private resources | Outbound          |
+| **Private Endpoint** | Private access _to_ App Service        | Inbound           |
+
+### App Service is NOT deployed inside your VNet
+
+Important architectural detail:
+
+- App Service = Microsoft-managed PaaS
+- It lives outside your VNet infrastructure.
+
+But:
+
+- it can integrate WITH your VNet via VNet Integration and/or Private Endpoint
+
+Fully Private Enterprise App
+Needed:
+
+✅ VNet Integration
+✅ Private Endpoint
+✅ Public Access OFF
+
+```
+Corporate Network
+       |
+Private Endpoint
+       |
+App Service
+       |
+VNet Integration
+       |
+Private Database
+```
+
+| Requirement                    | Needed Feature                     |
+| ------------------------------ | ---------------------------------- |
+| App accesses private DB        | VNet Integration                   |
+| Users privately access app     | Private Endpoint                   |
+| Disable public internet access | Public Access OFF                  |
+| App inside VNet                | Not possible directly (PaaS model) |
+
+### Key Takeaway
+
+VNet Integration = App Service can REACH INTO the VNet
+
+Private Endpoint = Network can REACH the App Service privately
+
+### Public Frontend App
+
+| Setting          | Value |
+| ---------------- | ----- |
+| Public Access    | ON    |
+| VNet Integration | ON    |
+| Private Endpoint | OFF   |
+
+### Private/internal API
+
+| Setting          | Value |
+| ---------------- | ----- |
+| Public Access    | OFF   |
+| VNet Integration | ON    |
+| Private Endpoint | ON    |
