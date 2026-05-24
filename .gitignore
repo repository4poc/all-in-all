@@ -1,2 +1,79 @@
 .env
 .env
+
+
+# =========================
+# .NET / C#
+# =========================
+bin/
+obj/
+
+# Build output
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+AnyCPU/
+
+# User-specific files
+*.user
+*.rsuser
+*.suo
+
+# =========================
+# Visual Studio / Rider / VS Code
+# =========================
+.vs/
+.idea/
+.vscode/
+
+# Rider
+*.sln.iml
+
+# =========================
+# ASP.NET / launch settings
+# =========================
+**/Properties/launchSettings.json
+
+# Local environment config
+appsettings.Development.json
+
+# Optional: ignore local secrets
+secrets.json
+
+# =========================
+# NuGet
+# =========================
+*.nupkg
+packages/
+.nuget/
+
+# =========================
+# Logs / temp
+# =========================
+*.log
+*.tmp
+*.temp
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Generated web assets cache
+# =========================
+**/staticwebassets.build.json
+**/staticwebassets.build.json.cache
+**/staticwebassets.build.endpoints.json
+
+# Razor / ASP.NET caches
+**/*.dswa.cache.json
+**/swae.build.ex.cache
+
+# =========================
+# Publish output
+# =========================
+publish/
+out/
