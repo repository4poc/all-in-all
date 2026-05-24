@@ -18,6 +18,8 @@
   - Blazor → frontend web UI
   - MAUI → mobile/desktop apps
 
+- upgrade from .NET 9 STS to .NET 10 LTS is a good move. .NET 10 is LTS and supported until Nov 14, 2028; .NET 9 support ends Nov 10, 2026.
+
 #### You can run application without a web server, but best practices is to deploy you application behind a web server like Nginx(Linux) or IIS (Windows)
 
 ```

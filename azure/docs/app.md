@@ -36,10 +36,46 @@ No need to patch and upgrade server
   - Name : Name of Pricing Plan
   - Plan :
     - Hardware View : vCPU/Memory (RAM)/Remote Storage/Scale (Instance)
-    - Feature View : Custom Domain/Auto Scale/Daily Backup/Staging Slots/Zone Redundancy/vNet Integration/
+    - Feature View : Custom Domain/Auto Scale/Daily Backup/Deployment Slots/Zone Redundancy/vNet Integration/
       - Free F1 - No feature
-      - Basic B1 - only custom domain feature and vNet Integration
+      - Basic B1
+        - custom domain : choose custom domain
+        - Manual Scaling : upto 3 instance
+        - vNet Integration : select/create Virtual Network
       - Standard (Legacy) - No Zone Redundancy feature
+        - custom domain : choose custom domain
+        - vNet Integration : select/create Virtual Network
+        - Automated Scaling :
+          - Scale Condition
+            - Scale mode : Based on metric
+            - Scale rule :
+              - matrix name : Avg. CPU Usage
+              - operation : greater than
+              - Threashold : 70
+              - Duration : 10 min
+              - Operation : increase instance by
+              - Instance Count : 1
+              - Cool Down Period : 5 min.
+            - Scale rule :
+              - matrix name : Avg. CPU Usage
+              - operation : less than
+              - Threashold : 70
+              - Duration : 10 min
+              - Operation : decrease instance by
+              - Instance Count : 1
+              - Cool Down Period : 5 min.
+            - instance limits :
+              - Default : 2
+              - Min: 1
+              - Max : 3
+        - Deployment Slots :
+          - Easy rollback
+          - An environemtn with own configuration within an app service instance for deployment and testing before deploying it to production slot via Swap operation
+          - When using deployment slots, make sure you check "Deployment slot setting" in Environment settings > connection string (Passwordless)
+            ![alt text](images/{FC0CDC0D-338D-4859-B3FF-24FCE018DDD3}.png)
+
+            To stick to slot during swap.
+
       - Premium (V2/V3) - All features
       - Isolated
 
@@ -192,3 +228,77 @@ Private Endpoint = Network can REACH the App Service privately
 | Public Access    | OFF   |
 | VNet Integration | ON    |
 | Private Endpoint | ON    |
+
+### Multiple App Services can share App Service Plan
+
+# Best way to connect app service to a database
+
+Use App Service Managed Identity to connect to Azure SQL using Microsoft Entra authentication. This avoids storing DB usernames/passwords in config. Microsoft recommends this pattern because managed identity removes secrets from connection strings
+
+Steps
+
+1. Enable Managed Identity on App Service
+2. Configure Microsoft Entra admin on Azure SQL Server, Important: SQL authentication admin alone cannot create Entra users in Azure SQL.
+3. Connect to the database as Entra admin, Use Azure Data Studio
+4. Create DB user for the App Service identity
+
+```
+CREATE USER [app-service-managed-identity] FROM EXTERNAL PROVIDER;
+
+ALTER ROLE db_datareader ADD MEMBER [your-app-service-name];
+ALTER ROLE db_datawriter ADD MEMBER [your-app-service-name];
+
+For stored procedures
+GRANT EXECUTE TO [app-service-managed-identity];
+```
+
+5. Use passwordless connection string with For .NET, Microsoft.Data.SqlClient
+
+```
+Server=tcp:<sql-server-name>.database.windows.net,1433;
+Database=<database-name>;
+Authentication=Active Directory Managed Identity;
+Encrypt=True;
+TrustServerCertificate=False;
+Connection Timeout=30;
+
+Final Architecture
+App Service
+  → Managed Identity
+  → Azure SQL Entra user
+  → DB roles/permissions
+```
+
+![alt text](images/{8FA1945F-167A-4D74-BE60-6B03485FF495}.png)
+
+## Enterprise Best Practice Architecture
+
+### Recommended Production Setup
+
+**App Service**
+
+- Managed Identity ON
+- VNet Integration ON
+
+**Azure SQL**
+
+- Private Endpoint ON
+- Public Network Access OFF
+
+**Authentication**
+
+- Entra ID / Managed IdentityEnterprise Best Practice Architecture
+
+**Architecture**
+
+```
+App Service
+   |
+Managed Identity (AUTH)
+   |
+VNet Integration
+   |
+Private Endpoint (NETWORK)
+   |
+Azure SQL
+```
