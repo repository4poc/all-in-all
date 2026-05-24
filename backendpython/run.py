@@ -1,4 +1,4 @@
-from app import create_app
+from backendpython.batman_agent import create_app
 
 app = create_app()
 

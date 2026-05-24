@@ -11,4 +11,11 @@ azure-ai-projects
 azure-identity
 # Anthropic Python client library for interacting with Anthropic's API
 anthropic
-# Browser automation tool for handling web browser interactions
+# Text analytics client library for Azure AI services
+azure-ai-textanalytics
+# Document intelligence client library for Azure AI services
+azure-ai-documentintelligence
+# A2A SDK for Azure AI services (if applicable)
+a2a-sdk
+# Unicorn for running the Flask application in production
+unicorn

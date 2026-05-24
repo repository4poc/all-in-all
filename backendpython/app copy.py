@@ -20,6 +20,13 @@ import requests
 import jsonref
 from typing import Any, cast
 
+from azure.ai.textanalytics import TextAnalyticsClient
+from azure.ai.documentintelligence import DocumentIntelligenceClient
+from azure.ai.documentintelligence.models import AnalyzeResult
+from azure.ai.documentintelligence.models import AnalyzeDocumentRequest
+from azure.ai.projects.models import PromptAgentDefinition
+from azure.core.credentials import AzureKeyCredential
+
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -33,6 +40,9 @@ AZURE_OPENAI_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT")
 AZURE_MODEL_NAME = os.getenv("AZURE_MODEL_NAME")
 FOUNDRY_PROJECT_ENDPOINT = os.getenv("FOUNDRY_PROJECT_ENDPOINT")
 MODEL_DEPLOYMENT_NAME = os.getenv("MODEL_DEPLOYMENT_NAME")
+
+azure_language_endpoint = os.getenv("AZURE_LANGUAGE_ENDPOINT")
+azure_language_api_key = os.getenv("AZURE_LANGUAGE_API_KEY")
 
 # Initialize OpenAI client
 openai_client = OpenAI(api_key=AZURE_OPENAI_API_KEY, base_url=AZURE_OPENAI_ENDPOINT)
@@ -90,6 +100,14 @@ def foundry_responses_chat():
 project_client = AIProjectClient(credential=DefaultAzureCredential(), endpoint=FOUNDRY_PROJECT_ENDPOINT)
 openai_client = project_client.get_openai_client()
 
+
+ta_credential = AzureKeyCredential(azure_language_api_key)
+
+text_analytics_client = TextAnalyticsClient(
+    endpoint=azure_language_endpoint,
+    credential=ta_credential
+)
+
 connection_id = ""
 
 mcp_server_name = os.getenv("MCP_SERVER_NAME")
@@ -114,7 +132,24 @@ for connection in project_client.connections.list():
 
 print(f"The AI Search Connection ID is: {connection_id}")
 
+def PII_Text_Redaction(input_text: str) -> str:
+    documents = [
+        input_text
+    ]
 
+    response = text_analytics_client.recognize_pii_entities(documents, language="en")
+    result = [doc for doc in response if not doc.is_error]
+    for doc in result:
+        redacted_text = doc.redacted_text
+        for entity in doc.entities:
+            print("Entity: {}".format(entity.text))
+            print("	Category: {}".format(entity.category))
+            print("	Confidence Score: {}".format(entity.confidence_score))
+            print("	Offset: {}".format(entity.offset))
+            print("	Length: {}".format(entity.length))
+        return redacted_text
+    
+    
 # OpanAI Agent API endpoint
 @app.route('/api/openAI/agent', methods=['POST'])
 def foundry_openAI_Agent():
@@ -145,6 +180,13 @@ def foundry_openAI_Agent():
         require_approval="never"
     )
 
+    custom_mcp_tool = MCPTool(
+        server_label="varinder-mcp-server",
+        server_url="http://localhost:8000/mcp",
+        server_description="Courses and Recipies MCP server",
+        require_approval="never"
+    )
+
     azure_ai_search_tool = AzureAISearchTool(
         azure_ai_search=AzureAISearchToolResource(
             indexes=[
@@ -162,8 +204,9 @@ def foundry_openAI_Agent():
         agent_name = "web-search-agent",
         definition = PromptAgentDefinition(
             model = MODEL_DEPLOYMENT_NAME,
-            instructions = "An agent that can perform petstore3 order information by orderID, mslearn mcp server and web search capabilities.You can use web search, Petstore OpenAPI, and Microsoft Learn MCP. Use Microsoft Learn MCP only for Microsoft documentation questions.Use the browser tool when the user asks to open websites, click buttons, fill forms, inspect pages, or perform UI workflows.Do not enter passwords, payment details, or sensitive personal data. Use azure_ai_search_tool to  answer cagpemini or varinder varinder related queries",
-            tools = [petstore_tool,MCPServerTool, azure_ai_search_tool]
+            instructions = "You are a Also a travel assistant. Help users plan their trips, find flights, hotels, and provide travel advice.",
+            tools = [custom_mcp_tool]
+            # tools = [petstore_tool,MCPServerTool, azure_ai_search_tool]
         )
     )
 
@@ -181,9 +224,13 @@ def foundry_openAI_Agent():
         conversation = openai_client.conversations.create()
         print(f"Created conversation with ID: {conversation.id}")
 
+        redacted_input = PII_Text_Redaction(user_message.strip())
+
+        print(f"Redacted Input: {redacted_input}")
+
         response = openai_client.responses.create(
             conversation=conversation.id,
-            input=user_message.strip(),
+            input=redacted_input,
             extra_body={
                 "agent_reference": {
                     "type": "agent_reference",
