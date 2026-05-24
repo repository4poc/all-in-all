@@ -153,6 +153,36 @@ export const PageLayout = (props: PageLayoutProps) => {
                         AI Chat
                       </a>
                     </li>
+                    <li>
+                      <a className="dropdown-item" href="/customersupport">
+                        Customer Support
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+
+                <li className="nav-item dropdown">
+                  <a
+                    className="nav-link dropdown-toggle"
+                    href="#"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    Agentic AI
+                  </a>
+
+                  <ul className="dropdown-menu">
+                    <li>
+                      <a className="dropdown-item" href="/chatwindow">
+                        AI Chat
+                      </a>
+                    </li>
+                    <li>
+                      <a className="dropdown-item" href="/customersupport">
+                        Customer Support
+                      </a>
+                    </li>
                   </ul>
                 </li>
               </ul>

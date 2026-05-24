@@ -16,6 +16,12 @@ npm run dev
 | Express | Backend API server  | 3000 (common choice) |
 ```
 
+| Tool         | Main purpose                           | Output                           |
+| ------------ | -------------------------------------- | -------------------------------- |
+| `vite build` | Bundles a frontend app for production  | Optimized files in `dist/`       |
+| `tsc`        | Type-checks and/or compiles TypeScript | `.js` files, or only type errors |
+| `ts-node`    | Runs TypeScript directly in Node.js    | No build output by default       |
+
 In real apps:
 
 ```

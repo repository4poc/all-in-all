@@ -70,3 +70,8 @@ export const loginRequest = {
 export const graphConfig = {
   graphMeEndpoint: "https://graph.microsoft.com/v1.0/me",
 };
+
+// Agent AI for cost monitoring
+export const azureManagementRequest = {
+  scopes: ["https://management.azure.com/user_impersonation"],
+};

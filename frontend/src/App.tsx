@@ -13,6 +13,7 @@ import Home from "./components/Home";
 import Drum from "./components/Drum";
 import CapitalQuiz from "./components/CapitalQuiz";
 import ChatWindow from "./components/ChatWindow";
+import CustomerSupport from "./components/CustomerSupport";
 
 /**
  * If a user is authenticated the ProfileContent component above is rendered. Otherwise a message indicating a user is not authenticated is rendered.
@@ -30,6 +31,7 @@ const MainContent = () => {
               <Route path="/qrcode" element={<QRGenerator />} />
               <Route path="/capitalquiz" element={<CapitalQuiz />} />
               <Route path="/chatwindow" element={<ChatWindow />} />
+              <Route path="/customersupport" element={<CustomerSupport />} />
             </Routes>
           </main>
 
