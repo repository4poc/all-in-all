@@ -55,6 +55,117 @@ resource "azurerm_resource_group" "rg" {
   tags     = var.tags
 }
 
+resource "azurerm_storage_account" "input_data_storage" {
+  name                = "allinallinputstorage007"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+
+  account_kind = "StorageV2"
+
+  # Enable anonymous blob access
+  allow_nested_items_to_be_public = true
+
+  access_tier = "Hot"
+
+  min_tls_version = "TLS1_2"
+
+  public_network_access_enabled = true
+
+  shared_access_key_enabled = true
+
+  infrastructure_encryption_enabled = false
+
+  cross_tenant_replication_enabled = false
+
+  blob_properties {
+    versioning_enabled = false
+
+    delete_retention_policy {
+      days = 7
+    }
+  }
+
+  tags = var.tags
+}
+
+# Public Blob Container
+resource "azurerm_storage_container" "input_data_container" {
+  name                  = "input"
+  storage_account_id    = azurerm_storage_account.input_data_storage.id
+  container_access_type = "container"
+}
+
+resource "azurerm_storage_account" "output_data_storage" {
+  name                = "allinalloutputstorage007"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+
+  account_kind = "StorageV2"
+
+  # Enable anonymous blob access
+  allow_nested_items_to_be_public = true
+
+  access_tier = "Hot"
+
+  min_tls_version = "TLS1_2"
+
+  public_network_access_enabled = true
+
+  shared_access_key_enabled = true
+
+  infrastructure_encryption_enabled = false
+
+  cross_tenant_replication_enabled = false
+
+  blob_properties {
+    versioning_enabled = false
+
+    delete_retention_policy {
+      days = 7
+    }
+  }
+
+  tags = var.tags
+}
+# Public Blob Container
+resource "azurerm_storage_container" "output_container" {
+  name                  = "output"
+  storage_account_id    = azurerm_storage_account.output_data_storage.id
+  container_access_type = "container"
+}
+
+resource "random_string" "suffix" {
+  length  = 6
+  upper   = false
+  special = false
+}
+
+
+# Azure AI Search - cheap/dev configuration
+resource "azurerm_search_service" "ai_search" {
+  name                = "srch-poc-${random_string.suffix.result}"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+
+  sku             = "free"
+  replica_count   = 1
+  partition_count = 1
+
+  public_network_access_enabled = true
+
+  tags = var.tags
+}
+
+
+
+
+
 
 # Create a Cognitive Account with kind AIServices which will enable Foundry capabilities
 resource "azurerm_cognitive_account" "foundry" {
@@ -128,8 +239,7 @@ resource "azurerm_cognitive_deployment" "text_embedding_ada_002" {
 
   depends_on = [
     azurerm_cognitive_account.foundry,
-    azurerm_cognitive_account_project.project,
-    azurerm_cognitive_deployment.gpt5
+    azurerm_cognitive_account_project.project
   ]
 }
 
@@ -164,29 +274,10 @@ resource "azapi_resource" "claude_opus_4_7_deployment" {
 
   depends_on = [
     azurerm_cognitive_account.foundry,
-    azurerm_cognitive_account_project.project,
-    azurerm_cognitive_deployment.text_embedding_ada_002
+    azurerm_cognitive_account_project.project
   ]
 }
 
-resource "azurerm_cognitive_account" "language" {
-  name                = "ailanguage-${var.appname}-${var.environment}"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-
-  kind     = "TextAnalytics"
-  sku_name = "F0"
-
-  custom_subdomain_name = "ailanguage-${var.appname}-${var.environment}"
-
-  public_network_access_enabled = true
-
-  identity {
-    type = "SystemAssigned"
-  }
-
-  tags = var.tags
-}
 
 module "databricks" {
   count               = 0 # Skipped , put it to 1
