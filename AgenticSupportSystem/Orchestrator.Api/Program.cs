@@ -24,11 +24,17 @@ builder.Services.AddCors(options =>
     });
 });
 
+
+// Register AG-UI Services
 builder.Services.AddHttpClient();
 builder.Services.AddLogging();
 builder.Services.AddAGUI();
+
 builder.Services.AddSingleton<RemoteAgentClient>();
 builder.Services.AddHttpContextAccessor();
+
+var app = builder.Build();
+
 
 var endpoint =
     Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT")
@@ -56,8 +62,13 @@ var meetingAnalyserAgentBaseUrl =
     builder.Configuration["Agents:MeetingAnalyserAgentBaseUrl"]
     ?? "http://localhost:5005";
 
+var proposalReviewerAgentBaseUrl =
+    builder.Configuration["Agents:ProposalReviewerAgentBaseUrl"]
+    ?? "http://localhost:5006";
 
-var app = builder.Build();
+var petstoreOpenApiAgentBaseUrl =
+    builder.Configuration["Agents:PetstoreOpenApiAgentBaseUrl"]
+    ?? "http://localhost:5007";
 
 var remoteAgentClient = app.Services.GetRequiredService<RemoteAgentClient>();
 
@@ -73,22 +84,52 @@ async Task<string> AskGitHubAgentAsync(string question)
     return await remoteAgentClient.AskAgentAsync(githubAgentBaseUrl, question);
 }
 
-[Description("Calls the MeetingAnalyser agent. Returns extracted meeting details as raw JSON. Do not summarize or rewrite the response.")]
-async Task<string> AskMeetingAnalyserAgentAsync(string question)
+[Description("Discovers and calls the MeetingAnalyser agent. Returns extracted meeting details as raw JSON. Do not summarize or rewrite the response.")]
+async Task<string> AskMeetingAnalyserAgentAsync(
+    [Description("The meeting trascript. Total length shoule be less than 500 characters")] string question)
 {
     return await remoteAgentClient.AskAgentAsync(meetingAnalyserAgentBaseUrl, question);
 }
 
+[Description("Discovers and calls the ProposalReviewer agent for proposal reviews against GDPR, HIPAA, security, compliance, and company policies.")]
+async Task<string> AskProposalReviewerAgentAsync(
+    [Description("Proposal review request. Include proposal text and target review scope such as GDPR, HIPAA, security, compliance, company policy, or full review.")]
+    string question)
+{
+    return await remoteAgentClient.AskAgentAsync(
+        proposalReviewerAgentBaseUrl,
+        question);
+}
+
+[Description("Discovers and calls the Petstore OpenAPI agent. Use this for petstore, pets, pet id, pet status, store inventory, orders, and user operations exposed by the Petstore OpenAPI specification.")]
+async Task<string> AskPetstoreOpenApiAgentAsync(
+    [Description("The user's Petstore API question. Examples: find available pets, get pet by id 10, check store inventory.")]
+    string question)
+{
+    return await remoteAgentClient.AskAgentAsync(
+        petstoreOpenApiAgentBaseUrl,
+        question);
+}
 
 var ragTool = AIFunctionFactory.Create(AskRagAgentAsync);
 var githubTool = AIFunctionFactory.Create(AskGitHubAgentAsync);
-var mailAnalyserTool = AIFunctionFactory.Create(AskMeetingAnalyserAgentAsync);
+var meetingAnalyserTool = AIFunctionFactory.Create(AskMeetingAnalyserAgentAsync);
+var proposalReviewerTool =
+    AIFunctionFactory.Create(AskProposalReviewerAgentAsync);
 
+var petstoreOpenApiTool =
+    AIFunctionFactory.Create(AskPetstoreOpenApiAgentAsync);
+
+/*var meetingAnalyserTool =
+    new ApprovalRequiredAIFunction(
+        AIFunctionFactory.Create(AskMeetingAnalyserAgentAsync));
+*/
 var chatClient = new AzureOpenAIClient(
         new Uri(endpoint),
         new AzureCliCredential())
     .GetChatClient(deploymentName)
     .AsIChatClient();
+
 
 AIAgent orchestratorAgent = chatClient.AsAIAgent(
     name: "OrchestratorAgent",
@@ -115,6 +156,9 @@ AIAgent orchestratorAgent = chatClient.AsAIAgent(
     - source code
 
     Use the MeetingAnalyser agent for:
+    Before calling the MeetingAnalyser tool, approval is required.
+    When the user provides a transcript, prepare the tool call.
+    The user must approve before the transcript is sent to the MeetingAnalyser agent
     Extract meeting details from the transcript.
 
     IMPORTANT:
@@ -139,12 +183,42 @@ AIAgent orchestratorAgent = chatClient.AsAIAgent(
         }
     ],
     "sentiment": ""
+
+
+    Use the ProposalReviewer agent for:
+    - proposal document review
+    - GDPR review
+    - HIPAA review
+    - security review
+    - compliance review
+    - company custom policy review
+    - full proposal risk review
+
+    If user asks "review only GDPR", call ProposalReviewer with GDPR scope.
+    If user asks "review security", call ProposalReviewer with Security scope.
+    If user asks "full proposal review", call ProposalReviewer with all scopes.
+
+
+    Use the Petstore OpenAPI agent for:
+    - petstore API questions
+    - finding pets by status
+    - getting a pet by id
+    - store inventory
+    - pet orders
+    - Petstore user operations
+    - questions that require reading or using the Petstore OpenAPI specification
+
+    When the user asks about available, pending, or sold pets, call the Petstore OpenAPI agent.
+    When the user asks for a specific pet id, call the Petstore OpenAPI agent.
+    Do not manually construct Petstore URLs.
+    Do not answer Petstore API questions from memory.    
     
     """,
-    tools: [ragTool, githubTool, mailAnalyserTool]
+    tools: [ragTool, githubTool, meetingAnalyserTool, proposalReviewerTool, petstoreOpenApiTool]
 );
 
 AgentSession session = await orchestratorAgent.CreateSessionAsync();
+Console.WriteLine(session.StateBag.ToString());
 
 app.UseCors("Frontend");
 
@@ -170,25 +244,8 @@ app.MapGet("/.well-known/agent.json", () =>
             "agent-discovery",
             "rag-routing",
             "github-routing",
-            "ag-ui"
-        ]
-    });
-});
-
-app.MapGet("/.well-known/agent-card.json", () =>
-{
-    return Results.Ok(new AgentCard
-    {
-        Name = "OrchestratorAgent",
-        Description = "Main AG-UI enterprise support orchestrator. Routes user questions to specialist agents.",
-        Version = "1.0.0",
-        Endpoint = "http://localhost:5000/agui/support",
-        Capabilities =
-        [
-            "orchestration",
-            "agent-discovery",
-            "rag-routing",
-            "github-routing",
+            "openapi-routing",
+            "petstore-routing",
             "ag-ui"
         ]
     });

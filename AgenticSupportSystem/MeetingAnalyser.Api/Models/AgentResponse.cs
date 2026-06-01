@@ -1,18 +1,16 @@
-using System.Text.Json.Serialization;
-
 namespace MeetingAnalyser.Api.Models;
 
-public record AgentResponse(
-    [property: JsonPropertyName("topic")] string Topic,
-    [property: JsonPropertyName("date")] string Date,
-    [property: JsonPropertyName("duration")] string Duration,
-    [property: JsonPropertyName("attendees")] string[] Attendees,
-    [property: JsonPropertyName("actionItems")] ActionItem[] ActionItems,
-    [property: JsonPropertyName("sentiment")] string Sentiment
-);
+public sealed class AgentResponse
+{
+    public string Topic { get; set; } = string.Empty;
 
-public record ActionItem(
-    [property: JsonPropertyName("owner")] string Owner,
-    [property: JsonPropertyName("action")] string Action,
-    [property: JsonPropertyName("due")] string Due
-);
+    public string Date { get; set; } = string.Empty;
+
+    public string Duration { get; set; } = string.Empty;
+
+    public List<string> Attendees { get; set; } = [];
+
+    public List<ActionItem> ActionItems { get; set; } = [];
+
+    public string Sentiment { get; set; } = string.Empty;
+}

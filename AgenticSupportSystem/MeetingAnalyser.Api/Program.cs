@@ -1,18 +1,25 @@
 using Azure.AI.OpenAI;
 using Azure.Identity;
+using MeetingAnalyser.Api.Models;
 using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
-using System.ComponentModel;
-using System.Net.Http.Headers;
-using System.Text.Json;
-
-using MeetingAnalyser.Api.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Frontend", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:5173", "http://localhost:3000")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 var endpoint =
     Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT")
@@ -26,45 +33,13 @@ var deploymentName =
 
 var app = builder.Build();
 
+app.UseCors("Frontend");
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.MapGet("/.well-known/agent.json", () =>
-{
-    return Results.Ok(new AgentCard
-    {
-        Name = "MeetingAnalystAgent",
-        Description = "You are an MeetingAnalyst Agent. Extract the topic, date , attendees, duration, action items, and overall sentiment from the provided transcript.",
-        Version = "1.0.0",
-        Endpoint = "http://localhost:5005/api/agent/ask",
-        Capabilities =
-        [
-            "meetings",
-            "transcripts"
-        ]
-    });
-});
-
-app.MapGet("/.well-known/agent-card.json", () =>
-{
-    return Results.Ok(new AgentCard
-    {
-        Name = "MeetingAnalystAgent",
-        Description = "You are an MeetingAnalyst Agent. Extract the topic, date , attendees, duration, action items, and overall sentiment from the provided transcript.",
-        Version = "1.0.0",
-        Endpoint = "http://localhost:5005/api/agent/ask",
-        Capabilities =
-        [
-            "meetings",
-            "transcripts"
-        ]
-    });
-});
-
-
 
 IChatClient chatClient = new AzureOpenAIClient(
         new Uri(endpoint),
@@ -75,79 +50,81 @@ IChatClient chatClient = new AzureOpenAIClient(
 AIAgent meetingAnalyserAgent = chatClient.AsAIAgent(
     name: "MeetingAnalyserAgent",
     instructions: """
-    Extract meeting details from the transcript.
-    Return:
-    - topic
-    - date
-    - duration
-    - attendees
-    - actionItems
-    - sentiment
+    You are a Meeting Analyser Agent.
+
+    Extract structured meeting information from the transcript.
+
+    Return JSON only.
+    Do not return markdown.
+    Do not add explanations.
+    Do not wrap the JSON in ```json.
+
+    Required JSON shape:
+
+    {
+      "topic": "",
+      "date": "",
+      "duration": "",
+      "attendees": [],
+      "actionItems": [
+        {
+          "owner": "",
+          "action": "",
+          "due": ""
+        }
+      ],
+      "sentiment": ""
+    }
+
+    Rules:
+    - If a value is missing, use an empty string.
+    - If attendees are missing, return an empty array.
+    - If no action items exist, return an empty array.
+    - Sentiment must be one of: Positive, Neutral, Negative, Mixed.
     """
 );
 
-// 3. Execute the Agent with RunAsync<T> for strongly-typed structured output
-string transcript = """
-Varinder: Good morning everyone. Thanks for joining. Today 24 May 2026 , will connect for 15 min. I wanted to review the Azure migration progress and confirm next steps for deployment.
-
-Sarah: Morning. From the infrastructure side, the App Service and Azure SQL resources are provisioned in the dev environment. Networking is also configured with VNet integration.
-
-John: Great. On the application side, we completed the .NET 10 upgrade and deployed the latest build to the dev slot yesterday. Basic smoke testing passed.
-
-Priya: I also validated database connectivity using managed identity. Passwordless connection is working correctly from App Service to Azure SQL.
-
-Varinder: Nice. Any blockers at the moment?
-
-Sarah: One thing—we still need to finalize private endpoint DNS configuration before we can disable public access on the database.
-
-John: I also noticed one API endpoint is returning a timeout during bulk processing. I’m investigating whether it’s a SQL query issue or app configuration.
-
-Priya: For QA testing, I’ll need the updated endpoint URL and sample data by tomorrow.
-
-Varinder: That works. Sarah, can you complete private endpoint configuration by end of day?
-
-Sarah: Yes, I can do that.
-
-Varinder: John, please investigate the timeout and share findings.
-
-John: Will do.
-
-Varinder: Priya, once you receive the endpoint, please begin regression testing.
-
-Priya: Sounds good.
-
-Varinder: Quick timeline check—are we still on track for pre-prod deployment this Friday?
-
-Sarah: Infra side yes.
-
-John: App side yes, assuming the timeout issue is resolved today.
-
-Priya: QA is aligned.
-
-Varinder: Perfect. Thanks everyone. Let’s reconnect tomorrow for a quick check-in.
-""";
-
-
-// Meeting Analyser
-app.MapPost("/api/agent/ask", async (AgentRequest request) =>
+app.MapGet("/.well-known/agent.json", () =>
 {
-    AgentResponse<MeetingAnalyser.Api.Models.AgentResponse> response =
-        await meetingAnalyserAgent.RunAsync<MeetingAnalyser.Api.Models.AgentResponse>(request.Question);
-
-    Console.WriteLine(JsonSerializer.Serialize(
-    response.Result,
-        new JsonSerializerOptions
-        {
-            WriteIndented = true
-        }
-    ));
-
-    return Results.Ok(response.Result);
-
-
+    return Results.Ok(new AgentCard
+    {
+        Name = "MeetingAnalyserAgent",
+        Description = "Extracts topic, date, attendees, duration, action items, and sentiment from a meeting transcript.",
+        Version = "1.0.0",
+        Endpoint = "http://localhost:5005/api/agent/ask",
+        Capabilities =
+        [
+            "meetings",
+            "transcripts",
+            "action-items",
+            "sentiment-analysis"
+        ]
+    });
 });
 
+app.MapPost("/api/agent/ask", async (AgentRequest request) =>
+{
+    if (string.IsNullOrWhiteSpace(request.Question))
+    {
+        return Results.BadRequest(new
+        {
+            error = "Transcript is required."
+        });
+    }
 
+    if (request.Question.Length > 8000)
+    {
+        return Results.BadRequest(new
+        {
+            error = "Transcript is too long. Maximum allowed length is 8000 characters."
+        });
+    }
 
+    AgentResponse<MeetingAnalyser.Api.Models.AgentResponse> response =
+        await meetingAnalyserAgent.RunAsync<MeetingAnalyser.Api.Models.AgentResponse>(
+            request.Question);
+
+    return Results.Ok(response.Result);
+});
 
 app.Run("http://localhost:5005");
