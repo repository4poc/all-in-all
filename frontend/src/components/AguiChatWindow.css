@@ -1,0 +1,133 @@
+.agui-chat {
+  width: 100%;
+  max-width: 900px;
+  height: 85vh;
+  margin: 24px auto;
+  border: 1px solid #ddd;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #fff;
+  text-align: left;
+}
+
+.agui-chat-header {
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.agui-chat-header h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.agui-chat-header span {
+  font-size: 12px;
+  color: #666;
+}
+
+.agui-chat-messages {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  background: #fafafa;
+}
+
+.agui-empty {
+  color: #1a0f0f;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.agui-message {
+  max-width: 75%;
+  margin-bottom: 14px;
+  padding: 12px;
+  border-radius: 12px;
+  color: #1a0f0f;
+}
+
+.agui-message-user {
+  margin-left: auto;
+  background: #dcfce7;
+}
+
+.agui-message-assistant {
+  margin-right: auto;
+  background: #fff;
+  border: 1px solid #eee;
+}
+
+.agui-message-role {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+.agui-message-content {
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.agui-chat-input {
+  display: flex;
+  gap: 8px;
+  padding: 16px;
+  border-top: 1px solid #eee;
+}
+
+.agui-chat-input input {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.agui-chat-input button,
+.agui-chat-header button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.agui-chat-input button {
+  background: #111827;
+  color: white;
+}
+
+.agui-chat-input button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.agui-message-content {
+  color: #000; /* black text */
+  font-family: Arial, sans-serif;
+  font-size: 14px; /* smaller font */
+  line-height: 1.4;
+}
+
+/* Also style markdown-generated elements */
+.agui-message-content p,
+.agui-message-content li,
+.agui-message-content span,
+.agui-message-content strong,
+.agui-message-content em,
+.agui-message-content code {
+  color: #000;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+/* Optional: bullet list spacing */
+.agui-message-content ul,
+.agui-message-content ol {
+  margin: 8px 0;
+  padding-left: 20px;
+}

@@ -62,6 +62,7 @@ function CustomerSupport() {
     loadToken();
   }, [accounts, instance]);
 
+  const threadId = getThreadId();
   //
   // AG-UI agent
   //
@@ -71,18 +72,14 @@ function CustomerSupport() {
 
       description: "Customer Support Agent",
 
-      threadId: getThreadId(),
+      threadId,
 
-      //
-      // Must be plain object
-      //
-      headers: accessToken
-        ? {
-            Authorization: `Bearer ${accessToken}`,
-          }
-        : {},
+      headers: {
+        ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+        "x-thread-id": threadId,
+      },
     });
-  }, [accessToken]);
+  }, [accessToken, threadId]);
 
   //
   // start typing animation
