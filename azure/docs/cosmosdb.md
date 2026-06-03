@@ -848,3 +848,35 @@ Need ACID across partitions or containers?
 ```
 
 You should almost never design a Cosmos solution assuming transactions across containers. That's where patterns like Change Feed, Service Bus, and eventual consistency come in.
+
+## Trigger
+
+JavaScript function trigger pre/post of the item.
+
+## In Cosmos DB, ACID is achieved only inside one logical partition, in one container.
+
+**Best options**
+
+TransactionalBatch — recommended in .NET
+
+Use this when multiple documents share the same partition key.
+
+```
+var batch = container.CreateTransactionalBatch(
+    new PartitionKey("cust123"));
+
+batch.CreateItem(order);
+batch.CreateItem(auditRecord);
+batch.ReplaceItem(summary.Id, summary);
+
+TransactionalBatchResponse response = await batch.ExecuteAsync();
+
+if (!response.IsSuccessStatusCode)
+{
+    throw new Exception($"Batch failed: {response.StatusCode}");
+}
+```
+
+If you want your cosmosdb data to be copied to other service as inserted/updated.
+
+**Use** : Change Feed
