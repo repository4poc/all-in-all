@@ -14,6 +14,8 @@ obj/
 x64/
 x86/
 AnyCPU/
+azure-tutorial
+azure_functions
 
 # User-specific files
 *.user
@@ -25,7 +27,6 @@ AnyCPU/
 # =========================
 .vs/
 .idea/
-.vscode/
 
 # Rider
 *.sln.iml
