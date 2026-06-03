@@ -543,3 +543,308 @@ static async Task DeleteItem(CosmosClient client)
 
 await DeleteItem(client);
 ```
+
+## Change Feed (Continuous stream of changes done within a container)
+
+A built-in feature in Azure CosmosDB, a persistant log record all changes occure within a container.
+So you can have application that react to that changes like Azure functions.
+So instead of pooling the cosmosDB, for changes. We can listen to the chagne feed.
+
+Usecase:
+
+- you want to send the change feed to another service like Azure Synapsis or Azure Data lake
+- You want to notifiy or track or monitor changes to containers.
+
+### Change Feed Processor - Key components
+
+- Monitored Container
+  - The container we are monitoring for changes
+- Lease Container
+  - Store the state
+  - Checkpoint in place
+- Host : Host machine run the change feed processor
+- Delegate : Code of the change feed processor
+
+### How to enable change feed feature in the cosmosDB
+
+< CosmosDB Account > --> Features --> All change feed (Enable)
+
+![alt text](images/{79A8E54F-2BEE-4186-BCD3-C06BCB71282E}.png)
+
+**Pre-requisite** : Enable Continuous backup.
+
+![alt text](images/{51EDAA94-6C99-458A-9A0C-ECD1BBD668CF}.png)
+
+![alt text](images/{4802B1FF-C9D3-457D-90B2-12A674E54218}.png)
+
+![alt text](images/{D034528A-3622-4B90-A757-19A9E7EFEF5A}.png)
+
+For Update Detection
+
+```
+foreach (var order in changes)
+{
+    if (order.CreatedAt == order.UpdatedAt)
+    {
+        Console.WriteLine($"INSERT: {order.Id}");
+    }
+    else
+    {
+        Console.WriteLine($"UPDATE: {order.Id}");
+    }
+}
+```
+
+For Delete Detection - Do soft delete
+
+```
+{
+  "id": "3",
+  "customerId": "Krishna",
+  "isDeleted": true,
+  "deletedAt": "2026-06-02T18:30:00Z"
+}
+```
+
+By default azure function listening to cosmosDB database container is by defautl a changefeed processor (so only insert/update, not delete)
+
+When you write
+
+```
+    [Function("CosmosTrigger1")]
+    public void Run([CosmosDBTrigger(
+        databaseName: "order-db",
+        containerName: "Orders",
+        Connection = "CosmosDBConnection",
+        LeaseContainerName = "leases",
+        CreateLeaseContainerIfNotExists = true)] IReadOnlyList<Order> input)
+    {
+        if (input != null && input.Count > 0)
+        {
+            _logger.LogInformation("Documents modified: " + input.Count);
+            _logger.LogInformation("First document Id: " + input[0].Id);
+        }
+    }
+```
+
+Azure Functions automatically creates and runs a Change Feed Processor behind the scenes.
+
+Conceptually, Azure is doing something similar to:
+This approach issed in 3rd party backend applications
+
+```
+static Task HandleChanges(
+    IReadOnlyCollection<Order> changes, CancellationToken token
+)
+{
+    Console.WriteLine($"Received {changes.Count} changes.");
+    foreach (var order in changes)
+    {
+        Console.WriteLine($"Order id: {order.Id}, CustomerId: {order.CustomerId}");
+    }
+
+    return Task.CompletedTask;
+}
+
+ChangeFeedProcessor processor =
+    ordersContainer
+        .GetChangeFeedProcessorBuilder<Order>(
+            processorName: "CosmosTrigger1",
+            onChangesDelegate: HandleChanges)
+        .WithLeaseContainer(leasesContainer)
+        .Build();
+
+await processor.StartAsync();
+```
+
+## Time To Live
+
+A Built-in feature in CosmosDB that automatically delete items after a specific amount of time
+
+- TTL is in seconds
+- Calculates from the time the item was last modified
+- Usecase : you are storing state data in cosmosDB and don't want separate script to delete data
+- TTL can be specified at
+  - container level : Default value for all items
+  - item level : Override the default container level value.
+- ![alt text](images/{504B0F66-155D-434E-943F-1C6011B3528E}.png)
+
+## Consistency Level :
+
+![alt text](images/{2C87E437-3B2E-4174-9C07-B7FFE59C545F}.png)
+
+In cosmosDB , global distribution we can have
+
+- Multi region read (so writes in primany region reflect in secondary regions, but writes in secondary region will not be synced to primary region)
+- Multi region writes (So writes to secondary regions also synched to primary and other regions)
+
+**Note** Globally distributed data feature, not available for serverless cosmosdb setup.
+
+So when data is globally distributed, we have differnet consistency levels:
+
+- **Strong** : linearizability guarantee, with highest read latency
+  ![alt text](images/{51F06183-C670-4B59-A754-E5A598C617E6}.png)
+- **Bounded Staleness** : Reads are allowed to be stale with bounded staleness (X seconds or X operations), with order guarantees.
+  ![alt text](images/{B927F86D-8487-4ECB-A836-A776355FB3C1}.png)
+- **Session** : In session, guranteed to get latest data.
+  ![alt text](images/{36367332-E10A-456C-AD3B-9D7A72E0E149}.png)
+- Consistant Prefix
+
+- **Eventual** : You dont mind reading stale data, but evetually data will be consistent.
+  ![alt text](images/{493BA177-3894-4B05-B648-462BA9297B1D}.png)
+
+Note: Azure Cosmos DB Serverless accounts do not support Global Distribution (multi-region writes/reads) in the same way as provisioned-throughput accounts.
+
+**Serverless limitations**
+
+Serverless supports:
+
+✅ Single region
+✅ Automatic scaling (pay per request)
+✅ Change Feed
+✅ Continuous Backup
+
+But has restrictions such as:
+
+❌ Multi-region writes
+❌ Traditional global distribution features
+❌ Autoscale RU/s (because there are no provisioned RU/s)
+
+## Synthetic Partition Key
+
+Choose partitionKey in such a way that, data is evenly distributed.
+
+In case you can't have any property that evently distribute data, you can add your own new property, that can distribute the data evenly. You can decide on the logic for they key (synthetic key) like by combining few properties/keys
+
+## Azure function (with Blob Trigger) - Azure cosmosDB
+
+```
+using System.IO;
+using System.Threading.Tasks;
+using Microsoft.Azure.Cosmos;
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+
+namespace Company.Function;
+
+public class BlobTrigger1
+{
+    private readonly ILogger<BlobTrigger1> _logger;
+    private readonly CosmosClient _cosmosClient;
+
+    public BlobTrigger1(ILogger<BlobTrigger1> logger)
+    {
+        _logger = logger;
+
+        var connectionString = Environment.GetEnvironmentVariable("CosmosDBConnection");
+        _cosmosClient = new CosmosClient(connectionString);
+    }
+
+    [Function(nameof(BlobTrigger1))]
+    [CosmosDBOutput(databaseName: "order-db", containerName: "Orders", Connection = "CosmosDBConnection")]
+    public async Task Run([BlobTrigger("samples-workitems/{name}", Connection = "promprequest2284_STORAGE")] Stream stream, string name)
+    {
+        using var blobStreamReader = new StreamReader(stream);
+        var content = await blobStreamReader.ReadToEndAsync();
+        _logger.LogInformation("C# Blob trigger function Processed blob\n Name: {name} \n Data: {content}", name, content);
+
+        Order? order = System.Text.Json.JsonSerializer.Deserialize<Order>(content);
+        if (order != null)
+        {
+            _logger.LogInformation("Order details: Id: {id}, Product: {product}, Quantity: {quantity}", order.Id, order.CustomerId, order.UserId);
+        }
+        else
+        {
+            _logger.LogError("Failed to deserialize the blob content into an Order object.");
+        }
+
+        _logger.LogInformation(JsonConvert.SerializeObject(order, Formatting.Indented));
+
+        if (order != null)
+        {
+            var container = _cosmosClient.GetContainer("order-db", "Orders");
+
+            await container.UpsertItemAsync(
+                order,
+                new PartitionKey(order.CustomerId));
+
+            _logger.LogInformation(
+                "Order inserted/upserted. Id: {id}, CustomerId: {customerId}, UserId: {userId}",
+                order.Id,
+                order.CustomerId,
+                order.UserId);
+        }
+    }
+}
+```
+
+## Stored Procdure
+
+They are written in JavaScript, run inside Cosmos DB, and are transactional only within one logical partition key. For partitioned containers, you must pass the partition key when executing the stored procedure.
+
+Use stored procedures only when you specifically need ACID transaction across multiple documents in the same partition in single container.
+
+Suppose your container is
+
+```
+Orders
+Partition Key = /CustomerId
+```
+
+Documents:
+
+```
+{
+  "id": "********",
+  "CustomerId": "cust123",
+  "Type": "CustomerData",
+  "name": "Harish"
+}
+
+{
+  "id": "********",
+  "CustomerId": "cust123",
+  "Type": "PaymentData",
+  "Mehod": "CreditCard",
+  "status": "Pending"
+}
+```
+
+- Server Side, set of sql
+- Scoped only single partition
+- Run by Database Engine
+- Written in JavaScript
+
+Everything with the same partition key value is physically colocated and can participate in a transaction.
+
+**What enterprises usually do today**
+
+In modern cloud architectures, most teams avoid Cosmos stored procedures and instead use:
+
+```
+- Application Service
+- Azure Function
+- Transaction Batch
+
+Especially TransactionalBatch in .NET:
+
+container.CreateTransactionalBatch(
+    new PartitionKey("cust123"))
+```
+
+This gives the same ACID guarantee within a partition and is easier to maintain than JavaScript stored procedures.
+
+For a Solution Architect, the rule of thumb is:
+
+```
+Need ACID within one partition?
+→ TransactionalBatch (preferred)
+→ Stored Procedure (legacy/special cases)
+
+Need ACID across partitions or containers?
+→ Use Saga/Event-driven pattern
+→ Service Bus / Change Feed / Compensation
+```
+
+You should almost never design a Cosmos solution assuming transactions across containers. That's where patterns like Change Feed, Service Bus, and eventual consistency come in.

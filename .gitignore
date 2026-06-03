@@ -16,6 +16,7 @@ x86/
 AnyCPU/
 azure-tutorial
 azure_functions
+.vscode/
 
 # User-specific files
 *.user
