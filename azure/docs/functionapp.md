@@ -50,6 +50,164 @@ PaaS
   - Enabled
     - Application Insight : < Select or Create Application Insight Resource>
 - Authentication: For best security practice, use managed identity authentication when available (some resources may only use secrets).
- ![alt text](images/{AF000BAB-8E9E-4E1B-98A5-C2734150F387}.png)
+  ![alt text](images/{AF000BAB-8E9E-4E1B-98A5-C2734150F387}.png)
 - Tags
 
+### Question: "If Azure Functions can expose HTTP endpoints, why do we need ASP.NET Web API at all?"
+
+The answer is that they solve different problems.
+
+Use Azure Functions when
+
+```
+Event-driven systems
+Serverless workloads
+Background processing
+Integrations
+```
+
+Examples
+
+```
+Blob uploaded
+→ Process file
+
+Cosmos document changed
+→ Trigger workflow
+
+Message arrives in Service Bus
+→ Process order
+
+Timer every night
+→ Generate report
+```
+
+Functions are excellent for:
+
+```
+Short-lived execution
+Auto-scaling
+Pay-per-execution
+Event processing
+```
+
+### Use ASP.NET Web API when
+
+When you are builing
+
+```
+Business applications
+Microservices
+Backend APIs
+Long-running services
+```
+
+Examples:
+
+```
+Order Management API
+Customer API
+Product API
+Banking API
+E-commerce Backend
+```
+
+### Can Functions replace Web APIs?
+
+For small applications: Yes
+For enterprise applications: No
+
+Why not?
+
+Suppose you have:
+
+```
+100 endpoints
+Complex authentication
+Swagger
+Versioning
+Middleware
+Caching
+CQRS
+Dependency Injection
+Custom Authorization
+```
+
+ASP.NET Core handles this naturally.
+
+Functions become harder to manage.
+
+### Enterprise Architecture
+
+```
+Frontend
+     ↓
+API Management
+     ↓
+ASP.NET Web API
+     ↓
+Cosmos DB
+
+Cosmos Change Feed
+     ↓
+Azure Function
+     ↓
+Service Bus
+```
+
+or
+
+```
+Frontend
+     ↓
+API Management
+     ↓
+Function App
+```
+
+for lightweight APIs.
+
+### Decision Metrix
+
+| Scenario                 | Web API | Function |
+| ------------------------ | ------- | -------- |
+| CRUD APIs                | ✅      | ⚠️       |
+| Event processing         | ❌      | ✅       |
+| Blob processing          | ❌      | ✅       |
+| Change Feed              | ❌      | ✅       |
+| Service Bus consumer     | ❌      | ✅       |
+| Complex business service | ✅      | ⚠️       |
+| Long-running service     | ✅      | ❌       |
+| Serverless integration   | ❌      | ✅       |
+| E-commerce backend       | ✅      | ⚠️       |
+| Scheduled jobs           | ❌      | ✅       |
+
+For a Solution Architect, the usual recommendation is:
+
+```
+Web API = synchronous business operations
+
+Azure Functions = asynchronous/event-driven processing
+```
+
+That's why in modern Azure solutions you'll often see both:
+
+## Function (Storage Queue Trigger)
+
+```
+    [Function(nameof(QueueTrigger1))]
+    public void Run([QueueTrigger("orderstate", Connection = "promprequest2284_STORAGE")] Order message)
+    {
+        if (message.Id == "order123")
+        {
+            _logger.LogError("Received a null message from the queue.");
+            return; // means success so message will be removed from the queue, if you want to retry, throw an exception instead of returning.
+        }
+        if (message.Id == "order1234")
+        {
+            _logger.LogError("Invalid message. Retrying.");
+            throw new Exception("Invalid order message."); // message will be send to the poison queue after 5 retries (default) if the exception is thrown in the function.
+        }
+        _logger.LogInformation("Order details: Id: {id}, Product: {product}, Quantity: {quantity}", message.Id, message.CustomerId, message.UserId);
+    }
+```
