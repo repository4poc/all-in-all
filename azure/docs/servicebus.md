@@ -636,3 +636,141 @@ application.json
   }
 }
 ```
+
+## Duplicate Message Detection
+
+Prevent same message to be accepted twice, so in case sender send same message again, service bus reject the message.
+
+### How it works
+
+Service Bus maintains message ids of message for a specific time windows and, it does not accept any message with same message id, already received in that time window.
+
+![alt text](images/{EEF03CB0-497F-477C-A74B-8DB01886E9A2}.png)
+
+| Avg message size | Approx messages in 5 GB |
+| ---------------: | ----------------------: |
+|             1 KB |            ~5.2 million |
+|             2 KB |            ~2.6 million |
+|             3 KB |            ~1.7 million |
+|             4 KB |            ~1.3 million |
+|            10 KB |                ~524,000 |
+|            50 KB |                ~104,000 |
+|           256 KB |                 ~20,000 |
+
+## If there are 1.5 mission messages, so how many function will invoke at a time, how it is in reality
+
+- 1.5 million messages does NOT mean 1.5 million functions run simultaneously
+- Suppose:
+  - Queue contains 1,500,000 messages
+  - Each message takes 2 seconds to process
+  - Function concurrency per instance = 32 (No of instance depends on Plan, Premium Max: 20 instances)
+
+```
+Queue: 1,500,000 messages
+
+Instance 1
+  ├─ Message 1
+  ├─ Message 2
+  ├─ ...
+  └─ Message 32
+```
+
+```
+Instance 1 → 32 concurrent
+Instance 2 → 32 concurrent
+Instance 3 → 32 concurrent
+...
+Instance 20 → 32 concurrent
+```
+
+```
+20 × 32 = 640 messages per 2 seconds
+
+1,500,000 / 640
+≈ 2343 seconds
+≈ 39 minutes
+```
+
+## Service Bus - Topic
+
+Used When there is single message that need to be read by multiple receiver, which is not possible in case of Queues.
+
+Used in **Fan-out** scenarios, where message need to be send to multiple receivers.
+
+### Pre-requisite:
+
+Service Bus with - Standar or Premium Tier
+
+### Create Service Bus Namespace
+
+### Create Serviec Bus Topic
+
+![alt text](images/{A36ABA3A-9C4C-4D92-B5CC-67BB89206803}.png)
+
+- Name:
+- Max Topic Size : 1-5 GB
+- TTL :
+- Enable Auto Delete on Ideal Topic :
+- Enable Duplicate Detection
+- Enable Partition
+- Support Ordering : This indicates whether the topic supports ordering
+
+### Create Topic - Subscription
+
+When we create subscription for the topic, each subscription will get the copy of the message.
+
+Example : Billing Subscription, Notification Subscription
+
+- Name
+- Max. Delivery Count
+- Auto Delete After Idle For
+  ![alt text](images/{F69D9093-2809-4B60-A607-EF53D6CFD730}.png)
+- Neve Auto Delete
+- Forward Message to Queue/Topic
+- Enable Session : With sessions enabled a subscription can guarantee first-in-first-out delivery of messages.
+- TTL
+- Enable Dead Lettering on message expire
+- Move messages that cause filter evaluation exceptions to the dead-letter subqueue
+- Lock duration
+  ![alt text](images/{24969F0F-9B23-4999-B648-7FFCAAF0E9B6}.png)
+
+  ![alt text](images/{D1989FF9-8E81-4994-B28F-338B8ED4D658}.png)
+
+### Use DefaultAuthentication instead of connectionstring
+
+In case you use managed identity using DefaultAuthentication, you need to give
+
+- "Service Bus Data Sender" Role to the sernder identity
+- "Service Bus Data Receiver" Role to the receiver identity
+
+For local Testing use "az login" amd on the cloud use the AKS or App Service - System Assigned Managed Identity
+
+### Service Bus Topic Subscription -Filter
+
+![alt text](images/{38081946-96A3-43A2-A757-4531F5C0E6F0}.png)
+
+There is a $default filter with condition 1==1, so it accept all messages
+
+![alt text](images/{3DFBA600-3778-4A00-AEB6-BAC0CE453D96}.png)
+
+### Add custom Filter
+
+Filter Types
+
+- SQL FIlter
+- Correlation Filter
+
+### SQL Filter
+
+Use can only use message Application properties in the Filters,
+![alt text](images/{AC8F1868-DA56-4F5E-A216-A92125EA8DBC}.png)
+![alt text](images/{F781999A-2135-4B2F-88E3-1E35C562D424}.png)
+![alt text](images/{781A5C0C-9076-4FF9-9815-DE5C4E06DBEA}.png)
+
+### Correlation Filter
+
+When you want to use the message property besides the message application properties
+
+If you are using multiple filter, all filter conditions must satify, else message will be rejected by the subscription.
+
+![alt text](images/{67E2DB61-D0A8-44FA-9350-FD2B6493E3AD}.png)
