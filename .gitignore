@@ -8,14 +8,17 @@
 bin/
 obj/
 
+# Custom Applications
+azure-webapi-demos
+azure_functions
+SRE
+
 # Build output
 [Dd]ebug/
 [Rr]elease/
 x64/
 x86/
 AnyCPU/
-azure-webapi-demos
-azure_functions
 .vscode/
 
 # User-specific files
