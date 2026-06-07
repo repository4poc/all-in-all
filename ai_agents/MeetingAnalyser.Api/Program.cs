@@ -54,28 +54,6 @@ AIAgent meetingAnalyserAgent = chatClient.AsAIAgent(
 
     Extract structured meeting information from the transcript.
 
-    Return JSON only.
-    Do not return markdown.
-    Do not add explanations.
-    Do not wrap the JSON in ```json.
-
-    Required JSON shape:
-
-    {
-      "topic": "",
-      "date": "",
-      "duration": "",
-      "attendees": [],
-      "actionItems": [
-        {
-          "owner": "",
-          "action": "",
-          "due": ""
-        }
-      ],
-      "sentiment": ""
-    }
-
     Rules:
     - If a value is missing, use an empty string.
     - If attendees are missing, return an empty array.
