@@ -1,195 +1,25 @@
 # 🚀 All-In-All
 
-Full-stack cloud-native application using:
-
-- React (Frontend)
-- FastAPI (Backend)
-- AKS (Kubernetes)
-- Terraform (Infrastructure)
-
----
+## Full-stack cloud-native application with Agentic AI capabilities
 
 ## 📁 Project Structure
 
 ```bash
 all-in-all/
 │
-├── frontend/ # React UI
-│ ├── public/
-│ ├── src/
-│ │ ├── app/ # App entry, routing
-│ │ ├── components/ # Reusable UI components
-│ │ ├── features/ # Feature-based modules
-│ │ ├── hooks/
-│ │ ├── services/ # API calls
-│ │ ├── store/ # Redux/Zustand
-│ │ ├── utils/
-│ │ └── styles/
-│ ├── tests/
-│ ├── package.json
-│ └── Dockerfile
+├── frontend/ # Frontend Application in ReactJS, Bootstrap, CSS Grid, NodeJS, Axios
 │
-├── backend/ # Python API (FastAPI recommended)
-│ ├── app/
-│ │ ├── api/ # Route definitions
-│ │ │ ├── v1/
-│ │ │ └── dependencies/
-│ │ ├── core/ # Config, security, settings
-│ │ ├── models/ # DB models
-│ │ ├── schemas/ # Pydantic schemas
-│ │ ├── services/ # Business logic
-│ │ ├── repositories/ # DB access layer
-│ │ ├── workers/ # Background jobs
-│ │ └── main.py
-│ │
-│ ├── tests/
-│ ├── alembic/ # DB migrations
-│ ├── requirements.txt / pyproject.toml
-│ └── Dockerfile
+├── ai_agent/ # AI Agent in C#
 │
-├── infrastructure/ # Terraform (IaC)
-│ ├── modules/ # Reusable modules
-│ │ ├── aks/
-│ │ ├── networking/
-│ │ ├── database/
-│ │ └── monitoring/
-│ │
-│ ├── environments/
-│ │ ├── dev/
-│ │ ├── staging/
-│ │ └── prod/
-│ │ ├── main.tf
-│ │ ├── variables.tf
-│ │ └── outputs.tf
-│ │
-│ └── global/
-│ ├── backend.tf # remote state config
-│ └── providers.tf
+├── backendexpress/ # Backend API in NodeJS, Express, TypeScript
 │
-├── k8s/ # Kubernetes manifests (AKS)
-│ ├── base/
-│ │ ├── frontend-deployment.yaml
-│ │ ├── backend-deployment.yaml
-│ │ ├── service.yaml
-│ │ └── ingress.yaml
-│ │
-│ ├── overlays/ # Kustomize or Helm
-│ │ ├── dev/
-│ │ ├── staging/
-│ │ └── prod/
+├── backendpyton/ # AI Agent in Python
 │
-├── docker/ # Optional central Docker configs
-│ ├── frontend/
-│ └── backend/
+├── infrastructure_terraform/ # Terraform Menifests
 │
-├── scripts/ # Automation scripts
-│ ├── deploy.sh
-│ ├── migrate.sh
-│ └── seed.sh
+├── infrastructure_cdk/ # CDK Menifests
 │
-├── .github/ or .azuredevops/ # CI/CD pipelines
-│ ├── workflows/
-│ │ ├── frontend.yml
-│ │ ├── backend.yml
-│ │ ├── terraform.yml
-│ │ └── deploy.yml
+├── helm/ # Helm Chart
 │
-├── docs/ # Architecture & ADRs
-│ ├── architecture.md
-│ ├── decisions/
-│ └── runbooks/
-│
-├── .env.example
-├── README.md
-└── Makefile
-```
-
----
-
-## 🛠️ Setup
-
-Run locally
-
-Backend
-
-```bash
-cd backend
-pip install -r requirements.txt
-uvicorn app.main:app --reload
-```
-
-Frontend
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-🐳 Docker
-
-```bash
-docker build -t backend ./backend
-
-docker build -t frontend ./frontend
-```
-
-☸️ Deploy to local
-
-```bash
-docker run -d -p 3000:80 frontend
-docker stop [containerid]
-docker ps (-a)
-```
-
-☸️ Deploy to AKS
-
-```bash
-helm upgrade --install my-app ./helm/my-app
-```
-
-🔐 Environment Variables
-
-```bash
-Create .env files for:
-
-Backend
-Frontend
-```
-
-🧠 Enterprise naming principle
-
-Names should encode:
-
-```
-<service>-<app>-<env>-<region>-<instance>
-
-name = "aks-allinall-dev-se-01"
-
-```
-
-Azure CAF style (very popular in enterprises)
-
-```
-<app>-<env>-<service>-<region>-<instance>
-
-name = "allinall-dev-aks-se-01"
-
-```
-
-**Your case**
-
-```bash
-App: allinall
-Region: Sweden Central → swedencentral or short se
-Environments: dev / stage / prod
-Resource: AKS
-```
-
-✅ Recommended AKS naming (enterprise style)
-Option 1 — readable (most common)
-
-```bash
-name = "aks-allinall-dev-se-01"
-name = "aks-allinall-prod-se-01"
+├── gitops/ # GitOps using ArgoCD
 ```
