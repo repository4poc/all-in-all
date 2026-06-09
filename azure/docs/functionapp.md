@@ -30,30 +30,90 @@ PaaS
   - Powershell
   - custom handler
 - version : 10 (LTS)
+
+```
+For Hosting Option : Flex Consumption
+
 - Instance Size: The amount of memory allocated to each instance of the function app
   - 512 MB
   - 2048 MB
-  - 4096 MB
+  - 4096 MB`
+```
+
+```
+For Hosting Option : App Service Plan
+
+- Plan : < App Service Plan >
+  -  Base B1
+```
+
+```
+This option is visible based on the Hosting Option and Plan
+
 - Zone Redundancy
   - Enabled
-- Storage Account: Select a storage account or create a new one. Accounts must support blobs, queue, and Table storage
-- Access
-  - Public Access : Public access is applied to both main site and advanced tool site. Deny public network access will block all incoming traffic except that comes from private endpoints.
-    - Enabled (Default)
-    - Disabled
-  - vNet Integration
-    - Enabled
-      - Virtual Network : Select or create a virtual network that is in the same region as your new app.
-    - Disabled (Default)
-- Application Insight: Azure Monitor application insights is an Application Performance Management (APM) service for developers and DevOps professionals. Enable it below to automatically monitor your application. It will detect performance anomalies, and includes powerful analytics tools to help you diagnose issues and to understand what users actually do with your app. Your bill is based on amount of data used by Application Insights and your data retention settings.
+```
+
+**Storage**
+
+- Storage Account: Select a storage account or create a new one. Accounts must support blobs, queue, and Table storage (General Purpose v2)
+- Diagnostic Settings : Disabled (Default)
+
+**Networking**
+
+- Enable Public Access : Public access is applied to both main site and advanced tool site. Deny public network access will block all incoming traffic except that comes from private endpoints.
+  - Enabled (Default)
   - Disabled
+- Enable Network Injection/Integration
+  - Enabled
+    - Virtual Network : Select or create a virtual network that is in the same region as your new app.
+  - Disabled (Default)
+
+**Monitoring**
+
+- Application Insight: Azure Monitor application insights is an Application Performance Management (APM) service for developers and DevOps professionals. Enable it below to automatically monitor your application. It will detect performance anomalies, and includes powerful analytics tools to help you diagnose issues and to understand what users actually do with your app. Your bill is based on amount of data used by Application Insights and your data retention settings.
+  - Disabled (Default)
   - Enabled
     - Application Insight : < Select or Create Application Insight Resource>
-- Authentication: For best security practice, use managed identity authentication when available (some resources may only use secrets).
-  ![alt text](images/{AF000BAB-8E9E-4E1B-98A5-C2734150F387}.png)
+
+```
+This option is visible based on the Hosting Option and Plan
+
+
+**Deployment**
+
+- Continuous Deployment : Disable (Default)
+  - Enabled
+    - GitHub Settings : Org/Repo/Branch/
+
+```
+
+- Authentication
+  - Managed Identity : Disabled (Default)
+    - Enabled
 - Tags
 
-### Question: "If Azure Functions can expose HTTP endpoints, why do we need ASP.NET Web API at all?"
+##
+
+## Azure Function - Managed Identity
+
+For best security practice, use managed identity authentication when available (some resources may only use secrets).
+![alt text](images/{AF000BAB-8E9E-4E1B-98A5-C2734150F387}.png)
+
+**Steps 1**
+
+- Choose Azure Function
+  - Identity
+    - Managed Identity : Enable
+
+**Steps 2**
+
+- Choose Resource whose accesss need to be granted to the Managed Identity of Function
+  - IAM
+    - Role : < Choose Role >
+    - User : < Choose Function Managed Identity >
+
+## Question: "If Azure Functions can expose HTTP endpoints, why do we need ASP.NET Web API at all?"
 
 The answer is that they solve different problems.
 

@@ -278,3 +278,10 @@ The purpose of change feed is to provide transaction logs of all the changes tha
 - Enable us to build solutions that process change events occur in blob storage account at low cost either in streaming or in batch mode
   - Keep all logs
   - Delete change feed logs for X days
+
+## Key Role
+
+- Storage Blob Data Reader
+- Storage Blob Data Contibutor
+- Storage Blob Data Owner
+- Storage Blob Delegator : Allow for user delegation key, used for signing SAS Token
