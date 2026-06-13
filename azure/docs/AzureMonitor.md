@@ -117,8 +117,9 @@ Investigates
 - Choose an Azure Web App
   - Monitoring
     - Application Insights
-      - Turn on Application Insights - Name : < Application Insight Resource Name >
-      - Log Analytics Workspace Name < Choose/Create Log Analytics Workspace >
+      - Turn on Application Insights
+        - Name : < Application Insight Resource Name >
+        - Log Analytics Workspace Name < Choose/Create Log Analytics Workspace >
 
 Application Insights collect data about your application, and need some place to store that data, so LAW is used for storing data.
 ![alt text](images/{FF645E33-9303-489C-A165-EB327679F651}.png)
@@ -238,3 +239,160 @@ Test Types
 | Applications in AWS/GCP     | Supported via SDK/OpenTelemetry        | ([Microsoft Learn][1]) |
 
 [1]: https://learn.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview?utm_source=chatgpt.com "Application Insights OpenTelemetry observability overview"
+
+## How to create alert based on activity log of a resource
+
+You can create Azure Monitor Activity Log Alerts that trigger when specific events appear in the Azure Activity Log (e.g., resource creation, deletion, VM shutdown, RBAC changes, policy changes, service health incidents).
+
+**Azure Monitor**
+
+- Go to Monitor.
+- Select Alerts → Create → Alert Rule.
+  ![alt text](images/{51C20F59-6A55-43E1-A6F6-881DEF5FCB55}.png)
+- Under Scope, select:
+  - Subscription
+  - Location
+  - Specific Resource
+    ![alt text](images/{4F2C7E45-FE65-4391-819E-48E635FE030D}.png)
+- Under Condition, choose Signal : "Activity Log" > Choose an Activity
+  ![alt text](images/{01E2FB49-8396-4002-ACA9-95B5AEC83CEC}.png)
+  ![alt text](images/{CFFD524D-4CC7-4D54-B2F0-C9D3FBD01328}.png)
+- Configure the Actions Group:
+  - Email
+  - SMS
+  - Push notification
+  - Logic App
+  - Azure Function
+  - Webhook
+    ![alt text](images/{778EE0FF-46A0-4CC2-ADDC-E73923DCE906}.png)
+- Configure Details regarding this Alert
+  - Subscription
+  - Resource Group
+  - Alert Rule Name
+  - Alert Rule Description
+
+### Here the main thing is Signal Type, which vary based on the resource we choose
+
+## How to create alert based on the matrics for a resource
+
+You can create Azure Monitor Matrix Alerts that trigger when specific threshold is touched in a matrics (e.g.,CPU > 80).
+
+**Azure Monitor**
+
+- Go to Monitor.
+- Select Matrics
+- Under Scope, select:
+  - Specific Resource
+  - Choose specific Matrix (List vary based on resource type)
+  - Aggregation : (List vary based on resource type)
+    - Count
+    - Averate
+      ![alt text](images/{F2128AD2-5BE0-4D48-9089-D2C3B9E1D117}.png)
+- Go to New Alert rule
+- Under Condition,
+  - Signal : Autofilled based on the metric you chose
+  - Theshold Type:
+    - static (Default)
+      - Aggregation Type: Count
+        - Count
+        - Average
+      - Value is : Greater Than
+      - Threshold Value:
+      - When to evaluate
+        - Check every : 5 min
+        - Lookback period : 5 min
+    - Dynamic
+      - Aggregation Type: Count
+        - Count
+        - Average
+      - Value is : Greater Than
+      - Threshold Sensitivity: High/Medium/Low
+      - When to evaluate
+        - Check every : 5 min
+        - Lookback period : 5 min  
+          ![alt text](images/{01E2FB49-8396-4002-ACA9-95B5AEC83CEC}.png)
+          ![alt text](images/{CFFD524D-4CC7-4D54-B2F0-C9D3FBD01328}.png)
+- Configure the Actions Group:
+  - Email
+  - SMS
+  - Push notification
+  - Logic App
+  - Azure Function
+  - Webhook
+    ![alt text](images/{778EE0FF-46A0-4CC2-ADDC-E73923DCE906}.png)
+- Configure Details regarding this Alert
+  - Subscription
+  - Resource Group
+  - Alert Rule Name
+  - Alert Rule Description
+
+### Here the main thing is Signal Type, which vary based on the resource we choose
+
+**VM Signals**
+
+- Average CPU
+- Average Connections
+-
+
+## How to add a matrics to a dashboard
+
+- Go to Monitor > Metrix > Chooose specic resource and Metrix
+  ![alt text](images/{3E490FFB-4955-4797-936D-9FCDEA3678E8}.png)
+- Select Add to Dashboard > Pin To Dashboard
+  - Choose Dashboard
+    - Existing
+      - Shared
+      - Private
+    - New
+      ![alt text](images/{912C9E36-CF21-4F19-811F-EA30A95441A3}.png)
+
+In enterprise practice, the recommendation is usually both, but with clear ownership:
+
+1. Application-specific dashboards Used by product/app teams. Focus on:
+
+- Business KPIs
+- User journeys
+- API success/error rates
+- Latency by endpoint
+- Application logs/errors
+- SLO/SLA health
+- Release impact
+
+Example: “Customer onboarding success rate”, “Payment API error rate”, “Login latency”.
+
+2. Application infrastructure-specific dashboards : Used by platform/SRE/infra teams. Focus on:
+
+- CPU, memory, disk, network
+- Kubernetes pod/node health
+- Database connections/query latency
+- Queue depth
+- Load balancer status
+- Cloud resource utilization
+- Capacity and cost signals
+
+Example: “PostgreSQL replica lag”, “Kubernetes pod restarts”, “EC2 CPU utilization”
+
+**Recommended enterprise model**
+Create a service dashboard per application that combines the most important app + infra signals, and keep deeper infra dashboards separately.
+
+So the structure is usually:
+
+Executive / Service Health Dashboard → high-level app health and business impact
+Application Dashboard → app metrics, APIs, errors, SLOs
+Infra Dashboard → Kubernetes/VM/database/network/resource health
+Runbook Dashboard → troubleshooting views for incidents
+
+For example, for an onboarding application, the main dashboard should show:
+
+- onboarding success rate
+- API latency
+- error rate
+- queue backlog
+- DB health
+- pod restarts
+- recent deployments
+
+You can also check Insights, that render the key metrics and base don that you can create alerts and dashboards
+
+![alt text](images/{897F2C59-CB14-4DCF-89FA-404C35992C2A}.png)
+![alt text](images/{4F6FB216-6115-4EA1-9B91-038445CAD33B}.png)

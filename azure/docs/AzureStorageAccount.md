@@ -1,14 +1,55 @@
-Azure Storage is a Microsoft-managed service providing cloud storage that is highly available, secure, durable, scalable, and redundant. Azure Storage includes Azure Blobs (objects), Azure Data Lake Storage Gen2, Azure Files, Azure Queues, and Azure Tables. The cost of your storage account depends on the usage and the options you choose.
+## Overview
+
+There are differnet type of data and for each type Azure has different data storage options
+
+**For Data Storage**
+
+- Structure Data : Azure SQL Database
+  - Azure SQL Database is basically an implementation of MS SQL Server on Azure cloude, full managed by Azure.
+  - OLTP (Online Transaction Processing) System
+- Semi-Structure (JSON ): Azure CosmosDB
+  - Azure CosmosDB is no SQL Database
+- Un-Structured Data (images/videos/backups files) : Storage Blob Storage
+
+**For Data Analysis**
+
+A general pratice for Data Analytics is not run analytics queries on the operation database like Azure SQL Database, instead first store the data into some datawarehouse - OLAP Operation.
+
+- Azure Synapsis : Azure Datawarehouse solution
+  - OLAP (OnLine Analytics Proceessing) System.
+- Azure DataFactory : Transfer data to Azure Synapsis
+- Azure Databricks : For Processing and Analysing your data.
+- Azure DataLake Gen2 Storage Account
+
+## Azure Storage Account
+
+Azure Storage Account is a fully managed storage on cloud that is
+
+- highly available
+- Secure
+- Scalable
+- Durable
+- Redundant.
+
+Azure Storage Account includes
+
+- Azure Blobs
+- Azure Data Lake Storage Gen2
+- Azure Files
+- Azure Queues
+- Azure Tables.
+
+The cost of your storage account depends on the usage and the options you choose.
 
 It is an object storage, so everything is stored as binary object.
 
 ### Type
 
-Storage Service for unstructure data (Blob, Files, Archieve, Videos)
+Storage Account Service for unstructure data (Blob, Files, Archieve, Videos)
 
 ### Storage Account Types
 
-- Standard General Purpose V2 - Storage Account
+- Standard General Purpose V2
   - Offer Services
     - Blob Storage Service : For Unstructured data (Images,Videos,Documents,Audio files)
       - Containers
@@ -19,12 +60,15 @@ Storage Service for unstructure data (Blob, Files, Archieve, Videos)
       - One Message Sender - One Message Receiver
     - Table Storage Service : Basic NoSQL Database
       - Key - Value
-- Premium
+- Premium (Does not support access tiers and Global Redundancy)
+  - Block Blob
+  - Page Blob
+  - File Share
 
-### Storage Account Configuration
+### How to create a Storage Account
 
 - Subscription
-- Resource Group
+  - Resource Group
 - Storage Account Name : < Unique Name >
   - lower case
   - no special character
@@ -47,9 +91,10 @@ Storage Service for unstructure data (Blob, Files, Archieve, Videos)
       - GZRS
 
   - Premium (For low latency)
-    - Block Blobs : Low Latency and High Tranaction rate
+    - Block Blobs (BB): Low Latency and High Tranaction rate
+      - Only 'Container' Option
     - File Shares : Enterprise High Performance Application
-    - Page Blobs : Random read/write operation
+    - Page Blobs (PB): Random read/write operation
     - Redundancy :
       - LRS
       - ZRS
@@ -59,7 +104,8 @@ Storage Service for unstructure data (Blob, Files, Archieve, Videos)
     - Enable SFTP
     - Enable network file system v3
 
-- Access tier
+- Access tier ## Tip: Costing Factor (Only support GP V2 Storage Account)
+  As there is also Cost associated with accessing the blobs
   - Storage Account and Blob Level
     - Hot : Optimized for frequent access (Default)
       - storage cost : high
@@ -104,24 +150,17 @@ Storage Service for unstructure data (Blob, Files, Archieve, Videos)
   - Enabled (Default)
 - Enable Defender for Storage
   - Enabled
-- Encryption type
+- Data encryption type : Enabled (Default) Data is encrypted at rest
   - Microsoft Managed Key (Default)
   - Customer Managed Key
-- Enable infrastructure encryption :
-  By default, Azure encrypts storage account data at rest. Infrastructure encryption adds a second layer of encryption to your storage account’s data. - Enable
+- Infrastructure encryption : Disabled (Default)
+  - Adds a second layer of encryption to your storage account’s data.
 - Tags
+  - Name/Value
 
 ```
 <storage ac>.blob.core.windows.net/<Container>/<virtual folder>/<file>.<ext>
 ```
-
-## Storage Type = Azure Files Storage
-
--
-
-## Storage Type = Azure Table Storage
-
-- Pe
 
 ## Different Authentication Techiniques
 
@@ -139,6 +178,26 @@ There are different ways to authorize users to access data in azure storage acco
 - Use Case:
   - public website / images
 
+There are two levels involved:
+
+- Storage Account Level – "Allow Blob Anonymous Access"
+- Container Level – Public access setting on each container
+
+If you enable "Allow Blob Anonymous Access" on the storage account, you are only permitting containers to be made public.
+You still cannot access blobs anonymously unless the container itself is configured for public access.
+
+```
+Storage Account: Allow anonymous access = Yes
+Container: Private
+Result: Anonymous access NOT allowed
+```
+
+```
+Storage Account: Allow anonymous access = Yes
+Container: Blob
+Result: Anonymous read access to blobs
+```
+
 ### 2. Key Authorization
 
 - Each Storage Account gets 2 keys.
@@ -155,14 +214,23 @@ There are different ways to authorize users to access data in azure storage acco
     - storae account level
 - Only SAS at blob level : Accessible directly via browser
 - SAS at Container Level
-  - Permissions - Read - Add - List - Delete - Write
-    ![alt text](Images/{D3C10C12-2837-4462-B19A-618CECAC6656}.png)
+  - Permissions
+    - Read
+    - Add
+    - List
+    - Delete
+    - Write
+      ![alt text](Images/{D3C10C12-2837-4462-B19A-618CECAC6656}.png)
 - SAS at Storage Account Level
   - ![alt text](images/{D3265435-A76D-4CB6-A3B4-111E337FCC95}.png)
 
 ### 4. MS Entra ID
 
 - Use RBAC to user Identities
+  - Role
+    - Reader
+    - Storage Blob Data Reader
+    - Storage Blob Data Writer
 
 ## Client to access Azure Storage Account
 
@@ -193,14 +261,26 @@ There are different ways to authorize users to access data in azure storage acco
 
 ## Life Cycle Management Policy
 
-A JSON policy that defines
+In Storage Account, there are two cost associated
+
+- storage cost
+- access cost
+
+- Different Tier offer differnt storage and access cost, which is inversly propotional to each other.
+
+So if our data is frequently access, we should save it in the hot tier
+or if our data is rearly accssed, we should save it in the cold/archieve tier or delete if required.
+
+To automate this transition of blob data from one tier to another, we use Lifecycle Management Rules.
+
+Lifecycle Management Rules is defined as JSON :
 
 - Transition blobs between hot,cool,cold,archieve tiers
 - Delete current version, previous version after a period of time
 - Applicable to Block Blob and Append Blob, not to system containers like $logs and $web
-- These policies run periodically and can take 24 to take affect
-- we can filter subset of blobs within storage account
-- Actions
+- These rules run periodically and can take 24 to take affect
+- we can **filter** subset of blobs within storage account
+- **Actions**
   - tierToHot
   - tierToCool
   - tierToCold
