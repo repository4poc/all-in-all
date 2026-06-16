@@ -65,23 +65,20 @@ Storage Account Service for unstructure data (Blob, Files, Archieve, Videos)
   - Page Blob
   - File Share
 
-### How to create a Storage Account
+## How to create a Storage Account
+
+**Project Details**
 
 - Subscription
   - Resource Group
+
+**Instance Details**
+
 - Storage Account Name : < Unique Name >
   - lower case
   - no special character
   - 3-24 characters
 - Region : Sweden Central
-- Storage Type
-  - Azure Blob Storage and Azure Data Lake Storage (Default)
-  - Azure Files Storage
-  - Azure Table Storage
-  - Azure Queue Storage
-
-## Storage Type = Azure Blob Storage and Azure Data Lake Storage
-
 - Performance
   - Standard (For General Purpose)
     - Redundancy :
@@ -99,13 +96,16 @@ Storage Account Service for unstructure data (Blob, Files, Archieve, Videos)
       - LRS
       - ZRS
 
-- Enable hierarchical namespace : Hierarchical namespace, complemented by Data Lake Storage Gen2 endpoint, enables file and directory semantics, accelerates big data analytics workloads, and enables access control lists (ACLs)
-  - Enabled
-    - Enable SFTP
-    - Enable network file system v3
+- Enable hierarchical namespace : Disabled (Default)
+  - Enable it for Data Lake Gen2 Storage Account
+  - Hierarchical namespace, complemented by Data Lake Storage Gen2 endpoint, enables file and directory semantics, accelerates big data analytics workloads, and enables access control lists (ACLs)
+- Access Protocol
+  - SFTP : Enabled (Default)
+  - network file system v3 (NFS) : Enabled (Default)
 
-- Access tier ## Tip: Costing Factor (Only support GP V2 Storage Account)
-  As there is also Cost associated with accessing the blobs
+- Access tier ## Tip: Costing Factor
+  - Only support GP V2 Storage Account
+  - As there is also Cost associated with accessing the blobs
   - Storage Account and Blob Level
     - Hot : Optimized for frequent access (Default)
       - storage cost : high
@@ -116,47 +116,48 @@ Storage Account Service for unstructure data (Blob, Files, Archieve, Videos)
       - Stored for min. 90 days else billed for that.
       - storage cost : less
       - Access cost : high
-  - Blob Level Only
-    - Archieve : For long term backups
-      - Stored for min. 180 days else billed for that.
-      - Rehydratation of data to Hot, Cool to access it, so take hours.
-      - storage cost : minimal
-      - Access cost : highest
+  - Blob Level Only - Archieve : For long term backups - Stored for min. 180 days else billed for that. - Rehydratation of data to Hot, Cool to access it, so take hours. - storage cost : minimal - Access cost : highest
 
-- Public Network Access
-  - Enabled (Default)
-    - Still not anonymour access
+**Network Connectivity**
+
+- Public access for all networks : Enabled (Default)
+  - Still not anonymour access
     - This mean the endpoint is accessible via Intenet
-  - Disable
-    - Private Endpoint
-      - Name
-      - Virtual Network
-      - Subnet
-- Enable Versioning
-  - Enabled
-- Enabled Change Feed
-  - Enabled
-- Enable Soft delete for blobs
-  - Enabled : 7 days
-- Enable Soft delete for Containers
-  - Enabled : 7 days
-- Enable Point-in-time recovery
+- Public access for selected networks or IPs
+- Private Endpoint
+  - Name
+  - Virtual Network
+  - Subnet
+
+**Data Protection**
+
+- Versioning : Enabled (Default)
+- Change Feed : : Enabled (Default)
+- Soft delete for blobs : : Enabled (Default)
+  - Retention : 7 days
+- Soft delete for Containers : Enabled (Default)
+  - Retention : 7 days
+- Point-in-time recovery : : Enabled (Default)
   - Enabled (then versioning, change feed, and blob soft delete must also be enabled)
-- Allow Anonymous access on containers (Default : No annonymous access)
+- Allow Anonymous access on containers : Disabled (Default)
+  - No annonymous access
   - Enabled
-- Enable Storage Account Key access
-  - Enabled (Default)
-- Require secure transfer for REST API operations : via HTTPS only
-  - Enabled (Default)
-- Enable Defender for Storage
-  - Enabled
-- Data encryption type : Enabled (Default) Data is encrypted at rest
-  - Microsoft Managed Key (Default)
-  - Customer Managed Key
+- Storage Account Key access : Enabled (Default)
+- Require secure transfer for REST API operations : via HTTPS only : Enabled (Default)
+- Defender for Storage : Disabled (Default)
+
+**Encryption**
+
+- Data encryption : Enabled (Default)
+  - Makes data is encrypted at rest
+    - Microsoft Managed Key (Default)
+    - Customer Managed Key
 - Infrastructure encryption : Disabled (Default)
   - Adds a second layer of encryption to your storage account’s data.
-- Tags
-  - Name/Value
+
+**Tags**
+
+- Name/Value
 
 ```
 <storage ac>.blob.core.windows.net/<Container>/<virtual folder>/<file>.<ext>
@@ -365,3 +366,22 @@ The purpose of change feed is to provide transaction logs of all the changes tha
 - Storage Blob Data Contibutor
 - Storage Blob Data Owner
 - Storage Blob Delegator : Allow for user delegation key, used for signing SAS Token
+
+## Azure Data Lake Gen 2 Storage Account
+
+- Here data arrives at a fast rate in large volumn
+- It is build on top of Azure blob storage
+- Here you get the feature of hierarchical namespace, so you can organize you blob objects into hierarchy of directories
+- The data could be
+  - Structured
+  - Semi-Structured
+  - Unstructured
+- In Data Analytics, there 2 steps
+  - Get Data From Various sources (Stored in Azure Data Lake)
+  - Analyse Data
+
+## How to create a Azure Data Lake Gen2 storage account
+
+When we create an Azure Data Lake Gen2 Storage Account, when we create a container, we see an option "Add Directory"
+
+![alt text](images/{F4F1780C-1176-4EDF-8CA4-46053CD74ED3}.png)

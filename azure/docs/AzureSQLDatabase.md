@@ -105,7 +105,7 @@ PaaS > DBaaS
 
   **Tip : Scaling** vCore - Serverless Types autoscale based on demand
 
-  ![alt text]({8AB14E60-CDAC-471A-BF29-A3469532FB3F}.png)
+  ![alt text](images/{8AB14E60-CDAC-471A-BF29-A3469532FB3F}.png)
   Elastic pools provide a simple and cost effective solution for managing the performance of multiple databases within a fixed budget. An elastic pool provides compute (eDTUs) and storage resources that are shared between all the databases it contains. Databases within a pool only use the resources they need, when they need them, within configurable limits. The price of a pool is based only on the amount of resources configured and is independent of the number of databases it contains.
 
   | Feature                   | General Purpose Serverless        | Hyperscale Serverless                   |
@@ -317,3 +317,314 @@ By Default, Azure SQL Database is encrypted by Azure Managed Encryption key,
 You can also use you custom managed key to encrypt the data.
 
 ![alt text]({B5396D83-90CD-43C7-A1F7-149A4A6A925A}.png)
+
+## Dynamic Data Masking (Tip : Security Feature)
+
+A techinique to limit the exposure of data in a Database.
+
+**UseCase** : you don't want nonadmin users to access credit card information in yout table
+
+Different Data Masking Rule :
+
+- Default
+- Email : First letters of the emal is exposed and the domain is replaced with \*\*\*
+- Custom Text : Here we decide which characters to expose for a particular cölumn/field
+- Credit Card Masking Rule : Here only last 4 digits are exposed. used to mask field/column containinig credit card information
+- Random Number : Here you generate a random number for a column/Field
+
+### Steps to implement Dynamic Data masking in Azure SQL Database
+
+- Login to Azure > Goto Azure SQL Database Resource > Dynamic Data Masking
+- Add Mask
+  - Name : < schema > -< Table > - < Column > (AutoFilled)
+  - Schema
+  - Table
+  - Column
+  - Masking Rule
+    - Default
+    - Email
+    - Custom Text
+    - Credit Card
+    - Random Number
+
+  ![alt text](images/{ACE0DFB9-17F6-484A-9F08-4D386923D3F3}.png)
+
+To see the masking affect login with non-admin user, as masking does not affect admin user access.
+
+## How to Create a non-admin user in Azure SQL Database
+
+**Option 1:** Create a Read-Only User (Recommended)
+
+```
+USE appdb;
+GO
+
+CREATE USER app_reader
+WITH PASSWORD = 'StrongPassword#123!';
+GO
+
+ALTER ROLE db_datareader
+ADD MEMBER app_reader;
+```
+
+The user can query data but cannot modify it.
+
+**Option 2:** Read + Write User
+
+```
+USE appdb;
+GO
+
+CREATE USER app_user
+WITH PASSWORD = 'StrongPassword#123!';
+GO
+
+ALTER ROLE db_datareader
+ADD MEMBER app_user;
+GO
+
+ALTER ROLE db_datawriter
+ADD MEMBER app_user;
+```
+
+Permissions:
+
+- SELECT
+- INSERT
+- UPDATE
+- DELETE
+
+No schema changes allowed.
+
+**Option 3:** Restrict Access to Specific Schema
+
+```
+USE appdb;
+GO
+
+CREATE USER reporting_user
+WITH PASSWORD = 'StrongPassword#123!';
+GO
+
+GRANT SELECT
+ON SCHEMA::SalesLT
+TO reporting_user;
+```
+
+This user can only read objects in the SalesLT schema.
+
+**Option 4:** Azure AD User (Preferred for Enterprises)
+
+`````
+USE appdb;
+GO
+
+CREATE USER [john.doe@company.com]
+FROM EXTERNAL PROVIDER;
+GO
+
+ALTER ROLE db_datareader
+ADD MEMBER [john.doe@company.com];
+````
+
+Benefits:
+
+- No SQL passwords
+- MFA support
+- Centralized identity management
+- Easier auditing
+
+| Role              | Permissions                  |
+| ----------------- | ---------------------------- |
+| db_datareader     | Read all tables/views        |
+| db_datawriter     | Insert/Update/Delete         |
+| db_ddladmin       | Create/Alter objects         |
+| db_backupoperator | Backup related tasks         |
+| db_owner          | Full database admin          |
+| db_securityadmin  | Manage users and permissions |
+
+
+For a typical application or reporting account, avoid db_owner and grant only db_datareader and/or specific schema permissions following the principle of least privilege.
+
+Azure SQL Database uses contained database users. The user exists only within that specific database.
+
+Azure SQL Server
+│
+├── master
+│
+├── appdb
+│   └── reporting_user
+│
+└── anotherdb
+
+If you create reporting_user in appdb, the user:
+
+- Can connect only to appdb
+- Has no access to anotherdb
+- Is not a server-level login
+
+
+SELECT DB_NAME() AS CurrentDatabase;
+`````
+
+If you want to create a server level user, used it in the application database here are the steps
+
+- ![alt text](images/{F54DD527-6F8B-4F1D-B7C4-DFF235DF9B18}.png)
+
+- Associate the non-admin user to your database
+  ![alt text](images/{466D9C00-CBBA-4EAF-8A58-AFF91FF81EE3}.png)
+
+## Azure Database Encryption
+
+Actually, Azure SQL Database data is encrypted both at rest and in transit by default.
+
+**1. Encryption in Transit (Data in Flight)**
+
+When a client connects to Azure SQL Database:
+
+```
+Application
+    |
+ TLS 1.2 / TLS 1.3
+    |
+Azure SQL Database
+```
+
+The connection is encrypted using TLS (Transport Layer Security).
+
+**2. Encryption at Rest**
+
+Azure SQL Database automatically uses Transparent Data Encryption (TDE).
+
+```
+Database Files
+    |
+    | TDE
+    |
+Encrypted Storage
+```
+
+**3. Backup Encryption**
+Automatic backups are also encrypted.
+
+```
+Database
+   |
+Backup
+   |
+Encrypted
+```
+
+## Always Encrypted Feature
+
+UseCase : We don't want event the database administator to see the data, we mark it as always encrypted, only accessible to the application.
+
+**Why Enterprises Use Always Encrypted**
+
+Typical sensitive fields:
+
+- Social Security Numbers
+- National IDs
+- Credit Card Numbers
+- Salary Data
+- Healthcare Records
+- Personal Identifiable Information (PII)
+
+Compliance frameworks such as:
+
+- PCI-DSS
+- HIPAA
+- GDPR
+- Financial regulations
+
+often require protection from privileged database administrators.
+
+```
+User
+  |
+  v
+Web Application
+  |
+Managed Identity
+  |
+Azure Key Vault
+  |
+Column Master Key
+  |
+Azure SQL Database
+```
+
+Who gets access to the key?
+
+- Not the end user.
+- Not the DBA.
+- The application identity.
+
+```
+Security Team
+    |
+    +--> Create Encryption key in Key Vault
+
+Application Team
+    |
+    +--> Managed Identity gets Get/Wrap/Unwrap permissions
+
+    Key Vault
+    |
+    +--> my-webapp Managed Identity
+            Get
+            WrapKey
+            UnwrapKey
+
+Deployment Pipeline
+    |
+    +--> Create CEK
+    +--> Enable Always Encrypted on columns
+
+DBA
+    |
+    +--> Manage database
+    +--> No Key Vault access
+```
+
+For a regulated environment (banking, healthcare, government), I would recommend:
+
+- DBA = Database administration only
+- Security team = Key Vault administration only
+- Application Managed Identity = Key usage only
+- No individual should have both database admin rights and Key Vault key permissions
+
+That's the architecture that gives you the real benefit of Always Encrypted: the DBA can manage the database but cannot view protected data.
+
+**Separation of Duties**
+
+| Principal            | Database       | Key Vault   |
+| -------------------- | -------------- | ----------- |
+| App Managed Identity | Read/Write     | Get Key     |
+| DBA                  | Admin          | No Access   |
+| Security Admin       | No Data Access | Manage Keys |
+
+| Team             | Permissions                  |
+| ---------------- | ---------------------------- |
+| Database Team    | Azure SQL Database           |
+| Security Team    | Azure Key Vault              |
+| Application Team | Application Managed Identity |
+| Auditors         | Read-only monitoring         |
+
+| Encryption Type | Use when                                                 | Limitation                          |
+| --------------- | -------------------------------------------------------- | ----------------------------------- |
+| Deterministic   | Need equality search/join, e.g. `WHERE NationalID = @id` | Same value produces same ciphertext |
+| Randomized      | Maximum protection                                       | Cannot search/join easily           |
+
+So we prefer to use Always encrypted over Data Masking
+
+**Steps to enable always encryption at column level in Database**
+![alt text](images/{C5FFD0F4-8F4E-4D5B-88C3-1E43525A30E4}.png)
+![alt text](images/{12932781-1366-4591-B54C-848633BA6867}.png)
+![alt text](images/{FD28F3ED-F9E4-4C8E-A4E7-424884479B80}.png)
+
+## Azure SQL Managed Instance
+
+- Used in case you need to migrate on-premise MS SQL Server latest enterprise edition to Azure
+- vNet Integration (Not available in Azure SQL Database)
+  ![alt text]({8E4F2052-F8A5-49D8-9887-39C9625B2D9C}.png)
