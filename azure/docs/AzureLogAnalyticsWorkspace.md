@@ -215,7 +215,28 @@ This will show Graphs in Network Watcher > Traffic Analytics For
 
 - Name/Value
 
-##
+## How Log Retention works in case of Log Analytics Workspace
+
+Logs in Log Analytics Workspace are automatically deleted according to the configured retention policy at either the workspace level or individual table level. No separate cleanup job is required.
+
+**Default Retension** - Across tables
+
+- Default : 30 days
+- Max : 730 days
+  ![alt text](images/{AABAA396-FE34-4181-B0C3-E94E275E228D}.png)
+
+| Log Type              | Retention                  |
+| --------------------- | -------------------------- |
+| Application logs      | 30-90 days                 |
+| Infrastructure logs   | 90-180 days                |
+| Security logs         | 180-365 days               |
+| Audit/Compliance logs | 1-7 years (often archived) |
+
+**Table Specific Retention**
+
+![alt text](images/{9B6AECE7-B499-4754-8852-B5603A638300}.png)
+
+- Max : 2 years
 
 ## Azure Log Analytics Workspace Tables
 
