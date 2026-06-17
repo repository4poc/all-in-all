@@ -31,12 +31,6 @@ resource "azurerm_kubernetes_cluster" "aks" {
   # Enable Private Cluster if specified
   private_cluster_enabled = false
 
-  # Service Mesh add-on with Istio mode and specific revision
-  service_mesh_profile {
-    mode      = "Istio"
-    revisions = ["1.17.2"]
-  }
-
   # Automatically upgrades Kubernetes minor versions
   automatic_upgrade_channel = var.kube_version_upgrade
   #Automatically updates node OS and VM image

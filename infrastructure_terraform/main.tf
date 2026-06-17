@@ -30,7 +30,6 @@ provider "azurerm" {
   features {}
 }
 
-# Configure the Kubernetes Provider
 provider "kubernetes" {
   host                   = module.aks.kube_admin_config[0].host
   client_certificate     = base64decode(module.aks.kube_admin_config[0].client_certificate)
@@ -38,7 +37,6 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(module.aks.kube_admin_config[0].cluster_ca_certificate)
 }
 
-# Configure the Helm Provider
 provider "helm" {
   kubernetes = {
     host                   = module.aks.kube_admin_config[0].host
@@ -51,12 +49,151 @@ provider "helm" {
 # Create a resource group
 resource "azurerm_resource_group" "rg" {
   name     = var.environment
-  location = var.region
+  location = "swedencentral"
   tags     = var.tags
 }
 
+module "acr" {
+  source              = "./modules/containers/acr"
+  resource_group_name = azurerm_resource_group.rg.name
+  region              = var.region
+  tags                = var.tags
+}
 
-# Create a Cognitive Account with kind AIServices which will enable Foundry capabilities
+module "aks" {
+  source                   = "./modules/containers/aks"
+  env                      = var.environment
+  appname                  = var.appname
+  region                   = var.region
+  resource_group_name      = azurerm_resource_group.rg.name
+  acr_id                   = module.acr.acr_id
+  system_node_count        = var.system_node_count
+  aks_sys_nodepool_vm_size = var.aks_sys_nodepool_vm_size
+  aks_app_nodepool_vm_size = var.aks_app_nodepool_vm_size
+  apps_min                 = var.apps_min
+  apps_max                 = var.apps_max
+  backend_min              = var.backend_min
+  backend_max              = var.backend_max
+  sku_tier                 = var.sku_tier
+  kube_version_upgrade     = var.kube_version_upgrade
+  tags                     = var.tags
+  tenant_id                = var.tenant_id
+
+  depends_on = [
+    module.acr
+  ]
+
+}
+
+
+
+resource "azurerm_storage_account" "input_data_storage" {
+  name                = "allinallinputstorage007"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+
+  account_kind = "StorageV2"
+
+  # Enable anonymous blob access
+  allow_nested_items_to_be_public = true
+
+  access_tier = "Hot"
+
+  min_tls_version = "TLS1_2"
+
+  public_network_access_enabled = true
+
+  shared_access_key_enabled = true
+
+  infrastructure_encryption_enabled = false
+
+  cross_tenant_replication_enabled = false
+
+  blob_properties {
+    versioning_enabled = false
+
+    delete_retention_policy {
+      days = 7
+    }
+  }
+
+  tags = var.tags
+}
+
+# Public Blob Container
+resource "azurerm_storage_container" "input_data_container" {
+  name                  = "input"
+  storage_account_id    = azurerm_storage_account.input_data_storage.id
+  container_access_type = "container"
+}
+
+resource "azurerm_storage_account" "output_data_storage" {
+  name                = "allinalloutputstorage007"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+
+  account_kind = "StorageV2"
+
+  # Enable anonymous blob access
+  allow_nested_items_to_be_public = true
+
+  access_tier = "Hot"
+
+  min_tls_version = "TLS1_2"
+
+  public_network_access_enabled = true
+
+  shared_access_key_enabled = true
+
+  infrastructure_encryption_enabled = false
+
+  cross_tenant_replication_enabled = false
+
+  blob_properties {
+    versioning_enabled = false
+
+    delete_retention_policy {
+      days = 7
+    }
+  }
+
+  tags = var.tags
+}
+# Public Blob Container
+resource "azurerm_storage_container" "output_container" {
+  name                  = "output"
+  storage_account_id    = azurerm_storage_account.output_data_storage.id
+  container_access_type = "container"
+}
+
+resource "random_string" "suffix" {
+  length  = 6
+  upper   = false
+  special = false
+}
+
+
+# Azure AI Search - cheap/dev configuration
+resource "azurerm_search_service" "ai_search" {
+  name                = "srch-poc-${random_string.suffix.result}"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+
+  sku             = "free"
+  replica_count   = 1
+  partition_count = 1
+
+  public_network_access_enabled = true
+
+  tags = var.tags
+}
+
 resource "azurerm_cognitive_account" "foundry" {
   name                = "foundry${var.appname}${var.environment}007"
   location            = azurerm_resource_group.rg.location
@@ -73,7 +210,6 @@ resource "azurerm_cognitive_account" "foundry" {
   }
 }
 
-# Create a Cognitive Account Project which will be the container for all AI assets like models, agents, etc. This is required to deploy models in Foundry.
 resource "azurerm_cognitive_account_project" "project" {
   name                 = "myproject"
   cognitive_account_id = azurerm_cognitive_account.foundry.id
@@ -87,9 +223,8 @@ resource "azurerm_cognitive_account_project" "project" {
   ]
 }
 
-# Deploying GPT-5.4 Mini model using native azurerm provider support
-resource "azurerm_cognitive_deployment" "gpt5" {
-  name                 = "gpt-5-deployment"
+resource "azurerm_cognitive_deployment" "gpt5_mini" {
+  name                 = "gpt-5.4-mini-deployment"
   cognitive_account_id = azurerm_cognitive_account.foundry.id
 
   sku {
@@ -100,8 +235,8 @@ resource "azurerm_cognitive_deployment" "gpt5" {
 
   model {
     format  = "OpenAI"
-    name    = "gpt-5"
-    version = "2025-08-07"
+    name    = "gpt-5.4-mini"
+    version = "2026-03-17"
   }
 
   depends_on = [
@@ -109,6 +244,7 @@ resource "azurerm_cognitive_deployment" "gpt5" {
     azurerm_cognitive_account_project.project
   ]
 }
+
 
 # Recommended newer embedding model
 resource "azurerm_cognitive_deployment" "text_embedding_ada_002" {
@@ -129,7 +265,7 @@ resource "azurerm_cognitive_deployment" "text_embedding_ada_002" {
   depends_on = [
     azurerm_cognitive_account.foundry,
     azurerm_cognitive_account_project.project,
-    azurerm_cognitive_deployment.gpt5
+    azurerm_cognitive_deployment.gpt5_mini
   ]
 }
 

@@ -30,38 +30,11 @@ cd infrastructure
 
 📁 2. Repository Structure (IMPLEMENT THIS)
 
-```bash
-infrastructure/
-  modules/
-    aks/
-      main.tf
-      variables.tf
-      outputs.tf
-    acr/
-      main.tf
-      variables.tf
-      outputs.tf
-
-  shared/
-    acr/
-      main.tf
-      backend.tf
-
-  envs/
-    dev/
-      main.tf
-      backend.tf
-      dev.tfvars
-    staging/
-    prod/
-
-  global/
-    variables.tf
 ```
 
-🧱 2. Deploy Shared ACR (ONE TIME)
+```
 
-infrastructure/shared/acr/main.tf
+🧱 2. Deploy
 
 ```bash
 terraform init -backend-config=backend/dev.hcl
@@ -69,6 +42,10 @@ terraform plan -var-file=envs/dev.tfvars
 terraform apply -var-file=envs/dev.tfvars
 terraform destroy -var-file=envs/dev.tfvars
 ```
+
+\*\* Deploy Shared ACR (ONE TIME)
+
+infrastructure/shared/acr/main.tf
 
 🧱 4. Connect to AKS
 
@@ -179,7 +156,7 @@ terraform destroy
   or In Storage Account: 1) Blob soft delete: ON 2) Retention: 7–30 days
 - Always enforce via IaC + Azure Policy where possible
 - create a storage account for state file for each environment
-  az group create --name tf-state-rg --location westeurope
+  az group create --name tf-state-rg --location swedencentral
 - Keep state config separate from variables
 - Use tfvars for config only
 - Use backend config for infrastructure state

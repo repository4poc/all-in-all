@@ -280,7 +280,7 @@ resource "azapi_resource" "claude_opus_4_7_deployment" {
 
 
 module "databricks" {
-  count               = 0 # Skipped , put it to 1
+  count               = 1 # Skipped , put it to 1
   source              = "./modules/dataanalytics/databricks"
   appname             = var.appname
   environment         = var.environment
