@@ -111,42 +111,69 @@ Just create an function as Event Handler with type "Azure Event Grid Trigger", L
 
 ## How do you publish Stroage Account event to Event Grid - Topic
 
+### 1. Create Event Subscription
+
 1. Goto the storage Account > Event
    ![alt text](images/{679E23D6-50EB-41D5-95D3-959B326E707B}.png)
 2. Create a subscription
    ![alt text](images/{E42C621C-3B1D-4348-8EDD-34548E728BDD}.png)
-   - Name : < >
-   - Schema : Azure Event Grid
-   - System Topic Name : < > // That will be create in Event Grid automatilly and all event will be published to it.
-   - Event Types : Choose Events from the List
-     - Blob Created
-     - Blob Deleted
-     - Blob Renamed
-     - Blob Tier Changed
-     - Directory Created
-     - Directory Deleted
-     - Directory Renamed
-     - Directory Tier Changed
-     - ...
-     - ...
-       ![alt text](images/{679AF1D0-105E-409A-8EA9-3307763B5BD1}.png)
-   - Endpoint Type : Pick Event Handlers
-     - Azure Function
-       - Subscription
-       - Resource Group
-       - Function App: < So Function App is Mandary for this >
-       - Slot:
-       - Function Name:
-     - Azure Event Hub
-     - Storage Queue
-     - Service Bus Queue
-     - Service Bus Topic
-     - Web Hook
-     - Event Grid Topic
+
+   ![alt text](images/{679AF1D0-105E-409A-8EA9-3307763B5BD1}.png)
+
+   ![alt text](images/{3496A338-14DC-4AB4-9AB8-A6F676D1D76A}.png)
+
+- Name : < Event Subscription Name >
+- Schema : Azure Event Grid
+  - Azure Event Grid (Defulat)
+  - Azure Cloud Event (Recommmended)
+- System Topic Name : < System Topic Name >
+- Event Types : Choose Events from the List
+  - Blob Created
+  - Blob Deleted
+  - Blob Renamed
+  - Blob Tier Changed
+  - Directory Created
+  - Directory Deleted
+  - Directory Renamed
+  - Directory Tier Changed
+
+- Endpoint Type : Pick Event Handlers
+  - Azure Function
+    - Subscription
+    - Resource Group
+    - Function App: < So Function App is Mandary for this >
+    - Slot:
+    - Function Name:
+
+    ![alt text](images/{EC52629F-EA33-4FAC-9182-9441F5E3CD80}.png)
+
+- Azure Event Hub
+- Storage Queue
+- Service Bus Queue
+  - ![alt text](images/{97394597-CB1D-47EE-88C4-AED9C8BE2DD4}.png)
+- Service Bus Topic
+- Web Hook
+  - ![alt text](images/{7CF61FB2-4067-4E89-9144-9160E309DA6B}.png)
+- Event Grid Topic
+
+## Connect an HTTP endpoint (WebHook)
+
+1.  Create Subscription with
+    - Endpoint Type : WebHook
+      - Function POST URL
+
+        ![alt text](images/{7E69B212-EC0D-43B0-8988-EA821D3D6625}.png)
+
+        You need to use NGROK to access the URL from the Azure Portal
+
+        ![alt text](images/{3A9A397F-B274-4940-B28E-92A7EC8E6FD0}.png)
+
+        Through PostMan, you can access this endpoint directly
+        ![alt text](images/{F192B137-018D-456F-AAB4-870C3B43C5B0}.png)
 
 **Microsoft.EventGrid** Resource ProviderNeed, so make sure it is registered under subscription > resource provider
 
-## How to test Event Grid - Hanlder locally
+## How to test Event Grid - Handler locally
 
 Use NGROK and expose your local function to web.
 
@@ -276,16 +303,11 @@ https://learn.microsoft.com/en-us/azure/event-grid/cloud-event-schema
 
 ## ## How do you publish Resource Group event to Service Bus Qeueue
 
-- Event Types :
-  - Resource Write Success
-  - Resource Write Failure
-  - Resource Write Cancel
-  - Resource Delete Success
-  - Resource Delete Failure
-  - Resource Delete Cancel
-  - Resource Action Success
-  - Resource Action Failure
-  - Resource Action Cancel
+There is no Event Blade at the Resource Group level, but you can configure it at subscription Level
+![alt text](images/{8D171241-3E31-4F86-87C5-7688417F4155}.png)
+![alt text](images/{03F71F2F-5D4C-4746-8542-DC518F6BBFD2}.png)
+
+![alt text](images/{E0BD0539-AD40-400B-97EB-407D9FAC65DC}.png)
 
 - Endpoint Type : Queue
   <Choose Service Bus Queue>
@@ -296,20 +318,13 @@ While creating the subscription, we can have Subject Filters enabled
 
 ![alt text](images/image.png)
 
-## Connect an HTTP endpoint (WebHook)
+## Event Grid in CosmosDB
 
-1.  Create Subscription with
-    - Endpoint Type : WebHook
-      - Function POST URL
+There is no Event Blade in Azure CosmosDB Account
 
-        ![alt text](images/{7E69B212-EC0D-43B0-8988-EA821D3D6625}.png)
+![alt text](images/{B1D34574-1F98-45E4-8BA0-51D4EB29F801}.png)
 
-        You need to use NGROK to access the URL from the Azure Portal
-
-        ![alt text](images/{3A9A397F-B274-4940-B28E-92A7EC8E6FD0}.png)
-
-        Through PostMan, you can access this endpoint directly
-        ![alt text](images/{F192B137-018D-456F-AAB4-870C3B43C5B0}.png)
+Microsoft's recommended **event-driven pattern** for Cosmos DB is generally **Change Feed**, not direct **Event Grid subscriptions** from the Cosmos DB account. The Change Feed lets you react to inserts/updates and drive downstream processing via Azure Functions, Event Hubs, Service Bus, or Event Grid.
 
 ## Custom Topics
 
