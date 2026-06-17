@@ -1,8 +1,53 @@
 ## Overview
 
-Azure Databricks is a cloud-based data and AI platform that helps organizations store, process, analyze, and build AI solutions from large amounts of data.
+A Apache Spark based platform for build data engineering solutions on Azure.
 
-It is build on top of apache spark.
+We will us PySpark and Spark SQL to build data engineering pipelines
+
+## Medallion Architecture
+
+Data is refined through layers:
+
+```
+Bronze  →  Silver  →  Gold
+Raw        Clean      Business-ready
+```
+
+![alt text](images/{BB51BCC0-9818-4C74-B7F9-2421C90788A9}.png)
+
+![alt text]({A7EFF92C-F98F-4582-B04F-F4440FB7A776}.png)
+
+## Introduction to Azure DataBricks
+
+DataBricks is Spark based unfied data analytics platform, provide by all major cloud platform.
+
+- Azure hosts databricks as First party service, so you get unified support from MS for Azure and Databricks
+
+**Features**
+
+- cluster setup is easy
+  - General Purpose
+  - In-Memory processing
+  - GPU support
+- Provide Nodebook IDE allows to
+  - Create and Run applications
+  - Collaborate with colleagues
+  - Connect with Version Control Tools
+    - GitHub
+    - Azure Repo
+- Administrative controls
+  - Azure EntraID
+- Optimized Spark Engine
+- Photon : Vectorized Query Engine, for fast (8X) query performance
+- Unity Catelog : For managing databases and Tables
+- Delta Lake : Support for ACID Transaction, for data reliability and integrity
+- Delta Lite Table : Declarative ETL framework, helps create data pipelines.
+- Workflows : For scheduling and orchestrate tasks and pipelines
+- SQL Warehouse : SQL Based Analytical environment to explore data, create dashboard,
+- ML Flow :
+- Databricks IQ : An AI assistant help develop, debut code, add comments and create dashboard
+
+## How to create Azure Databricks
 
 Imagine a company has data scattered across:
 

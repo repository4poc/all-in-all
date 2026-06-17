@@ -302,14 +302,14 @@ While creating the subscription, we can have Subject Filters enabled
     - Endpoint Type : WebHook
       - Function POST URL
 
-        ![alt text]({7E69B212-EC0D-43B0-8988-EA821D3D6625}.png)
+        ![alt text](images/{7E69B212-EC0D-43B0-8988-EA821D3D6625}.png)
 
         You need to use NGROK to access the URL from the Azure Portal
 
-        ![alt text]({3A9A397F-B274-4940-B28E-92A7EC8E6FD0}.png)
+        ![alt text](images/{3A9A397F-B274-4940-B28E-92A7EC8E6FD0}.png)
 
         Through PostMan, you can access this endpoint directly
-        ![alt text]({F192B137-018D-456F-AAB4-870C3B43C5B0}.png)
+        ![alt text](images/{F192B137-018D-456F-AAB4-870C3B43C5B0}.png)
 
 ## Custom Topics
 
