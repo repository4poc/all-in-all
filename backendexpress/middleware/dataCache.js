@@ -40,6 +40,8 @@ export const loadUsers = async () => {
 
 export const startUsersCacheRefresh = async () => {
   // load immediately on app startup
+  // load immediately on app startup
+
   await loadUsers();
   await loadTodos();
 
