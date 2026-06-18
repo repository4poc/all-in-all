@@ -8,6 +8,7 @@
 bin/
 obj/
 
+
 # Custom Applications
 azure-webapi-demos
 azure_functions

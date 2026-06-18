@@ -1,8 +1,11 @@
-# 🚀 All-In-All
+## All-In-All
 
-## Full-stack cloud-native application with Agentic AI capabilities
+It is a web application that showcase capabilities like
 
-## 📁 Project Structure
+- Multi-agent
+- Multiturn conversation
+
+## Project Structure
 
 ```bash
 all-in-all/
@@ -23,3 +26,7 @@ all-in-all/
 │
 ├── gitops/ # GitOps using ArgoCD
 ```
+
+## Architecture
+
+## User Flow
