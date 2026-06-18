@@ -613,3 +613,7 @@ AKS-prod    → secure + HA + private
 ```
 
 ```
+
+![alt text]({23CA644E-2550-4EC4-92AC-64843C58A73D}.png)
+![alt text]({CE1791B3-E451-4AF1-BBAC-E82CC962768C}.png)
+![alt text]({4C441033-3035-4205-AD31-762F1FAEB7AF}.png)

@@ -51,8 +51,7 @@ public sealed class RemoteAgentClient
         {
             Content = JsonContent.Create(new AgentRequest
             {
-                Question = question,
-                SubscriptionId = subscriptionId ?? ""
+                Question = question
             })
         };
 

@@ -151,8 +151,6 @@ request_handler = DefaultRequestHandler(
 )
 
 
-from a2a.server.apps import A2AStarletteApplication
-
 server = A2AStarletteApplication(
     agent_card = public_agent_card,
     http_handler = request_handler
@@ -170,4 +168,4 @@ config = uvicorn.Config(
 
 server_instance = uvicorn.Server(config)
 
-await server_instance.serve()
+server_instance.serve()

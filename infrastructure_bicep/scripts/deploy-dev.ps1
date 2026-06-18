@@ -1,7 +1,7 @@
 $ErrorActionPreference = "Stop"
 
 $ResourceGroup = "rg-dbx-dev-weu"
-$Location = "westeurope"
+$Location = "swedencentral"
 
 az.cmd group create `
   --name $ResourceGroup `

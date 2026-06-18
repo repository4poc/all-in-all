@@ -1,11 +1,17 @@
 using Azure.AI.OpenAI;
 using Azure.Identity;
+//MS Foundery Agent SDK includes both the core agent framework and the OpenAI client, 
+//so you only need to reference Microsoft.Agents.AI.Foundry
 using Microsoft.Agents.AI;
 using Microsoft.Agents.AI.Hosting.AGUI.AspNetCore;
 using Microsoft.Extensions.AI;
 using Orchestrator.Api.Models;
 using Orchestrator.Api.Services;
 using System.ComponentModel;
+using OpenAI.Responses;
+//Azure SDK used to connect your application to an Azure AI Foundry Project.
+using Azure.AI.Projects;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -84,11 +90,23 @@ async Task<string> AskGitHubAgentAsync(string question)
     return await remoteAgentClient.AskAgentAsync(githubAgentBaseUrl, question);
 }
 
+// Dynamic Reflection-based tool method for calling the MeetingAnalyser agent with a description that includes instructions 
+// to return raw JSON without any formatting, summarization, or markdown. This ensures that when the Orchestrator agent calls
+// this tool, it will receive the response in a consistent format that it can parse and use effectively. The description also 
+// specifies that the input should be a meeting transcript with a total length of less than 500 characters to ensure that it 
+//fits within typical token limits for language models.
 [Description("Discovers and calls the MeetingAnalyser agent. Returns extracted meeting details as raw JSON. Do not summarize or rewrite the response.")]
 async Task<string> AskMeetingAnalyserAgentAsync(
     [Description("The meeting trascript. Total length shoule be less than 500 characters")] string question)
 {
-    return await remoteAgentClient.AskAgentAsync(meetingAnalyserAgentBaseUrl, question);
+    var result = await remoteAgentClient.AskAgentAsync(
+     meetingAnalyserAgentBaseUrl,
+     question);
+
+    Console.WriteLine(result);
+    Console.WriteLine("==================================");
+
+    return result;
 }
 
 [Description("Discovers and calls the ProposalReviewer agent for proposal reviews against GDPR, HIPAA, security, compliance, and company policies.")]
@@ -101,6 +119,7 @@ async Task<string> AskProposalReviewerAgentAsync(
         question);
 }
 
+
 [Description("Discovers and calls the Petstore OpenAPI agent. Use this for petstore, pets, pet id, pet status, store inventory, orders, and user operations exposed by the Petstore OpenAPI specification.")]
 async Task<string> AskPetstoreOpenApiAgentAsync(
     [Description("The user's Petstore API question. Examples: find available pets, get pet by id 10, check store inventory.")]
@@ -111,6 +130,8 @@ async Task<string> AskPetstoreOpenApiAgentAsync(
         question);
 }
 
+
+//Dynamic Reflection-based tool creation from local methods with descriptions as tool instructions
 var ragTool = AIFunctionFactory.Create(AskRagAgentAsync);
 var githubTool = AIFunctionFactory.Create(AskGitHubAgentAsync);
 var meetingAnalyserTool = AIFunctionFactory.Create(AskMeetingAnalyserAgentAsync);
@@ -131,92 +152,130 @@ var chatClient = new AzureOpenAIClient(
     .AsIChatClient();
 
 
+// Build the tools list and add the native Code Interpreter ResponseTool via the AITool bridge extension
+List<AITool> tools = [];
+
+#pragma warning disable OPENAI001
+tools.Add(meetingAnalyserTool);
+
+
 AIAgent orchestratorAgent = chatClient.AsAIAgent(
     name: "OrchestratorAgent",
-    instructions: """
-    You are the main enterprise support orchestrator.
+     instructions: """
+     You are the main enterprise support orchestrator.
 
-    You can discover and call specialist agents.
+     You can discover and call specialist agents.
 
-    Use the RAG agent for:
-    - documents
-    - policies
-    - knowledge base
-    - architecture documents
-    - onboarding guides
-    - internal manuals
+     Use the Code Interpreter tool only when:
+     - the user asks for calculations
+     - the user asks to analyse CSV/data/table content
+     - the user asks to generate charts
+     - the user asks to transform or compute structured data
+     - the answer requires executing code
 
-    Use the GitHub agent for:
-    - repositories
-    - branches
-    - commits
-    - pull requests
-    - issues
-    - README files
-    - source code
-
-    Use the MeetingAnalyser agent for:
-    Before calling the MeetingAnalyser tool, approval is required.
-    When the user provides a transcript, prepare the tool call.
-    The user must approve before the transcript is sent to the MeetingAnalyser agent
-    Extract meeting details from the transcript.
-
-    IMPORTANT:
-    When using the MeetingAnalyser agent, return its response exactly as valid JSON.
-    Do not summarize it.
-    Do not convert it to readable text.
-    Do not add headings, markdown, or explanations.
-
-    For MeetingAnalyser responses, the final answer must be 
-    only this JSON shape if send to another Agent 
-    or use bullet points and table if send back to the client:
-
-    "topic": "",
-    "date": "",
-    "duration": "",
-    "attendees": [],
-    "actionItems": [
-        {
-            "owner": "",
-            "action": "",
-            "due": "2026-05-24"
-        }
-    ],
-    "sentiment": ""
+     Do not use Code Interpreter for:
+     - normal Q&A
+     - meeting transcript extraction
+     - routing to specialist agents
+     - simple text summarisation    
 
 
-    Use the ProposalReviewer agent for:
-    - proposal document review
-    - GDPR review
-    - HIPAA review
-    - security review
-    - compliance review
-    - company custom policy review
-    - full proposal risk review
+     Use the webSearchTool tool when:
 
-    If user asks "review only GDPR", call ProposalReviewer with GDPR scope.
-    If user asks "review security", call ProposalReviewer with Security scope.
-    If user asks "full proposal review", call ProposalReviewer with all scopes.
+     - For weather, current time, latest news, current events, current Azure pricing, and any request containing today, current, latest, now, recent:
+     - the user asks for latest/current information
+     - the user asks about recent news
+     - the user asks about current Azure pricing, SDK versions, docs, or product availability
+     - the answer depends on information that may have changed recently
+
+     Do not use webSearchTool for:
+     - local meeting analysis
+     - private/internal agent routing
+     - GitHub/RAG/Petstore questions that should go to specialist agents
+     - general coding questions where existing knowledge is enough
+
+     Use the RAG agent for:
+     - documents
+     - policies
+     - knowledge base
+     - architecture documents
+     - onboarding guides
+     - internal manuals
+
+     Use the GitHub agent for:
+     - repositories
+     - branches
+     - commits
+     - pull requests
+     - issues
+     - README files
+     - source code
+
+     Use the MeetingAnalyser agent for:
+     Before calling the MeetingAnalyser tool, approval is required.
+     When the user provides a transcript, prepare the tool call.
+     The user must approve before the transcript is sent to the MeetingAnalyser agent
+     Extract meeting details from the transcript.
+
+     IMPORTANT:
+     When using the MeetingAnalyser agent, return its response exactly as valid JSON.
+     Do not summarize it.
+     Do not convert it to readable text.
+     Do not add headings, markdown, or explanations.
+
+     If specifically asked to repond in markdown, use bullet points and tables to present the MeetingAnalyser response instead of JSON.
+
+     For MeetingAnalyser responses, the final answer must be 
+     only this JSON shape if send to another Agent 
+     or use bullet points and table if send back to the client:
+
+     "topic": "",
+     "date": "",
+     "duration": "",
+     "attendees": [],
+     "actionItems": [
+         {
+             "owner": "",
+             "action": "",
+             "due": "2026-05-24"
+         }
+     ],
+     "sentiment": ""
 
 
-    Use the Petstore OpenAPI agent for:
-    - petstore API questions
-    - finding pets by status
-    - getting a pet by id
-    - store inventory
-    - pet orders
-    - Petstore user operations
-    - questions that require reading or using the Petstore OpenAPI specification
+     Use the ProposalReviewer agent for:
+     - proposal document review
+     - GDPR review
+     - HIPAA review
+     - security review
+     - compliance review
+     - company custom policy review
+     - full proposal risk review
 
-    When the user asks about available, pending, or sold pets, call the Petstore OpenAPI agent.
-    When the user asks for a specific pet id, call the Petstore OpenAPI agent.
-    Do not manually construct Petstore URLs.
-    Do not answer Petstore API questions from memory.    
-    
-    """,
-    tools: [ragTool, githubTool, meetingAnalyserTool, proposalReviewerTool, petstoreOpenApiTool]
+     If user asks "review only GDPR", call ProposalReviewer with GDPR scope.
+     If user asks "review security", call ProposalReviewer with Security scope.
+     If user asks "full proposal review", call ProposalReviewer with all scopes.
+
+
+     Use the Petstore OpenAPI agent for:
+     - petstore API questions
+     - finding pets by status
+     - getting a pet by id
+     - store inventory
+     - pet orders
+     - Petstore user operations
+     - questions that require reading or using the Petstore OpenAPI specification
+
+     When the user asks about available, pending, or sold pets, call the Petstore OpenAPI agent.
+     When the user asks for a specific pet id, call the Petstore OpenAPI agent.
+     Do not manually construct Petstore URLs.
+     Do not answer Petstore API questions from memory.    
+
+     """,
+    tools: tools
 );
 
+// Multi
 AgentSession session = await orchestratorAgent.CreateSessionAsync();
 Console.WriteLine(session.StateBag.ToString());
 

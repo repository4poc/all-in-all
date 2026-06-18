@@ -55,7 +55,7 @@ Benefits:
 - Reduced risk of accidental fallback
 - Clearer security reviews
 
-![alt text]({85A7257A-2546-42F7-A6EB-77B7392381BC}.png)
+![alt text](images/{85A7257A-2546-42F7-A6EB-77B7392381BC}.png)
 
 ## Why MS Agent Framework?
 
@@ -341,17 +341,314 @@ Console.WriteLine(await agent.RunAsync(
 
 ## Tool Types
 
-#
-
-#
-
-#
-
-#
-
-#
-
 ![alt text](images/{01348239-9CAB-4409-B761-50936BD58ACA}.png)
+
+## Tool Approval
+
+It is a framework feature that lets you gate every tool invocation
+
+```
+AIFunction weatherFunction = AIFunctionFactory.Create(GetWeather);
+
+AIFunction approvalRequiredWeatherFunction = new ApprovalRequiredAIFunction(weatherFunction);
+```
+
+```
+AIAgent agent = new AIProjectClient(
+    new Uri("<your-foundry-project-endpoint>"),
+    new DefaultAzureCredential())
+     .AsAIAgent(
+        model: "gpt-4o-mini",
+        instructions: "You are a helpful assistant",
+        tools: [approvalRequiredWeatherFunction]);
+```
+
+## Provider Support Matrix
+
+The OpenAI and Azure OpenAI providers each offer two client types — Responses and Chat Completion — with different tool capabilities
+
+![alt text](images/{35A9C98E-1A9C-4065-B57D-B6A9FE84E1BC}.png)
+
+| Tool                        | Purpose                                    |
+| --------------------------- | ------------------------------------------ |
+| `HostedCodeInterpreterTool` | Execute Python/code in a sandbox           |
+| `HostedWebSearchTool`       | Search the public web                      |
+| `HostedMcpServerTool`       | Connect to hosted MCP servers              |
+| `HostedFileSearchTool`      | Search uploaded/indexed files              |
+| `HostedImageGenerationTool` | Generate images                            |
+| `HostedShellTool`           | Execute shell commands in a hosted runtime |
+
+## Function Tool
+
+**Option 1: Using direct Function Tool**
+
+```
+[Description("Gets weather for a city")]
+string GetWeather(string city)
+
+
+tools: [AIFunctionFactory.Create(GetWeather)]
+```
+
+```
+Main Agent
+    |
+    +--> GetWeather()
+```
+
+**Pros**
+
+- Simpler
+- Faster (fewer LLM calls)
+- Lower cost
+- Easier debugging
+
+**Best for**
+
+- Simple functions
+- CRUD operations
+- Database lookups
+- API calls
+- Deterministic logic
+
+**The main agent decides:**
+
+- When to call it
+- What parameters to send
+- How to interpret the result
+
+**Option 2: Using an Agent as a Function Tool**
+
+```
+User
+  |
+Main Agent
+  |
+Weather Agent
+  |
+GetWeather()
+```
+
+**Pros**
+
+Encapsulation of Domain Knowledge
+
+Weather Agent can have its own:
+
+```
+instructions:
+"You are a meteorology expert..."
+```
+
+The main agent doesn't need weather expertise.
+
+**Main Agent:**
+
+- Doesn't know weather specifics.
+- Delegates to Weather Agent.
+
+**Weather Agent:**
+
+- Calls GetWeather
+- Interprets wind speed
+- Considers rain
+- Returns recommendation
+
+Without the Weather Agent, the main agent must perform all reasoning itself.
+
+```
+// Create the inner agent with its own tools
+AIAgent weatherAgent = new AIProjectClient(
+    new Uri("<your-foundry-project-endpoint>"),
+    new DefaultAzureCredential())
+     .AsAIAgent(
+        model: "gpt-4o-mini",
+        instructions: "You answer questions about the weather.",
+        name: "WeatherAgent",
+        description: "An agent that answers questions about the weather.",
+        tools: [AIFunctionFactory.Create(GetWeather)]);
+
+// Create the main agent and provide the inner agent as a function tool
+AIAgent agent = new AIProjectClient(
+    new Uri("<your-foundry-project-endpoint>"),
+    new DefaultAzureCredential())
+     .AsAIAgent(
+        model: "gpt-4o-mini",
+        instructions: "You are a helpful assistant.",
+        tools: [weatherAgent.AsAIFunction()]);
+
+// The main agent can now call the weather agent as a tool
+Console.WriteLine(await agent.RunAsync("What is the weather like in Amsterdam?"));
+```
+
+## How to use WebSearch Tool
+
+Web Search allows agents to search the web for up-to-date information. This tool enables agents to answer questions about current events, find documentation, and access information beyond their training data.
+
+```
+using System;
+using Azure.AI.Projects;
+using Azure.Identity;
+using Microsoft.Agents.AI;
+using Microsoft.Extensions.AI;
+using System.ComponentModel;
+
+
+[Description("Get the weather for a given location.")]
+static string GetWeather([Description("The location to get the weather for.")] string location)
+    => $"The weather in {location} is cloudy with a high of 15°C.";
+
+
+var mcpHostedTool = new HostedMcpServerTool(
+    serverName: "microsoft_learn",
+    serverAddress: "https://learn.microsoft.com/api/mcp")
+{
+    AllowedTools = ["microsoft_docs_search"],
+    ApprovalMode = HostedMcpServerToolApprovalMode.NeverRequire
+};
+
+// Hosted Code Interpreter Tool
+var codeInterpreterTool = new HostedCodeInterpreterTool();
+var webSearchTool = new HostedWebSearchTool();
+
+AIAgent agent = new AIProjectClient(
+        new Uri("https://foundryallinalldev007.openai.azure.com"),
+        new AzureCliCredential())
+    .AsAIAgent(
+        model: "gpt-5-deployment",
+        instructions: """
+        You are a helpful assistant.
+        You can:
+        - call local C# functions,
+        - use hosted code interpreter for calculations and Python-style data analysis,
+        - use Microsoft Learn MCP search.
+        - use web search for current and web search for information.
+        """,
+        name: "FriendlyAssistant",
+        tools: [AIFunctionFactory.Create(GetWeather), codeInterpreterTool, mcpHostedTool, webSearchTool]);
+
+Console.WriteLine(await agent.RunAsync("""
+What is current time in Amritsar Punjab India
+"""));
+
+
+```
+
+## How to use Code Interprator Tool
+
+```
+using System;
+using Azure.AI.Projects;
+using Azure.Identity;
+using Microsoft.Agents.AI;
+using Microsoft.Extensions.AI;
+using System.ComponentModel;
+
+
+[Description("Get the weather for a given location.")]
+static string GetWeather([Description("The location to get the weather for.")] string location)
+    => $"The weather in {location} is cloudy with a high of 15°C.";
+
+
+var mcpHostedTool = new HostedMcpServerTool(
+    serverName: "microsoft_learn",
+    serverAddress: "https://learn.microsoft.com/api/mcp")
+{
+    AllowedTools = ["microsoft_docs_search"],
+    ApprovalMode = HostedMcpServerToolApprovalMode.AlwaysRequire
+};
+
+AIAgent agent = new AIProjectClient(
+        new Uri("https://foundryallinalldev007.openai.azure.com"),
+        new AzureCliCredential())
+    .AsAIAgent(
+        model: "gpt-5-deployment",
+        instructions: """
+        You are a helpful assistant.
+        You can:
+        - call local C# functions,
+        - use hosted code interpreter for calculations and Python-style data analysis.
+        """,
+        name: "FriendlyAssistant",
+        tools: [AIFunctionFactory.Create(GetWeather), new HostedCodeInterpreterTool()]);
+
+Console.WriteLine(await agent.RunAsync("""
+Calculate the first 1000 prime numbers and provide:
+- count
+- largest prime
+- average value
+- execution details"
+"""));
+
+```
+
+## How to use the Model Context Protocol tool
+
+You can extend the capabilities of your Microsoft Foundry agent by connecting it to tools hosted on remote Model Context Protocol (MCP) servers.
+
+```
+using System;
+using Azure.AI.Projects;
+using Azure.Identity;
+using Microsoft.Agents.AI;
+using Microsoft.Extensions.AI;
+using System.ComponentModel;
+
+
+[Description("Get the weather for a given location.")]
+static string GetWeather([Description("The location to get the weather for.")] string location)
+    => $"The weather in {location} is cloudy with a high of 15°C.";
+
+
+var mcpHostedTool = new HostedMcpServerTool(
+    serverName: "microsoft_learn",
+    serverAddress: "https://learn.microsoft.com/api/mcp")
+{
+    AllowedTools = ["microsoft_docs_search"],
+    ApprovalMode = HostedMcpServerToolApprovalMode.NeverRequire
+};
+
+// Hosted Code Interpreter Tool
+var codeInterpreterTool = new HostedCodeInterpreterTool();
+
+AIAgent agent = new AIProjectClient(
+        new Uri("https://foundryallinalldev007.openai.azure.com"),
+        new AzureCliCredential())
+    .AsAIAgent(
+        model: "gpt-5-deployment",
+        instructions: """
+        You are a helpful assistant.
+        You can:
+        - call local C# functions,
+        - use hosted code interpreter for calculations and Python-style data analysis,
+        - use Microsoft Learn MCP search.
+        """,
+        name: "FriendlyAssistant",
+        tools: [AIFunctionFactory.Create(GetWeather), codeInterpreterTool, mcpHostedTool]);
+
+Console.WriteLine(await agent.RunAsync("""
+Use the microsoft_learn MCP tool, specifically microsoft_docs_search.
+
+Search Microsoft Learn for:
+"HostedMcpServerTool Agent Framework AllowedTools ApprovalMode"
+
+Return only information found by the MCP search.
+
+For validation, include:
+1. The exact MCP tool name used.
+2. The top 3 Microsoft Learn result titles.
+3. The Microsoft Learn URLs.
+4. A short summary of each result.
+5. Say "NO MCP RESULT" if you cannot call the MCP tool.
+"""));
+
+```
+
+#
+
+#
+
+#
 
 An Enterprise Application with Multi-Agent using
 
@@ -388,3 +685,7 @@ For an onboarding process like:
 - Create ServiceNow ticket
 - Send email
 - Track state for days
+
+```
+
+```
