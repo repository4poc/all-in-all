@@ -171,6 +171,11 @@ Not supported with serverless capacity mode.
 **Security**
 
 - Key-based Authentication : Enabled (Default)
+  - Disabled
+    - To forcing authentication through Microsoft Entra ID
+    - After creation, you must assign a Cosmos DB data-plane role to your users, service principals, or managed identities, such as:
+      - Cosmos DB Built-in Data Reader
+      - Cosmos DB Built-in Data Contributor
 - Data Encryption
   - Service Managed Key (Default)
   - Customer Managed Key (CMK)
