@@ -4,6 +4,8 @@
   - Customer API (Port:8000)
   - User API (Port:9000)
 
+  ![alt text](images/{1F2A003B-C5E0-43A1-AC00-CC45007AD9C0}.png)
+
 ## Azure API Management vs Azure Application Gateway
 
 | Feature                        | Azure API Management                           | Azure Application Gateway                      |
@@ -20,6 +22,53 @@
 | Web Application Firewall (WAF) | No                                             | Yes                                            |
 | Backend Routing                | Basic                                          | Advanced path-based routing                    |
 | Monetization/Subscriptions     | Yes                                            | No                                             |
+
+Common Enterprise Architecture: Use Both
+
+```
+Internet
+    ↓
+Application Gateway (WAF)
+    ↓
+API Management
+    ↓
+Backend APIs / AKS / App Services
+```
+
+**Application Gateway**
+
+- Blocks malicious traffic
+- Provides WAF protection
+- Handles SSL termination
+- Routes traffic
+
+**API Management**
+
+- Authenticates API consumers
+- Applies throttling and quotas
+- Validates JWTs
+- Handles API versioning
+- Provides developer portal and analytics
+
+| Service                   | Network Component | VNet Integration | Primary Purpose              |
+| ------------------------- | ----------------- | ---------------- | ---------------------------- |
+| Azure Load Balancer       | Yes               | Native           | Layer 4 load balancing       |
+| Azure Application Gateway | Yes               | Native           | Layer 7 load balancing + WAF |
+| Azure API Management      | No                | Supported        | API gateway and management   |
+
+**Key Difference from Application Gateway**
+
+**Application Gateway**
+
+- Lives inside your VNet.
+- Requires a dedicated subnet.
+- Processes traffic directly as a network appliance.
+
+**API Management**
+
+- Is a PaaS service.
+- Can be connected to a VNet.
+- Focuses on API policies, authentication, throttling, versioning, and developer experience rather than traffic distribution.
 
 ## When to Use Azure API Management
 
@@ -47,11 +96,20 @@ Features
 
 ## Create Azure API Management
 
+**Project Details**
+
 - Subscription
-- Resource Group
-- Region
-- Organization Name
-- Administrator Email
+  - Resource Group
+
+**Instace Details**
+
+- Region:
+- Resource Name:
+- Organization Name:
+- Administrator Email:
+
+**Pricing Tier**
+
 - Pricing Tier:
   - Developer (No SLA)
   - Basic (99.95% SLA)
@@ -66,28 +124,41 @@ Features
 
 Azure API Management Developer tier, the good news is that Microsoft currently lists the Developer tier deployment as free of charge.
 
-### Monitor + Secure
+**Monitor + Secure**
 
 - Log Analytics: Disabled (Default)
 - Defender for APIs in MS Defender for Cloud : Disabled (Default)
 - Application Insight : Disabled (Default)
 
-### Networking
+**Networking**
 
 - Private Link : Disabled (Default)
-- vNet Integration
+- vNet Integration : Disabled (Default)
+- VNet Injection : Disabled (Defulat) ## Premium Tier Feature
 
-### System Assigned Managed Identity
+**Authentication**
 
-- Status : Disabled (Default)
+- System Assigned Managed Identity : Disabled (Default)
 
-### Tags
+**Tags**
 
-- Key : Value
+- Name : Value
+
+```
+Mobile App
+    ↓
+Azure API Management
+    ↓
+Microservices
+```
 
 ## Defind APIs in Azure API Management
 
+![alt text](images/{920B455C-B3DD-43A5-ACBE-448CC82BEA15}.png)
+
 1. **Add API**
+
+![alt text](images/{3AC00534-5BF8-48F7-B61F-DB3E22775E45}.png)
 
 - APIs > APIs
   - Add API
@@ -99,14 +170,17 @@ Azure API Management Developer tier, the good news is that Microsoft currently l
       - Web Service URL : https://< myapi >.azurewebsites.net
       - API Service Suffix : orders (Base URL : < api-management-url>/orders )
       - Products :
+        ![alt text](images/{016DE9AF-7BFE-4490-ACA2-1613E90310B0}.png)
 
 2. **Within Added API (Order API), add Operations**
+   ![alt text](images/{EF17FBA5-C365-41AE-AFA5-B046448B497E}.png)
    - Choose (**Order API**)
      - Add Operation
        - Disply Name : Get Orders
        - Name: get.orders
        - URL : GET | /api/orders
        - Description
+         ![alt text](images/{66E02C1C-D7B3-407C-8715-AE38EDEF831B}.png)
      - Add Operation
        - Disply Name : Get Order By Id
        - Name: get.orders.id
@@ -120,6 +194,7 @@ Azure API Management Developer tier, the good news is that Microsoft currently l
        - Request
          - Add Representation : application/json
          - Sample: JSON example
+           ![alt text](images/{619DEB31-AF23-48D7-B4DF-99E4B815B111}.png)
 
 ## Allow Access Only via API Managerment
 
