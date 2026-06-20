@@ -4,6 +4,35 @@
   - Customer API (Port:8000)
   - User API (Port:9000)
 
+## Azure API Manager vs Azure Application Gateway
+
+| Feature                        | Azure API Management                           | Azure Application Gateway                      |
+| ------------------------------ | ---------------------------------------------- | ---------------------------------------------- |
+| Primary Purpose                | API lifecycle management                       | Layer 7 load balancing and web traffic routing |
+| Target Audience                | API consumers and developers                   | Web applications and infrastructure teams      |
+| Protocols                      | REST, SOAP, GraphQL, WebSocket                 | HTTP, HTTPS, WebSocket                         |
+| API Security                   | OAuth, JWT validation, API keys, rate limiting | WAF, SSL termination, URL filtering            |
+| Developer Portal               | Yes                                            | No                                             |
+| API Versioning                 | Yes                                            | No                                             |
+| API Transformation             | Yes (rewrite requests/responses)               | Limited URL/header rewrite                     |
+| Analytics                      | Detailed API usage analytics                   | Traffic metrics and diagnostics                |
+| Load Balancing                 | No (not primary purpose)                       | Yes                                            |
+| Web Application Firewall (WAF) | No                                             | Yes                                            |
+| Backend Routing                | Basic                                          | Advanced path-based routing                    |
+| Monetization/Subscriptions     | Yes                                            | No                                             |
+
+## When to Use Azure API Management
+
+Use Azure API Management when:
+
+- Exposing APIs to internal, partner, or external developers
+- Enforcing API policies
+- Managing API versions
+- Applying rate limits and quotas
+- Validating JWT tokens
+- Transforming requests and responses
+- Providing a developer portal
+
 ## Flow
 
 UI(FrontEnd App) --> API Management --> APIs
