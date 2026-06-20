@@ -223,3 +223,18 @@ Data Sources Used
 
 We can find Insight section in Azure Monitor
 ![alt text](images/{53E4D39F-2F95-49E2-B403-1ECB8C4F7C7A}.png)
+
+Application Insights is not limited to App Service and Function Apps. It is part of Azure Monitor and can collect telemetry from many Azure and non-Azure workloads.
+
+You can use Application Insights with:
+
+- Azure App Service
+  Azure Functions
+- Azure Kubernetes Service (AKS)
+- Azure Container Apps
+- Virtual Machines
+- On-premises applications
+- .NET, Java, Node.js, Python applications running anywhere
+- Containers running in Docker
+- Background workers and console applications
+- Microservices architectures
