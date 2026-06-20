@@ -8,10 +8,19 @@ Azure Application Insight is used for Application performance monitoring.
 
 - Subscription
   - Resource Group
+
+**Instance Details**
+
 - Name
 - Region
+
+**Log Analytics Workspace**
+
 - Log Analytics Workspace : < Choose LAW resource >
-- Tags
+
+**Tags**
+
+- Name/Value
 
 Application Insight Resource Offer features
 

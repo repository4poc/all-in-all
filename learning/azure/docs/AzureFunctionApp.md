@@ -96,10 +96,6 @@ This option is visible based on the Hosting Option and Plan
 
 **Authentication**
 
-- Authentication
-  - Managed Identity : Disabled (Default)
-    - Enabled
-
 ![alt text](images/{422FC435-F6E2-4463-98CF-015B9680C9F1}.png)
 
 **Tags**

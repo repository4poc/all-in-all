@@ -13,7 +13,7 @@
 - Relational between Tables
 - Good for Transactional Data (ACID Characteristics)
 
-### Azure CosmosDB - Used For Unstrctured (JSON) Data
+### Azure CosmosDB - Used For Semi-Structured (JSON) Data
 
 - No SQL, Relational and Vector Database
 - No Fixed Schema (Data is in different forms)
