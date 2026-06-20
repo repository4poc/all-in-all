@@ -602,6 +602,26 @@ await DeleteItem(client);
 
 ## Change Feed (Continuous stream of changes done within a container)
 
+Azure Cosmos DB does not have an "event plane" concept like Event Grid or Event Hubs.
+
+Cosmos DB has:
+
+- Control Plane
+  - Create/update/delete accounts, databases, containers
+  - Managed through Azure Resource Manager (ARM)
+- Data Plane
+  - Read/write/query documents
+  - Secured with Cosmos DB RBAC, Entra ID, keys, etc.
+- Change Feed
+  - An ordered stream of inserts and updates in a container
+  - Used for event-driven processing, CQRS, projections, analytics, integration, etc.
+
+When discussing authentication:
+
+- Control Plane → Azure RBAC roles (Owner, Contributor, etc.)
+- Data Plane → Cosmos DB Built-in Data Reader/Contributor roles
+- Change Feed → Uses the same data-plane permissions as reading documents because it is part of the data plane.
+
 A built-in feature in Azure CosmosDB, a persistant log record all changes occure within a container.
 So you can have application that react to that changes like Azure functions.
 So instead of pooling the cosmosDB, for changes. We can listen to the chagne feed.
