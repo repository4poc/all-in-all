@@ -32,6 +32,7 @@ Suitable For
 - Publish
   - Code : Enabled (Default)
     - Runtime stack :
+      - .Net
       - Node
       - Java
       - PHP
