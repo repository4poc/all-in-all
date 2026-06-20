@@ -129,3 +129,28 @@ Backend1  Backend2
 **Tags**
 
 - Name/Value
+
+## Azure Web Application Firewall
+
+An additional feature available on Azure Application Gateway and Azure Frontdoor service
+![alt text](images/{D4B93AB0-218B-4485-A4AC-733362060AD7}.png)
+
+Protects against
+
+- SQL Injection Attacks
+- Cross Site Scripting Attacks
+
+  ![alt text](images/{77857B5D-4672-4AFD-8E03-4DD45EE63454}.png)
+
+- After you upgrade to WAF Tier, just enable it
+  ![alt text](images/{081CD0F3-E8E2-4F33-ACB4-AC7A66C6CF9C}.png)
+  ![alt text](images/{201FF2FB-7E56-4CC4-94A1-576B61283638}.png)
+
+- WAF Mode
+  - Detective (Default)
+  - Preventive
+
+    ![alt text](images/{0D039852-B530-44B5-A3BE-CD6ED2CE9E1D}.png)
+
+- Enable Rules
+  ![alt text](images/{14214348-8968-4AAB-9FDE-A039EF545B6E}.png)
