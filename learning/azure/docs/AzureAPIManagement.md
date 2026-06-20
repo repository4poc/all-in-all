@@ -4,7 +4,7 @@
   - Customer API (Port:8000)
   - User API (Port:9000)
 
-## Azure API Manager vs Azure Application Gateway
+## Azure API Management vs Azure Application Gateway
 
 | Feature                        | Azure API Management                           | Azure Application Gateway                      |
 | ------------------------------ | ---------------------------------------------- | ---------------------------------------------- |
