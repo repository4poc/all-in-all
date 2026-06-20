@@ -46,6 +46,10 @@ Suitable For
 
 **Pricing Plan**
 
+![alt text](images/{CACADEEF-5B5B-4DD6-9A12-F02980D2BEEC}.png)
+![alt text](images/{96CCDC92-B42E-4C23-B1CC-DCA1321D7456}.png)
+![alt text](images/{EF762227-B601-48B9-8EC4-4D8B483558B0}.png)
+
 - Pricing Plans
   - Name : Name of Pricing Plan
   - Plan :
