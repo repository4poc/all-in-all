@@ -336,3 +336,84 @@ Azure SQL
 ```
 
 ```
+
+Azure services are PaaS services that are Microsoft-managed and typically live outside your VNet by default (similar to Azure App Service), here are the common ones:
+
+**Compute / Application Services**
+
+- Azure App Service
+- Azure Functions (Consumption and Premium plans)
+- Azure Logic Apps (Consumption)
+- Azure API Management (Developer/Basic/Standard tiers by default)
+- Azure Container Apps
+
+**Data Services**
+
+- Azure Cosmos DB
+- Azure SQL Database
+- Azure Storage
+- Azure Cache for Redis
+- Azure Key Vault
+
+**Messaging Services**
+
+- Azure Service Bus
+- Azure Event Hubs
+- Azure Event Grid
+
+**Monitoring Services**
+
+- Application Insights
+- Azure Monitor
+- Log Analytics Workspace
+
+**Important distinction**
+
+These services are not deployed inside your VNet. Microsoft hosts them in its own infrastructure.
+
+However, many of them support:
+
+- Private Endpoints
+- VNet Integration
+- Service Endpoints
+- Private Link
+
+```
+Your VNet
+ ├─ AKS
+ ├─ VM
+ └─ App Service (VNet Integration)
+          |
+          v
+ Private Endpoint
+          |
+          v
+ Cosmos DB
+```
+
+Services that live inside your VNet infrastructure are those that get deployed into your VNet/subnets and receive private IP addresses from your network.
+
+**Compute**
+
+- Azure Virtual Machines
+- Azure Virtual Machine Scale Sets
+- Azure Kubernetes Service (the worker nodes and node pools are in your VNet)
+- Azure Container Instances (when deployed with VNet integration)
+
+**Networking**
+
+- Azure Application Gateway
+- Azure Firewall
+- Azure Bastion
+- Azure Load Balancer
+- NAT Gateway
+- VPN Gateway
+- ExpressRoute Gateway
+- Network Interfaces (NICs)
+- Managed Services with Dedicated VNet Deployment
+
+Some PaaS services can be deployed into a dedicated subnet:
+
+- Azure API Management (Internal VNet mode)
+- Azure Databricks (VNet injection)
+- Azure Synapse Analytics (managed VNet features)
