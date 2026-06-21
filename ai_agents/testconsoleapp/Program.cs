@@ -1,64 +1,98 @@
 ﻿using System;
-using Azure.AI.Projects;
+using System.ComponentModel;
+using Azure.AI.OpenAI;
 using Azure.Identity;
 using Microsoft.Agents.AI;
+using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.AI;
-using System.ComponentModel;
-
 
 [Description("Get the weather for a given location.")]
-static string GetWeather([Description("The location to get the weather for.")] string location)
+static string GetWeather(
+    [Description("The location to get the weather for.")] string location)
     => $"The weather in {location} is cloudy with a high of 15°C.";
 
+var azureOpenAIEndpoint = "https://foundryallinalldev007.openai.azure.com";
+var deploymentName = "gpt-5-deployment";
 
-var mcpHostedTool = new HostedMcpServerTool(
-    serverName: "microsoft_learn",
-    serverAddress: "https://learn.microsoft.com/api/mcp")
-{
-    AllowedTools = ["microsoft_docs_search"],
-    ApprovalMode = HostedMcpServerToolApprovalMode.NeverRequire
-};
+var cosmosEndpoint = "https://cosmosdb2284.documents.azure.com:443/";
+var databaseId = "agentdb";
+var containerId = "chatHistory";
 
-// Hosted Code Interpreter Tool
-var codeInterpreterTool = new HostedCodeInterpreterTool();
-var webSearchTool = new HostedWebSearchTool();
-var imageGeneratorTool = new HostedImageGenerationTool
-{
-    Options = new ImageGenerationOptions
+// In real app, use stable ID from your app/session.
+// Example: $"{userId}:{chatId}"
+var conversationId = "user-varinder-chat-002";
+
+var credential = new DefaultAzureCredential();
+
+CosmosClient cosmosClient = new CosmosClient(
+    accountEndpoint: cosmosEndpoint,
+    tokenCredential: credential,
+    new CosmosClientOptions
     {
-        MediaType = "image/png",
-        Count = 1,
-        ImageSize = new System.Drawing.Size(1024, 1024)
+        AllowBulkExecution = true
+    });
+
+Database database = await cosmosClient.CreateDatabaseIfNotExistsAsync(databaseId);
+
+await database.CreateContainerIfNotExistsAsync(
+    id: containerId,
+    partitionKeyPath: "/conversationId");
+
+// Cosmos-backed history provider.
+// Container partition key must be /conversationId.
+var historyProvider = new CosmosChatHistoryProvider(
+    cosmosClient: cosmosClient,
+    databaseId: databaseId,
+    containerId: containerId,
+    stateInitializer: session =>
+        new CosmosChatHistoryProvider.State(
+            conversationId: conversationId));
+
+historyProvider.MaxMessagesToRetrieve = 30;
+historyProvider.MessageTtlSeconds = 120;
+
+// Azure OpenAI chat client.
+// This path does not use Foundry server-side conversation history.
+AzureOpenAIClient azureOpenAIClient = new AzureOpenAIClient(
+    new Uri(azureOpenAIEndpoint),
+    new AzureCliCredential());
+
+IChatClient chatClient = azureOpenAIClient
+    .GetChatClient(deploymentName)
+    .AsIChatClient();
+
+AIAgent agent = chatClient.AsAIAgent(new ChatClientAgentOptions
+{
+    Name = "FriendlyAssistant",
+
+    // OK here, because this is framework-managed history.
+    ChatHistoryProvider = historyProvider,
+
+    ChatOptions = new ChatOptions
+    {
+        Instructions = "You are a helpful assistant. Keep your answers brief.",
+        Tools = [AIFunctionFactory.Create(GetWeather)]
     }
-};
+});
 
-AIAgent agent = new AIProjectClient(
-        new Uri("https://foundryallinalldev007.openai.azure.com"),
-        new AzureCliCredential())
-    .AsAIAgent(
-        model: "gpt-5-deployment",
-        instructions: """
-        You are a helpful assistant.
-        You can:
-        - call local C# functions,
-        - use hosted code interpreter for calculations and Python-style data analysis,
-        - use Microsoft Learn MCP search.
-        - use web search for current and web search for information.
-        - use image generation to create images based on user requests.
-        """,
-        name: "FriendlyAssistant",
-        tools: [AIFunctionFactory.Create(GetWeather), codeInterpreterTool, mcpHostedTool, webSearchTool, imageGeneratorTool]);
+AgentSession session = await agent.CreateSessionAsync();
 
+Console.WriteLine("First turn:");
 try
 {
-    await foreach (var update in agent.RunStreamingAsync(
-    "Generate one PNG image of a futuristic Helsinki harbor at sunset."))
-    {
-        Console.WriteLine(update);
-    }
+    Console.WriteLine(await agent.RunAsync(
+        "Who is the weather in Paris France?",
+        session));
 }
 catch (Exception ex)
 {
-    Console.WriteLine($"Error: {ex.Message}");
-}
+    Console.WriteLine(ex);
 
+    if (ex.InnerException != null)
+    {
+        Console.WriteLine("INNER:");
+        Console.WriteLine(ex.InnerException);
+    }
+
+    throw;
+}
