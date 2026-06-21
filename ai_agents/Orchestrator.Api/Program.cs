@@ -60,6 +60,10 @@ var costManagementMcpEndpoint =
     builder.Configuration["McpServers:AzureCost:Endpoint"]
     ?? "http://localhost:5080/mcp";
 
+var AksMonitoringMcpEndpoint =
+    builder.Configuration["McpServers:AzureCost:Endpoint"]
+    ?? "http://localhost:5070/mcp";
+
 var meetingAnalyserAgentBaseUrl =
     builder.Configuration["Agents:MeetingAnalyserAgentBaseUrl"]
     ?? "http://localhost:5005";
@@ -140,7 +144,7 @@ var codeInterpreterTool = new HostedCodeInterpreterTool();
 tools.Add(codeInterpreterTool);
 
 /*
-* microsoft_learn MCP Tool
+* Cost Management MCP Tool
 */
 var mcpTransport = new HttpClientTransport(new HttpClientTransportOptions
 {
@@ -148,17 +152,31 @@ var mcpTransport = new HttpClientTransport(new HttpClientTransportOptions
     TransportMode = HttpTransportMode.StreamableHttp,
     ConnectionTimeout = TimeSpan.FromSeconds(30)
 });
-
 var azureCostMcpClient = await McpClient.CreateAsync(mcpTransport);
-
 var azureCostMcpTools = await azureCostMcpClient.ListToolsAsync();
-
 foreach (var tool in azureCostMcpTools)
 {
-    Console.WriteLine($"MCP Tool: {tool.Name}");
+    Console.WriteLine($"Cost MCP Tool: {tool.Name}");
 }
-
 tools.AddRange(azureCostMcpTools);
+
+
+/*
+* AKS Monitoring MCP Tool
+*/
+var aksmcpTransport = new HttpClientTransport(new HttpClientTransportOptions
+{
+    Endpoint = new Uri(AksMonitoringMcpEndpoint), // http://localhost:5070/mcp
+    TransportMode = HttpTransportMode.StreamableHttp,
+    ConnectionTimeout = TimeSpan.FromSeconds(30)
+});
+var azureAksMcpClient = await McpClient.CreateAsync(aksmcpTransport);
+var azureAksMcpTools = await azureAksMcpClient.ListToolsAsync();
+foreach (var tool in azureAksMcpTools)
+{
+    Console.WriteLine($"AKS MCP Tool: {tool.Name}");
+}
+tools.AddRange(azureAksMcpTools);
 
 /*
 MeetingAnalyserTool
@@ -189,9 +207,24 @@ AIAgent agent = chatClient.AsAIAgent(new ChatClientAgentOptions
         Call the MCP tool directly.
         If the MCP tool returns JSON, summarize it clearly unless the user asks for raw JSON.
 
+        Use AKS MCP tools to investigate AKS incidents.
 
-        You can:
-        - call local C# functions,
+        Start with read-only investigation:
+        - Check pod errors.
+        - Check pod restarts.
+        - Check Kubernetes warning events.
+        - Check node CPU and memory pressure.
+        - Use safe KQL when needed.
+
+        Rules:
+        - Do not perform destructive actions.
+        - Do not restart, scale, delete, cordon, or drain anything automatically.
+        - Summarize affected namespace, pod, container, time window, and likely root cause.
+        - Recommend remediation steps, but require human approval.        
+
+        Use Code Interprator tools to .
+
+        - call or generate C# or python functions,
         - use hosted code interpreter for calculations and Python-style data analysis,
         - use Microsoft Learn MCP search.
 

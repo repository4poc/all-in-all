@@ -7,12 +7,8 @@ using Azure.ResourceManager.CostManagement;
 using Azure.ResourceManager.CostManagement.Models;
 using ModelContextProtocol.Server;
 using Azure.ResourceManager.Advisor;
-using Azure.ResourceManager.Advisor.Models;
 using Azure.ResourceManager.Resources;
 using System.Globalization;
-using System.Globalization;
-using System.Text.Json;
-using Azure;
 
 namespace CostManagement.McpServer.Tools;
 
@@ -229,7 +225,7 @@ public sealed class CostManagementTools
                 Impact = data.Impact?.ToString(),
                 Problem = data.ShortDescription?.Problem,
                 Solution = data.ShortDescription?.Solution,
-                ResourceId = data.ResourceMetadata?.ResourceId,
+                ResourceId = data.ResourceMetadata.ResourceId,
                 RecommendationTypeId = data.RecommendationTypeId?.ToString(),
                 LastUpdated = null
             });
