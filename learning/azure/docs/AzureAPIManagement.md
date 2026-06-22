@@ -293,3 +293,156 @@ Policy can be applied at **API** level as well as **Operation** level
 ## APIM - Virtual Network Integration
 
 UseCase : Backend Private API hosted on a VM within a virtual network
+
+## How to setup Authentication in API Management
+
+I’ll give you an end-to-end Azure APIM + Microsoft Entra ID setup, including what to configure in Entra, APIM policies, and how clients call it.
+
+Thought for a few seconds
+
+Yes — implement OAuth2/JWT in Azure API Management like this.
+
+Target flow
+Client app → gets OAuth2 token from Microsoft Entra ID
+Client app → calls APIM with Authorization: Bearer <token>
+APIM → validates JWT
+APIM → forwards request to backend only if token is valid
+
+APIM does not issue OAuth tokens. It validates tokens issued by Microsoft Entra ID or another identity provider. Microsoft recommends validate-azure-ad-token for Entra tokens, or validate-jwt for generic identity providers.
+
+Step 1: Register backend API in Microsoft Entra ID
+
+Go to:
+
+Microsoft Entra ID → App registrations → New registration
+
+Create one app registration for your API, for example:
+
+Name: my-private-api
+Supported account type: Single tenant
+
+Then configure:
+
+Expose an API → Set Application ID URI
+
+Example:
+
+api://my-private-api
+
+Add a scope:
+
+Scope name: access_as_user
+Who can consent: Admins and users
+
+Final scope will look like:
+
+api://my-private-api/access_as_user
+Step 2: Register client application
+
+Create another app registration for the caller:
+
+Name: my-client-app
+
+Then add API permission:
+
+API permissions → Add permission → My APIs → my-private-api
+
+Select:
+
+access_as_user
+
+Grant admin consent if required.
+
+For service-to-service flow, create a client secret or certificate for this client app.
+
+Step 3: Get a JWT access token
+
+For client credentials flow:
+
+curl -X POST "https://login.microsoftonline.com/<tenant-id>/oauth2/v2.0/token" \
+ -H "Content-Type: application/x-www-form-urlencoded" \
+ -d "client_id=<client-app-id>" \
+ -d "client_secret=<client-secret>" \
+ -d "scope=api://my-private-api/.default" \
+ -d "grant_type=client_credentials"
+
+This returns:
+
+{
+"access_token": "eyJ...",
+"token_type": "Bearer",
+"expires_in": 3599
+}
+
+Microsoft notes that access tokens should be validated by the resource server/API, not by the client application.
+
+Step 4: Add APIM inbound JWT validation policy
+
+In Azure Portal:
+
+API Management → APIs → Select API → Design → All operations → Inbound processing → Code editor
+
+Add:
+
+<policies>
+  <inbound>
+    <base />
+
+    <validate-azure-ad-token tenant-id="<tenant-id>">
+      <audiences>
+        <audience>api://my-private-api</audience>
+      </audiences>
+      <client-application-ids>
+        <application-id><client-app-id></application-id>
+      </client-application-ids>
+      <required-claims>
+        <claim name="roles" match="any">
+          <value>Api.Read</value>
+        </claim>
+      </required-claims>
+    </validate-azure-ad-token>
+
+  </inbound>
+
+  <backend>
+    <base />
+  </backend>
+
+  <outbound>
+    <base />
+  </outbound>
+
+  <on-error>
+    <base />
+  </on-error>
+</policies>
+
+Minimum version:
+
+<validate-azure-ad-token tenant-id="<tenant-id>">
+  <audiences>
+    <audience>api://my-private-api</audience>
+  </audiences>
+</validate-azure-ad-token>
+Step 5: Call APIM with token
+curl https://<apim-name>.azure-api.net/my-api/orders \
+  -H "Authorization: Bearer <access-token>" \
+  -H "Ocp-Apim-Subscription-Key: <subscription-key>"
+
+Subscription key is optional depending on your APIM product settings. It is useful for API access control, but OAuth/JWT is the real authentication layer.
+
+Step 6: Secure APIM to backend
+
+Best practice: APIM validates the caller token, then APIM authenticates to backend separately using Managed Identity. Microsoft’s APIM managed identity policy obtains an Entra token and sets it as a Bearer token to the backend.
+
+<authentication-managed-identity resource="api://<backend-app-id>" />
+Recommended production setup
+OAuth2/JWT validation at APIM
++ Managed Identity from APIM to backend
++ Private endpoint / internal VNet
++ HTTPS only
++ Rate limit policy
++ Required claims/roles
++ Optional subscription key
+
+This is the clean enterprise pattern.
