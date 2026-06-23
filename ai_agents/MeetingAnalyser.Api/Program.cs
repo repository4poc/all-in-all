@@ -40,10 +40,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+var credential = new AzureCliCredential();
 
 IChatClient chatClient = new AzureOpenAIClient(
         new Uri(endpoint),
-        new AzureCliCredential())
+        credential)
     .GetChatClient(deploymentName)
     .AsIChatClient();
 

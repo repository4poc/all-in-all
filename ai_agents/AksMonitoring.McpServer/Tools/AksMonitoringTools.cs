@@ -47,16 +47,14 @@ public sealed class AksMonitoringTools
         int minutes = 60,
         CancellationToken cancellationToken = default)
     {
-        var namespaceFilter = string.IsNullOrWhiteSpace(namespaceName)
-            ? ""
-            : $"""| where Namespace == "{EscapeKql(namespaceName)}" """;
+        var namespaceFilter = "apps";
 
         var query = $"""
         KubePodInventory
         | where TimeGenerated > ago({minutes}m)
         {namespaceFilter}
         | summarize RestartCount=max(ContainerRestartCount), Latest=max(TimeGenerated)
-            by Namespace, PodName, ContainerName
+            by Namespace, Name, ContainerName
         | where RestartCount > 0
         | order by RestartCount desc
         | take 50

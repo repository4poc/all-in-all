@@ -214,7 +214,8 @@ var historyProvider = new CosmosChatHistoryProvider(
 
 historyProvider.MaxMessagesToRetrieve = 30;
 historyProvider.MessageTtlSeconds = -1;
-
+var chatClient = azureOpenAIClient.GetChatClient(deploymentName)
+    .AsIChatClient();
 
 AIAgent agent = chatClient.AsAIAgent(new ChatClientAgentOptions
 {

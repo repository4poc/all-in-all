@@ -13,7 +13,6 @@ using OpenAI.Responses;
 using Azure.AI.Projects;
 using Microsoft.Azure.Cosmos;
 using ModelContextProtocol.Client;
-using ModelContextProtocol.Protocol;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,14 +60,16 @@ var costManagementMcpEndpoint =
     ?? "http://localhost:5080/mcp";
 
 var AksMonitoringMcpEndpoint =
-    builder.Configuration["McpServers:AzureCost:Endpoint"]
+    builder.Configuration["McpServers:AzureAKS:Endpoint"]
     ?? "http://localhost:5070/mcp";
 
 var meetingAnalyserAgentBaseUrl =
     builder.Configuration["Agents:MeetingAnalyserAgentBaseUrl"]
     ?? "http://localhost:5005";
 
-
+var documentManagerAgentBaseUrl =
+    builder.Configuration["Agents:DocumentManagerAgentBaseUrl"]
+    ?? "http://localhost:5010";
 
 /*
 * Persistant State Management in CosmosDB
@@ -115,7 +116,7 @@ Function as Tools
 [Description("Get the weather for a given location.")]
 static string GetWeather(
     [Description("The location to get the weather for.")] string location)
-    => $"The weather in {location} is cloudy with a high of 15°C.";
+    => $"The weather in {location} is sunny with a high of 25°C.";
 
 /**
 Function as Tools
@@ -127,6 +128,18 @@ async Task<string> AskMeetingAnalyserAgentAsync(
     var result = await remoteAgentClient.AskAgentAsync(
      meetingAnalyserAgentBaseUrl,
      question);
+    return result;
+}
+
+[Description("Discovers and calls the Document Manager agent. Use this for document, contract, invoice, compliance, metadata, and workflow questions.")]
+async Task<string> AskDocumentManagerAgentAsync(
+    [Description("The user's document management question.")] string question)
+{
+    Console.WriteLine($"Asking DocumentManager agent: {question}");
+    var result = await remoteAgentClient.AskAgentAsync(
+        documentManagerAgentBaseUrl,
+        question);
+
     return result;
 }
 
@@ -184,6 +197,12 @@ MeetingAnalyserTool
 var meetingAnalyserTool = AIFunctionFactory.Create(AskMeetingAnalyserAgentAsync);
 tools.Add(meetingAnalyserTool);
 
+/*
+DocumentManagerTool
+*/
+var documentManagerTool = AIFunctionFactory.Create(AskDocumentManagerAgentAsync);
+tools.Add(documentManagerTool);
+
 
 AzureOpenAIClient azureOpenAIClient = new AzureOpenAIClient(
     new Uri(endpoint), credential);
@@ -220,7 +239,19 @@ AIAgent agent = chatClient.AsAIAgent(new ChatClientAgentOptions
         - Do not perform destructive actions.
         - Do not restart, scale, delete, cordon, or drain anything automatically.
         - Summarize affected namespace, pod, container, time window, and likely root cause.
-        - Recommend remediation steps, but require human approval.        
+        - Recommend remediation steps, but require human approval.   
+
+        Use the DocumentManager agent for:
+
+        - document search 
+        - metadata-driven document lookup
+        - contract
+        - invoices
+        - policies- compliance documents
+        - document workflow state
+         Before answering document questions, call the DocumentManager agent
+        Do not answer document-management questions from memory.    
+ 
 
         Use Code Interprator tools to .
 
@@ -303,6 +334,7 @@ app.MapGet("/.well-known/agent.json", () =>
         ]
     });
 });
+
 
 app.MapAGUI("/agui/support", agent);
 
