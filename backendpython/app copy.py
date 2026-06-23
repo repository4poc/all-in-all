@@ -109,28 +109,9 @@ text_analytics_client = TextAnalyticsClient(
 )
 
 connection_id = ""
-
-mcp_server_name = os.getenv("MCP_SERVER_NAME")
 ai_search_connection_name = os.getenv("AI_SEARCH_CONNECTION_NAME")
 ai_search_index_name = os.getenv("AI_SEARCH_INDEX_NAME")
 
-connection_id = None
-if mcp_server_name:
-    for connection in project_client.connections.list():
-        if connection.name == mcp_server_name:
-            connection_id = connection.id
-            break
-
-print(f"MCP connection name={mcp_server_name}, id={connection_id}")
-
-connection_id = ""
-
-for connection in project_client.connections.list():
-    if connection.name == ai_search_connection_name:
-        connection_id = connection.id
-        break
-
-print(f"The AI Search Connection ID is: {connection_id}")
 
 def PII_Text_Redaction(input_text: str) -> str:
     documents = [
@@ -151,41 +132,8 @@ def PII_Text_Redaction(input_text: str) -> str:
     
     
 # OpanAI Agent API endpoint
-@app.route('/api/openAI/agent', methods=['POST'])
+@app.route('/api/agent/ask', methods=['POST'])
 def foundry_openAI_Agent():
-
-    # Load OpenAPI spec URL as JSON object
-    spec_url = "https://petstore3.swagger.io/api/v3/openapi.json"
-    spec_response = requests.get(spec_url, timeout=20)
-    spec_response.raise_for_status()
-
-    petstore_spec = cast(dict[str, Any], jsonref.loads(spec_response.text))
-
-    # Create OpenAPI tool
-    petstore_tool = {
-        "type": "openapi",
-        "openapi": {
-            "name": "petstore-api",
-            "spec": petstore_spec,
-            "auth": {
-                "type": "anonymous"
-            }
-        }
-    }
-
-    MCPServerTool = MCPTool(
-        server_label="microsoft_learn_server",
-        server_url="https://learn.microsoft.com/api/mcp",
-        server_description="Microsoft Learn documentation MCP server",
-        require_approval="never"
-    )
-
-    custom_mcp_tool = MCPTool(
-        server_label="varinder-mcp-server",
-        server_url="http://localhost:8000/mcp",
-        server_description="Courses and Recipies MCP server",
-        require_approval="never"
-    )
 
     azure_ai_search_tool = AzureAISearchTool(
         azure_ai_search=AzureAISearchToolResource(
@@ -205,17 +153,16 @@ def foundry_openAI_Agent():
         definition = PromptAgentDefinition(
             model = MODEL_DEPLOYMENT_NAME,
             instructions = "You are a Also a travel assistant. Help users plan their trips, find flights, hotels, and provide travel advice.",
-            tools = [custom_mcp_tool]
-            # tools = [petstore_tool,MCPServerTool, azure_ai_search_tool]
+            tools = [azure_ai_search_tool]
         )
     )
 
     print(f"Created agent with ID: {agent.id} and name: {agent.name} and tools: {[tool['type'] for tool in agent.definition.tools]}")
     
-
     data = request.get_json(silent=True) or {}
 
     user_message = data.get('message')
+
     if not user_message or not user_message.strip():
         return jsonify({'error': 'Message is required'}), 400
 
@@ -295,4 +242,5 @@ def foundry_anthropic_chat():
 
 # Run the Flask app
 if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=5000)
     app.run(host="0.0.0.0", port=5000)
