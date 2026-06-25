@@ -38,6 +38,9 @@ builder.Services.AddLogging();
 builder.Services.AddAGUI();
 
 builder.Services.AddSingleton<RemoteAgentClient>();
+builder.Services.AddSingleton<PiiRedactionService>();
+builder.Services.AddSingleton<WeatherTools>();
+
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
@@ -80,7 +83,7 @@ var containerId = "chatHistory";
 
 // In real app, use stable ID from your app/session.
 // Example: $"{userId}:{chatId}"
-var conversationId = "user-varinder-chat-003";
+var conversationId = "user-varinder-chat-006";
 var credential = new AzureCliCredential();
 
 CosmosClient cosmosClient = new CosmosClient(
@@ -97,15 +100,49 @@ await database.CreateContainerIfNotExistsAsync(
     id: containerId,
     partitionKeyPath: "/conversationId");
 
+var piiGuard = app.Services.GetRequiredService<PiiRedactionService>();
+var weatherTools = app.Services.GetRequiredService<WeatherTools>();
+
+
 // Cosmos-backed history provider.
 // Container partition key must be /conversationId.
+/*
 var historyProvider = new CosmosChatHistoryProvider(
     cosmosClient: cosmosClient,
     databaseId: databaseId,
     containerId: containerId,
     stateInitializer: session =>
         new CosmosChatHistoryProvider.State(
-            conversationId: conversationId));
+            conversationId: conversationId),
+    storeInputRequestMessageFilter: messages =>
+    {
+        return messages.Select(message =>
+        {
+            if (message.Role != ChatRole.User)
+                return message;
+
+            var redactedText = piiGuard
+                .RedactAsync(message.Text)
+                .GetAwaiter()
+                .GetResult();
+
+            Console.WriteLine("===== COSMOS STORE FILTER =====");
+            Console.WriteLine($"Before Cosmos: {message.Text}");
+            Console.WriteLine($"After Cosmos: {redactedText}");
+            Console.WriteLine("===============================");
+
+            return new ChatMessage(ChatRole.User, redactedText);
+        });
+    });*/
+
+var historyProvider = new CosmosChatHistoryProvider(
+    cosmosClient: cosmosClient,
+    databaseId: databaseId,
+    containerId: containerId,
+    stateInitializer: session =>
+        new CosmosChatHistoryProvider.State(
+            conversationId: conversationId)
+    );
 
 historyProvider.MaxMessagesToRetrieve = 30;
 historyProvider.MessageTtlSeconds = 120;
@@ -114,10 +151,14 @@ historyProvider.MessageTtlSeconds = 120;
 Function as Tools
 **/
 [Description("Get the weather for a given location.")]
-static string GetWeather(
+async Task<string> GetWeather(
     [Description("The location to get the weather for.")] string location)
-    => $"The weather in {location} is sunny with a high of 25°C.";
-
+{
+    Console.WriteLine($"GetWeather called with location: {location}");
+    var results = await weatherTools.GetWeather(location);
+    Console.WriteLine($"GetWeather returned: {results}");
+    return results;
+}
 /**
 Function as Tools
 **/
@@ -125,9 +166,11 @@ Function as Tools
 async Task<string> AskMeetingAnalyserAgentAsync(
     [Description("The meeting trascript. Total length shoule be less than 500 characters")] string question)
 {
+    var safeQuestion = await piiGuard.RedactAsync(question);
+
     var result = await remoteAgentClient.AskAgentAsync(
      meetingAnalyserAgentBaseUrl,
-     question);
+     safeQuestion);
     return result;
 }
 
@@ -136,6 +179,10 @@ async Task<string> AskDocumentManagerAgentAsync(
     [Description("The user's document management question.")] string question)
 {
     Console.WriteLine($"Asking DocumentManager agent: {question}");
+
+    //var safeQuestion = await piiGuard.RedactAsync(question);
+
+
     var result = await remoteAgentClient.AskAgentAsync(
         documentManagerAgentBaseUrl,
         question);
@@ -207,8 +254,12 @@ tools.Add(documentManagerTool);
 AzureOpenAIClient azureOpenAIClient = new AzureOpenAIClient(
     new Uri(endpoint), credential);
 
-var chatClient = azureOpenAIClient.GetChatClient(deploymentName)
+//var chatClient = azureOpenAIClient.GetChatClient(deploymentName).AsIChatClient();
+
+var rawChatClient = azureOpenAIClient.GetChatClient(deploymentName)
     .AsIChatClient();
+
+var chatClient = rawChatClient;//new PiiGuardChatClient(rawChatClient, piiGuard);
 
 
 AIAgent agent = chatClient.AsAIAgent(new ChatClientAgentOptions
@@ -220,6 +271,13 @@ AIAgent agent = chatClient.AsAIAgent(new ChatClientAgentOptions
     {
         Instructions = """
         You are a helpful assistant.
+
+        PII policy:
+        - Hotel names, city names, business names, and public place names are not PII.
+        - The redaction layer must preserve hotel names, city names, business names, and public place names.
+        - User messages may contain redacted values.
+        - If a value is already redacted, do not reconstruct it.
+        - However, do not ask the user to reveal it. Instead, continue using the available non-redacted context.
 
         For Azure Cost queries, use the local MCP tool named get_daily_cost_trend.
         Do not answer Azure Cost daily trend questions from memory.

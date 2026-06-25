@@ -311,6 +311,9 @@ app.MapPost("/api/agent/ask", async (AgentRequest request) =>
 
     var response = await documentManagerAgent.RunAsync<string>(request.Question);
 
+    Console.WriteLine($"Received response: {response.Result}");
+
+
     return Results.Ok(new
     {
         answer = response.Result

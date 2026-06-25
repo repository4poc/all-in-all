@@ -1,5 +1,4 @@
 using CostManagement.McpServer.Tools;
-using ModelContextProtocol.Server;
 
 var builder = WebApplication.CreateBuilder(args);
 

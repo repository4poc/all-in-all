@@ -4,10 +4,11 @@ using Azure.Monitor.Query;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton(
+builder.Services.AddSingleton<LogsQueryClient>(_ =>
     new LogsQueryClient(new DefaultAzureCredential()));
 
-builder.Services.AddMcpServer()
+builder.Services
+    .AddMcpServer()
     .WithHttpTransport()
     .WithTools<AksMonitoringTools>();
 
@@ -17,4 +18,4 @@ app.MapGet("/", () => "AKS Monitoring MCP Server is running.");
 
 app.MapMcp("/mcp");
 
-app.Run("http://localhost:5070");
+app.Run();
