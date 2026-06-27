@@ -29,4 +29,22 @@ all-in-all/
 
 ## Architecture
 
-![alt text](./learning/azure/{BE367AF9-8814-47A3-B85A-8810F8CC77CA}.png)
+![alt text](./learning/azure/docs/images/{BE367AF9-8814-47A3-B85A-8810F8CC77CA}.png)
+
+## Local Setup
+
+**Prerequisites**
+
+You need to have docker desktop running on local machine
+
+**Setup Steps**
+
+- cd all-in-all
+
+**Build images**
+
+- docker compose down
+- docker compose build
+
+  **Specific module**
+  - docker compose build < backendexpress >
