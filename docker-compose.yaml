@@ -1,0 +1,22 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NGINX_CONF: nginx.local.conf
+    container_name: frontend
+    env_file:
+      - ./frontend/.env
+    ports:
+      - "80:80"
+    depends_on:
+      - backendexpress
+    restart: unless-stopped
+
+  backendexpress:
+    build:
+      context: ./backendexpress
+    container_name: backendexpress
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
