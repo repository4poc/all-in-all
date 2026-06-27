@@ -307,9 +307,23 @@ AIAgent agent = chatClient.AsAIAgent(new ChatClientAgentOptions
         - invoices
         - policies- compliance documents
         - document workflow state
-         Before answering document questions, call the DocumentManager agent
-        Do not answer document-management questions from memory.    
- 
+        Before answering document questions, call the DocumentManager agent
+        Do not answer document-management questions from memory. 
+        
+        For document-management answers returned to the client:
+        - Always call DocumentManager first.
+        - Preserve the factual answer from DocumentManager.
+        - Do not convert content questions into metadata-only questions.
+        - Do not say metadata is missing unless DocumentManager explicitly says the user asked about metadata.
+        - Do not use markdown tables.
+        - Format the final response as bullet points only.
+
+        "project": "",
+        "department": "",
+        "blobURL": "",
+        "status": "",
+        "securityClass": "",        
+      
 
         Use Code Interprator tools to .
 

@@ -8,6 +8,8 @@ using Microsoft.Extensions.AI;
 using System.ComponentModel;
 using System.Text.Json;
 using DocumentManager.Api.Models;
+using Azure.Search.Documents.Models;
+using OpenAI.Embeddings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,12 +46,27 @@ var searchIndex =
     builder.Configuration["AzureSearch:IndexName"]
     ?? "document-manager-index";
 
+var vectorFieldName =
+    builder.Configuration["AzureSearch:VectorFieldName"]
+    ?? "contentVector";
+
 var credential = new AzureCliCredential();
 
 builder.Services.AddSingleton(new SearchClient(
     new Uri(searchEndpoint),
     searchIndex,
     credential));
+
+var embeddingDeploymentName =
+    Environment.GetEnvironmentVariable("AZURE_OPENAI_EMBEDDING_DEPLOYMENT_NAME")
+    ?? builder.Configuration["AzureOpenAI:EmbeddingDeploymentName"]
+    ?? "text-embedding-3-mini";
+
+builder.Services.AddSingleton(sp =>
+{
+    return new AzureOpenAIClient(new Uri(endpoint), credential)
+        .GetEmbeddingClient(embeddingDeploymentName);
+});
 
 builder.Services.AddSingleton(sp =>
 {
@@ -72,6 +89,89 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+
+[Description("Searches documents using vector similarity over document content. Use this for semantic questions where exact keywords may not match, including joining date, start date, employment date, contract facts, obligations, risks, penalties, payment delays, termination rights, renewal terms, or compliance meaning.")]
+async Task<string> SearchDocumentsByVectorAsync(
+    [Description("Natural language semantic query, for example: contracts with payment delay penalties")] string query,
+    [Description("Optional OData metadata filter, for example: customer eq 'Contoso' and status eq 'Approved'")] string? filter = null)
+{
+    var searchClient = app.Services.GetRequiredService<SearchClient>();
+    var embeddingClient = app.Services.GetRequiredService<EmbeddingClient>();
+
+    var embeddingResponse = await embeddingClient.GenerateEmbeddingAsync(query);
+    var queryVector = embeddingResponse.Value.ToFloats();
+
+    var options = new SearchOptions
+    {
+        Size = 5,
+        Filter = string.IsNullOrWhiteSpace(filter) ? null : filter
+    };
+
+    options.Select.Add("id");
+    options.Select.Add("documentId");
+    options.Select.Add("fileName");
+    options.Select.Add("content");
+    options.Select.Add("documentType");
+    options.Select.Add("customer");
+    options.Select.Add("project");
+    options.Select.Add("department");
+    options.Select.Add("owner");
+    options.Select.Add("status");
+    options.Select.Add("workflowState");
+    options.Select.Add("retentionClass");
+    options.Select.Add("blobPath");
+    options.Select.Add("createdDate");
+    options.Select.Add("expiryDate");
+
+    options.VectorSearch = new()
+    {
+        Queries =
+        {
+            new VectorizedQuery(queryVector)
+            {
+                KNearestNeighborsCount = 5,
+                Fields = { vectorFieldName }
+            }
+        }
+    };
+
+    var response = await searchClient.SearchAsync<DocumentManager.Api.Models.SearchDocument>(null, options);
+
+    var results = new List<object>();
+
+    await foreach (var item in response.Value.GetResultsAsync())
+    {
+        var content = item.Document.content ?? "";
+
+        results.Add(new
+        {
+            item.Score,
+            item.Document.id,
+            item.Document.documentId,
+            item.Document.fileName,
+            item.Document.documentType,
+            item.Document.customer,
+            item.Document.project,
+            item.Document.department,
+            item.Document.owner,
+            item.Document.status,
+            item.Document.workflowState,
+            item.Document.retentionClass,
+            item.Document.blobPath,
+            item.Document.createdDate,
+            item.Document.expiryDate,
+            Snippet = content.Length > 700 ? content[..700] : content
+        });
+    }
+
+    return JsonSerializer.Serialize(results, new JsonSerializerOptions
+    {
+        WriteIndented = true
+    });
+}
+
+
 [Description("Searches enterprise documents using metadata and content.")]
 async Task<string> SearchDocumentsAsync(
     [Description("Search text, for example: approved contracts for Contoso")] string query,
@@ -90,7 +190,7 @@ async Task<string> SearchDocumentsAsync(
         options.Select.Add("id");
         options.Select.Add("documentId");
         options.Select.Add("fileName");
-        options.Select.Add("Content");
+        options.Select.Add("content");
         options.Select.Add("documentType");
         options.Select.Add("customer");
         options.Select.Add("project");
@@ -103,31 +203,31 @@ async Task<string> SearchDocumentsAsync(
         options.Select.Add("createdDate");
         options.Select.Add("expiryDate");
 
-        var response = await searchClient.SearchAsync<SearchDocument>(query, options);
+        var response = await searchClient.SearchAsync<DocumentManager.Api.Models.SearchDocument>(query, options);
 
         var results = new List<object>();
 
         await foreach (var item in response.Value.GetResultsAsync())
         {
-            var content = item.Document.Content ?? "";
+            var content = item.Document.content ?? "";
 
             results.Add(new
             {
                 item.Score,
-                item.Document.Id,
-                item.Document.DocumentId,
-                item.Document.FileName,
-                item.Document.DocumentType,
-                item.Document.Customer,
-                item.Document.Project,
-                item.Document.Department,
-                item.Document.Owner,
-                item.Document.Status,
-                item.Document.WorkflowState,
-                item.Document.RetentionClass,
-                item.Document.BlobPath,
-                item.Document.CreatedDate,
-                item.Document.ExpiryDate,
+                item.Document.id,
+                item.Document.documentId,
+                item.Document.fileName,
+                item.Document.documentType,
+                item.Document.customer,
+                item.Document.project,
+                item.Document.department,
+                item.Document.owner,
+                item.Document.status,
+                item.Document.workflowState,
+                item.Document.retentionClass,
+                item.Document.blobPath,
+                item.Document.createdDate,
+                item.Document.expiryDate,
                 Snippet = content.Length > 700 ? content[..700] : content
             });
         }
@@ -171,6 +271,65 @@ async Task<string> SearchDocumentsAsync(
     }
 }
 
+[Description("Searches documents using only metadata filters. Use this when the user asks by customer, project, status, workflow state, owner, department, retention class, document type, or expiry date.")]
+async Task<string> SearchDocumentsByMetadataAsync(
+    [Description("Azure AI Search OData filter, for example: customer eq 'Contoso' and status eq 'Approved'")] string filter)
+{
+    var searchClient = app.Services.GetRequiredService<SearchClient>();
+
+    var options = new SearchOptions
+    {
+        Size = 20,
+        Filter = filter
+    };
+
+    options.Select.Add("id");
+    options.Select.Add("documentId");
+    options.Select.Add("fileName");
+    options.Select.Add("documentType");
+    options.Select.Add("customer");
+    options.Select.Add("project");
+    options.Select.Add("department");
+    options.Select.Add("owner");
+    options.Select.Add("status");
+    options.Select.Add("workflowState");
+    options.Select.Add("retentionClass");
+    options.Select.Add("blobPath");
+    options.Select.Add("createdDate");
+    options.Select.Add("expiryDate");
+
+    var response = await searchClient.SearchAsync<DocumentManager.Api.Models.SearchDocument>("*", options);
+
+    var results = new List<object>();
+
+    await foreach (var item in response.Value.GetResultsAsync())
+    {
+        results.Add(new
+        {
+            item.Score,
+            item.Document.id,
+            item.Document.documentId,
+            item.Document.fileName,
+            item.Document.documentType,
+            item.Document.customer,
+            item.Document.project,
+            item.Document.department,
+            item.Document.owner,
+            item.Document.status,
+            item.Document.workflowState,
+            item.Document.retentionClass,
+            item.Document.blobPath,
+            item.Document.createdDate,
+            item.Document.expiryDate
+        });
+    }
+
+    return JsonSerializer.Serialize(results, new JsonSerializerOptions
+    {
+        WriteIndented = true
+    });
+}
+
 [Description("Prepares a document workflow state change. Requires human confirmation before execution.")]
 Task<string> PrepareWorkflowChangeAsync(
     string documentId,
@@ -206,6 +365,8 @@ Task<string> PrepareWorkflowChangeAsync(
 var tools = new List<AITool>
 {
     AIFunctionFactory.Create(SearchDocumentsAsync),
+    AIFunctionFactory.Create(SearchDocumentsByMetadataAsync),
+    AIFunctionFactory.Create(SearchDocumentsByVectorAsync),
     AIFunctionFactory.Create(PrepareWorkflowChangeAsync)
 };
 
@@ -223,7 +384,7 @@ AIAgent documentManagerAgent = chatClient.AsAIAgent(new ChatClientAgentOptions
         Instructions = """
         You are a metadata-driven Document Manager Agent.
 
-        Your role is similar to a lightweight M-Files style document assistant.
+        Your role is similar to a lightweight document assistant.
 
         You help users:
         - Find documents by business metadata.
@@ -232,49 +393,49 @@ AIAgent documentManagerAgent = chatClient.AsAIAgent(new ChatClientAgentOptions
         - Explain document status and workflow state.
         - Prepare workflow transitions.
 
-        Always use SearchDocumentsAsync for:
-        - contracts
-        - invoices
-        - HR policies
-        - project documents
-        - compliance documents
-        - document status questions
-        - document workflow questions
-        - questions about document content
+        Use SearchDocumentsByMetadataAsync when the user asks about:
+        - documents by customer
+        - documents by project
+        - documents by owner
+        - documents by status
+        - documents by workflow state
+        - documents by department
+        - documents by document type
+        - documents by retention class
+        - documents by created date
+        - documents by expiry date
 
-        Metadata fields include:
-        - id
-        - documentId
-        - fileName
-        - documentType
-        - customer
-        - project
-        - department
-        - owner
-        - status
-        - workflowState
-        - retentionClass
+        Use SearchDocumentsByMetadataAsync when the user asks only by metadata fields.
 
+        Use SearchDocumentsByVectorAsync for semantic/content questions where the answer may be inside document text, including:
+        - joining date
+        - start date
+        - employment date
+        - effective date
+        - contract date
+        - date mentioned in a document
+        - who joined which company
+        - facts that are inside document content, not metadata
+        - obligations, risks, penalties, payment delays, termination rights, renewal terms, or compliance meaning
+
+        If the user asks a factual question and the answer is not metadata:
+        1. Call SearchDocumentsByVectorAsync first.
+        2. If evidence is weak, call SearchDocumentsAsync with likely keywords.
+        3. Answer only from returned Snippet/content.
+        4. Do not say metadata is missing unless the user specifically asked about metadata.
+
+        Use SearchDocumentsAsync when the user asks for exact keyword/content search or when the user gives exact phrases.
+        
         Rules:
         - Do not invent documents.
         - Do not answer from memory.
-        - Use only SearchDocumentsAsync results.
-        - Cite available fields: fileName, documentId, id, status, and workflowState.
+        - Cite available fields: fileName, blobURL , status, and workflowState.
+        - If there are multiple results, only show top record each distinct blobURL in a bullet point 
+        - Do not use markdown tables. Use bullet points only.
         - If fileName or documentId is empty, use id.
         - If no documents are found, say so clearly.
         - Do not approve, archive, delete, or modify documents automatically.
         - Workflow changes must be prepared only and require human approval.
-
-        Filter rules:
-        - Only use Azure AI Search OData filters.
-        - Never use contains().
-        - For text search, put the text in the query parameter.
-        - Use filters only for exact metadata fields, for example:
-        customer eq 'Contoso'
-        status eq 'Approved'
-        workflowState eq 'In Review'
-        documentType eq 'Contract'
-        
         """,
         Tools = tools
     }
