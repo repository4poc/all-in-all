@@ -5,8 +5,6 @@ WORKDIR /app
 
 COPY package*.json ./
 
-# Deletes existing node_modules and package-lock.json to ensure a clean slate for npm ci
-# Uses package-lock.json exactly and fails if the package-lock.json and package.json are out of sync
 RUN npm ci
 
 COPY . .

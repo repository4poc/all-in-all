@@ -50,19 +50,19 @@ var deploymentName =
 
 var costManagementMcpEndpoint =
     builder.Configuration["McpServers:AzureCost:Endpoint"]
-    ?? "http://localhost:5080/mcp";
+    ?? "http://costmanagementmcp:5080/mcp";
 
 var aksMonitoringMcpEndpoint =
     builder.Configuration["McpServers:AzureAKS:Endpoint"]
-    ?? "http://localhost:5070/mcp";
+    ?? "http://aksmonitoringmcp:5070/mcp";
 
 var meetingAnalyserAgentBaseUrl =
     builder.Configuration["Agents:MeetingAnalyserAgentBaseUrl"]
-    ?? "http://localhost:5005";
+    ?? "http://meetinganalyser:5005";
 
 var documentManagerAgentBaseUrl =
     builder.Configuration["Agents:DocumentManagerAgentBaseUrl"]
-    ?? "http://localhost:5010";
+    ?? "http://documentmanager:5010";
 
 var cosmosEndpoint =
     builder.Configuration["CosmosDb:Endpoint"]
@@ -258,7 +258,7 @@ app.MapGet("/.well-known/agent.json", () =>
 
 app.MapAGUI("/agui/support", agent);
 
-app.Run("http://localhost:5000");
+app.Run("http://0.0.0.0:5000");
 
 
 static async Task AddMcpToolsIfAvailableAsync(
@@ -269,15 +269,17 @@ static async Task AddMcpToolsIfAvailableAsync(
 {
     try
     {
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(3));
+
         var transport = new HttpClientTransport(new HttpClientTransportOptions
         {
             Endpoint = new Uri(endpoint),
             TransportMode = HttpTransportMode.StreamableHttp,
-            ConnectionTimeout = TimeSpan.FromSeconds(10)
+            ConnectionTimeout = TimeSpan.FromSeconds(3)
         });
 
-        var client = await McpClient.CreateAsync(transport);
-        var mcpTools = await client.ListToolsAsync();
+        var client = await McpClient.CreateAsync(transport, cancellationToken: cts.Token);
+        var mcpTools = await client.ListToolsAsync(cancellationToken: cts.Token);
 
         foreach (var tool in mcpTools)
         {
@@ -286,10 +288,14 @@ static async Task AddMcpToolsIfAvailableAsync(
 
         tools.AddRange(mcpTools);
 
-        logger.LogInformation("{McpName} connected successfully.", name);
+        logger.LogInformation("{McpName} connected successfully. Tool count: {Count}", name, mcpTools.Count);
     }
     catch (Exception ex)
     {
-        logger.LogWarning(ex, "{McpName} unavailable at {Endpoint}. Skipping MCP tools.", name, endpoint);
+        logger.LogWarning(
+            "{McpName} unavailable at {Endpoint}. Continuing without MCP tools. Reason: {Message}",
+            name,
+            endpoint,
+            ex.Message);
     }
 }

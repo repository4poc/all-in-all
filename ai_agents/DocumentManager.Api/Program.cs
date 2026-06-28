@@ -50,7 +50,7 @@ var vectorFieldName =
     builder.Configuration["AzureSearch:VectorFieldName"]
     ?? "contentVector";
 
-var credential = new AzureCliCredential();
+var credential = new DefaultAzureCredential();
 
 builder.Services.AddSingleton(new SearchClient(
     new Uri(searchEndpoint),
@@ -448,7 +448,7 @@ app.MapGet("/.well-known/agent.json", () =>
         Name = "DocumentManagerAgent",
         Description = "Metadata-driven enterprise document manager for search, summaries, workflow state, and compliance-style document discovery.",
         Version = "1.0.0",
-        Endpoint = "http://localhost:5010/api/agent/ask",
+        Endpoint = "http://documentmanager:5010/api/agent/ask",
         Capabilities =
         [
             "documents",
@@ -481,4 +481,4 @@ app.MapPost("/api/agent/ask", async (AgentRequest request) =>
     });
 });
 
-app.Run("http://localhost:5010");
+app.Run("http://0.0.0.0:5010");

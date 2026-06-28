@@ -11,6 +11,7 @@ services:
       - "80:80"
     depends_on:
       - backendexpress
+      - orchestrator
     restart: unless-stopped
 
   backendexpress:
@@ -19,4 +20,86 @@ services:
     container_name: backendexpress
     ports:
       - "3000:3000"
+    restart: unless-stopped
+
+  orchestrator:
+    build:
+      context: ./ai_agents/Orchestrator.Api
+    container_name: orchestrator
+    ports:
+      - "5000:5000"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5000
+      OTEL_SERVICE_NAME: orchestrator
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://aspire-dashboard:18889
+      OTEL_EXPORTER_OTLP_PROTOCOL: grpc
+    env_file:
+      - ./ai_agents/Orchestrator.Api/.env
+    restart: unless-stopped
+
+  costmanagementmcp:
+    build:
+      context: ./ai_agents/CostManagement.McpServer
+    container_name: costmanagementmcp
+    ports:
+      - "5080:5080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5080
+      OTEL_SERVICE_NAME: costmanagementmcp
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://aspire-dashboard:18889
+      OTEL_EXPORTER_OTLP_PROTOCOL: grpc
+    env_file:
+      - ./ai_agents/CostManagement.McpServer/.env
+    restart: unless-stopped
+
+  aksmonitoringmcp:
+    build:
+      context: ./ai_agents/AksMonitoring.McpServer
+    container_name: aksmonitoringmcp
+    ports:
+      - "5070:5070"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5070
+    env_file:
+      - ./ai_agents/AksMonitoring.McpServer/.env
+    restart: unless-stopped
+
+  documentmanager:
+    build:
+      context: ./ai_agents/DocumentManager.Api
+    container_name: documentmanager
+    ports:
+      - "5010:5010"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5010
+    env_file:
+      - ./ai_agents/DocumentManager.Api/.env
+    restart: unless-stopped
+
+  meetinganalyser:
+    build:
+      context: ./ai_agents/MeetingAnalyser.Api
+    container_name: meetinganalyser
+    ports:
+      - "5005:5005"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5005
+    env_file:
+      - ./ai_agents/MeetingAnalyser.Api/.env
+    restart: unless-stopped
+
+  aspire-dashboard:
+    image: mcr.microsoft.com/dotnet/aspire-dashboard:latest
+    container_name: aspire-dashboard
+    ports:
+      - "18888:18888" # Dashboard UI
+      - "4317:18889" # OTLP gRPC from host
+      - "4318:18890" # OTLP HTTP from host
+    environment:
+      DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS: "true"
     restart: unless-stopped

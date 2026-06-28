@@ -15,7 +15,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("Frontend", policy =>
     {
         policy
-            .WithOrigins("http://localhost:5173", "http://localhost:3000")
+            .WithOrigins("http://0.0.0.0:5173", "http://0.0.0.0:3000", "http://0.0.0.0:5000")
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
@@ -134,7 +134,7 @@ app.MapGet("/.well-known/agent.json", () =>
         Name = "MeetingAnalyserAgent",
         Description = "Extracts topic, date, attendees, duration, action items, and sentiment from a meeting transcript.",
         Version = "1.0.0",
-        Endpoint = "http://localhost:5005/api/agent/ask",
+        Endpoint = "http://meetinganalyser:5005/api/agent/ask",
         Capabilities =
         [
             "meetings",
@@ -170,4 +170,4 @@ app.MapPost("/api/agent/ask", async (AgentRequest request) =>
     return Results.Ok(response.Result);
 });
 
-app.Run("http://localhost:5005");
+app.Run("http://0.0.0.0:5005");

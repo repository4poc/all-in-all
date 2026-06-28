@@ -6,6 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<LogsQueryClient>(_ =>
     new LogsQueryClient(new DefaultAzureCredential()));
+builder.WebHost.UseUrls("http://0.0.0.0:5070");
+
 
 builder.Services
     .AddMcpServer()

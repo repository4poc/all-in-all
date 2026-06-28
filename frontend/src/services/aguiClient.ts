@@ -1,7 +1,6 @@
 import type { AguiEvent, ChatMessage } from "../types/agui";
 
-const AGUI_ENDPOINT =
-  import.meta.env.VITE_AGUI_ENDPOINT ?? "http://localhost:5000/agui/support";
+const AGUI_ENDPOINT = import.meta.env.VITE_AGUI_ENDPOINT ?? "/agui/support";
 
 type StreamOptions = {
   messages: ChatMessage[];
