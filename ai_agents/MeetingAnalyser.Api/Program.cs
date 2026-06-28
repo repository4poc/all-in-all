@@ -40,7 +40,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-var credential = new AzureCliCredential();
+var credential = new DefaultAzureCredential();
 
 IChatClient chatClient = new AzureOpenAIClient(
         new Uri(endpoint),

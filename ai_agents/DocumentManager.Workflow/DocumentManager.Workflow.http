@@ -1,0 +1,6 @@
+@DocumentManager.Workflow_HostAddress = http://localhost:5159
+
+GET {{DocumentManager.Workflow_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
