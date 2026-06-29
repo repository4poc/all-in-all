@@ -1,92 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: apps-deployment
-  namespace: apps
+  name: frontend
+  namespace: { { .Values.namespace } }
   labels:
-    app: apps
-
+    app: frontend
 spec:
-  replicas: 2
-
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 1
-      maxSurge: 1
+  replicas: { { .Values.replicaCount } }
   selector:
     matchLabels:
-      app: apps
-
+      app: frontend
   template:
     metadata:
       labels:
-        app: apps
-        workload: apps
-
+        app: frontend
     spec:
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 100
-              podAffinityTerm:
-                labelSelector:
-                  matchExpressions:
-                    - key: app
-                      operator: In
-                      values:
-                        - apps
-                topologyKey: kubernetes.io/hostname
-
-      nodeSelector:
-        workload: apps
-
-      tolerations:
-        - key: workload
-          operator: Equal
-          value: apps
-          effect: NoSchedule
-
       containers:
-        - name: apps-container
+        - name: frontend
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: Always
-
+          imagePullPolicy: { { .Values.image.pullPolicy | default "Always" } }
           ports:
             - containerPort: 80
-
-          env:
-            - name: VITE_AZURE_API_URL
-              valueFrom:
-                configMapKeyRef:
-                  name: frontend-config
-                  key: VITE_AZURE_API_URL
-
-            - name: VITE_AZURE_MODEL_NAME
-              valueFrom:
-                configMapKeyRef:
-                  name: frontend-config
-                  key: VITE_AZURE_MODEL_NAME
-
-          resources:
-            requests:
-              cpu: "250m"
-              memory: "256Mi"
-
-            limits:
-              cpu: "1000m"
-              memory: "1Gi"
-
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 80
-            initialDelaySeconds: 5
-            periodSeconds: 10
-
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 80
-            initialDelaySeconds: 15
-            periodSeconds: 20
+          envFrom:
+            - configMapRef:
+                name: frontend-config
