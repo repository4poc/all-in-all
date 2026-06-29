@@ -49,7 +49,7 @@ spec:
 
       containers:
         - name: orchestrator
-          image: orchestrator:{{ .Values.image.tag | default "main" }}
+          image: allinallacr.azurecr.io/orchestrator
           imagePullPolicy: {{ .Values.image.pullPolicy | default "Always" }}
           ports:
             - containerPort: 5000
