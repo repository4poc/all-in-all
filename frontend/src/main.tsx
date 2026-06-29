@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
-/*
+
 import { PublicClientApplication } from "@azure/msal-browser";
 import { MsalProvider } from "@azure/msal-react";
 import { msalConfig } from "./authConfig";
@@ -14,10 +14,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <App />
     </MsalProvider>
   </BrowserRouter>,
-);*/
+);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
-    <App />
+    <MsalProvider instance={msalInstance}>
+      <App />
+    </MsalProvider>
   </BrowserRouter>,
 );
