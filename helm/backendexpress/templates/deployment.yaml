@@ -47,9 +47,9 @@ spec:
           effect: "NoSchedule"
 
       containers:
-        - name: backendexpress-container
-          image: {{ .Values.image.repository }}:main
-          imagePullPolicy: Always
+        - name: backendexpress
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag | default "main" }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | default "Always" }}
           ports:
             - containerPort: 3000
 
