@@ -14,9 +14,9 @@ spec:
     rollingUpdate:
       maxUnavailable: 1
       maxSurge: 1
-    selector:
-      matchLabels:
-        app: apps
+  selector:
+    matchLabels:
+      app: apps
 
   template:
     metadata:
