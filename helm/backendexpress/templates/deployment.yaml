@@ -48,7 +48,7 @@ spec:
 
       containers:
         - name: backendexpress-container
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: {{ .Values.image.repository }}:main
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
