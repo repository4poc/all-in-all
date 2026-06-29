@@ -8,14 +8,15 @@ metadata:
 spec:
   replicas: 1
 
+  selector:
+    matchLabels:
+      app: backendexpress
+
   strategy:
     type: RollingUpdate
     rollingUpdate:
       maxUnavailable: 1
       maxSurge: 1
-    selector:
-      matchLabels:
-        app: backendexpress
 
   template:
     metadata:
@@ -35,16 +36,16 @@ spec:
                       operator: In
                       values:
                         - backendexpress
-                topologyKey: "kubernetes.io/hostname"
+                topologyKey: kubernetes.io/hostname
 
       nodeSelector:
         workload: apps
 
       tolerations:
-        - key: "workload"
-          operator: "Equal"
-          value: "apps"
-          effect: "NoSchedule"
+        - key: workload
+          operator: Equal
+          value: apps
+          effect: NoSchedule
 
       containers:
         - name: backendexpress
