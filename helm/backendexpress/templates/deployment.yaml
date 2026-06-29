@@ -17,10 +17,6 @@ spec:
       matchLabels:
         app: backendexpress
 
-  selector:
-    matchLabels:
-      app: backendexpress
-
   template:
     metadata:
       labels:
