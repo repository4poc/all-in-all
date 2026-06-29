@@ -10,7 +10,51 @@ using OpenAI.Responses;
 using Microsoft.Azure.Cosmos;
 using ModelContextProtocol.Client;
 
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
+using System.Diagnostics;
+
 var builder = WebApplication.CreateBuilder(args);
+
+var orchestratorActivitySource = new ActivitySource("Orchestrator.Api");
+
+var enableOtel =
+    builder.Configuration.GetValue<bool>("Observability:OpenTelemetry:Enabled");
+
+if (enableOtel)
+{
+    builder.Services.AddOpenTelemetry()
+        .ConfigureResource(resource =>
+        {
+            resource.AddService(
+                serviceName: builder.Configuration["OTEL_SERVICE_NAME"]
+                    ?? builder.Environment.ApplicationName);
+        })
+        .WithTracing(tracing =>
+        {
+            tracing
+                .AddAspNetCoreInstrumentation()
+                .AddHttpClientInstrumentation()
+                .AddSource("Orchestrator.Api")
+                .AddSource("Microsoft.Extensions.AI")
+                .AddOtlpExporter();
+        })
+        .WithMetrics(metrics =>
+        {
+            metrics
+                .AddAspNetCoreInstrumentation()
+                .AddHttpClientInstrumentation()
+                .AddRuntimeInstrumentation()
+                .AddOtlpExporter();
+        });
+
+    builder.Logging.AddOpenTelemetry(logging =>
+    {
+        logging.IncludeFormattedMessage = true;
+        logging.IncludeScopes = true;
+    });
+}
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -166,7 +210,8 @@ await AddMcpToolsIfAvailableAsync(
     tools,
     costManagementMcpEndpoint,
     "Cost MCP",
-    logger);
+    logger,
+    orchestratorActivitySource);
 
 await AddMcpToolsIfAvailableAsync(
     tools,
@@ -185,7 +230,14 @@ var rawChatClient = azureOpenAIClient
     .GetChatClient(deploymentName)
     .AsIChatClient();
 
-var chatClient = rawChatClient;
+//var chatClient = rawChatClient;
+
+var chatClient = new ChatClientBuilder(rawChatClient)
+    .UseOpenTelemetry(
+        loggerFactory: app.Services.GetRequiredService<ILoggerFactory>(),
+        sourceName: "Microsoft.Extensions.AI",
+        configure: c => c.EnableSensitiveData = true)
+    .Build();
 
 AIAgent agent = chatClient.AsAIAgent(new ChatClientAgentOptions
 {
@@ -258,6 +310,12 @@ app.MapGet("/.well-known/agent.json", () =>
 
 app.MapAGUI("/agui/support", agent);
 
+app.MapGet("/health", () => Results.Ok(new
+{
+    status = "Healthy",
+    timestamp = DateTime.UtcNow
+}));
+
 app.Run("http://0.0.0.0:5000");
 
 
@@ -265,8 +323,21 @@ static async Task AddMcpToolsIfAvailableAsync(
     List<AITool> tools,
     string endpoint,
     string name,
-    ILogger logger)
+    ILogger logger,
+    ActivitySource? activitySource = null)
 {
+    Activity? activity = null;
+    if (activitySource != null)
+    {
+        logger.LogWarning("ActivitySource is null. Skipping OpenTelemetry activity creation for {McpName}.", name);
+        activity = activitySource.StartActivity(
+$"mcp.discovery.{name}",
+ActivityKind.Client);
+
+        activity?.SetTag("mcp.name", name);
+        activity?.SetTag("mcp.endpoint", endpoint);
+    }
+
     try
     {
         using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(3));
@@ -288,6 +359,12 @@ static async Task AddMcpToolsIfAvailableAsync(
 
         tools.AddRange(mcpTools);
 
+        if (activitySource != null)
+        {
+            activity?.SetTag("mcp.tool.count", mcpTools.Count);
+            activity?.SetStatus(ActivityStatusCode.Ok);
+        }
+
         logger.LogInformation("{McpName} connected successfully. Tool count: {Count}", name, mcpTools.Count);
     }
     catch (Exception ex)
@@ -297,5 +374,10 @@ static async Task AddMcpToolsIfAvailableAsync(
             name,
             endpoint,
             ex.Message);
+        if (activitySource != null)
+        {
+            activity?.SetStatus(ActivityStatusCode.Error, ex.Message);
+            activity?.RecordException(ex);
+        }
     }
 }
