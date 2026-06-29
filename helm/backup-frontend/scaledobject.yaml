@@ -1,0 +1,26 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: apps-scaledobject
+  namespace: apps
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: frontend-deployment
+  minReplicaCount: 1
+  maxReplicaCount: 2
+  triggers:
+    - type: cron
+      metadata:
+        # Required
+        timezone: Asia/Kolkata # The acceptable values would be a value from the IANA Time Zone Database.
+        start: 30 * * * * # Every hour on the 30th minute <minute> <hour> <day-of-month> <month> <day-of-week>
+        end: 45 * * * * # Every hour on the 45th minute <minute> <hour> <day-of-month> <month> <day-of-week>
+        desiredReplicas: "2"
+    - type: cron
+      metadata:
+        timezone: Asia/Kolkata
+        start: 46 * * * *
+        end: 29 * * * *
+        desiredReplicas: "1"

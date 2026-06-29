@@ -1,0 +1,21 @@
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: frontend-vpa
+  namespace: apps
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: frontend
+  updatePolicy:
+    updateMode: Auto # VPA can automatically update resource requests for pods. This may cause pod restarts if resource requests change.
+  resourcePolicy:
+    containerPolicies:
+      - containerName: frontend
+        controlledResources:
+          - memory
+        minAllowed:
+          memory: "256Mi"
+        maxAllowed:
+          memory: "1Gi" # VPA will not recommend values outside of this range. This is useful to prevent VPA from recommending very high resource requests that could lead to pod eviction or very low resource requests that could lead to poor performance.

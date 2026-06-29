@@ -1,5 +1,5 @@
 image:
-  repository: allinallacr.azurecr.io/backendexpress
+  repository: allinallacr.azurecr.io/orchestrator
   tag: "main"
 
 replicaCount: 1
