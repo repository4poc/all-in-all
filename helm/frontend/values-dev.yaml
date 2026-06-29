@@ -12,8 +12,3 @@ pdb:
   minAvailable: 1
 
 namespace: apps
-
-config:
-  azureApiUrl: "https://foundryallinalldev007.services.ai.azure.com/openai/v1/chat/completions"
-  azureModelName: "gpt-5.4-mini-deployment"
-  azureApiKey: "REPLACE_WITH_ACTUAL_KEY_OR_USE_K8S_SECRET"

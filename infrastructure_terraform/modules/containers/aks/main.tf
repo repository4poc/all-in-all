@@ -169,6 +169,7 @@ resource "kubernetes_namespace_v1" "argocd" {
   ]
 }
 
+/*
 resource "helm_release" "argocd" {
   name      = "argocd"
   namespace = kubernetes_namespace_v1.argocd.metadata[0].name
@@ -185,7 +186,7 @@ resource "helm_release" "argocd" {
     azurerm_role_assignment.aks_rbac_cluster_admin
   ]
 }
-
+*/
 data "azurerm_client_config" "current" {}
 
 resource "azurerm_role_assignment" "kubernetes_registry" {
@@ -207,4 +208,23 @@ resource "azurerm_role_assignment" "aks_rbac_cluster_admin" {
   scope                = azurerm_kubernetes_cluster.aks.id
   role_definition_name = "Azure Kubernetes Service RBAC Cluster Admin"
   principal_id         = data.azurerm_client_config.current.object_id
+}
+
+
+resource "helm_release" "argocd" {
+  name       = "argocd"
+  namespace  = kubernetes_namespace_v1.argocd.metadata[0].name
+  repository = "https://argoproj.github.io/argo-helm"
+  chart      = "argo-cd"
+
+  create_namespace = false
+
+  values = [
+    file("${path.root}/argocd/values.yaml")
+  ]
+
+  depends_on = [
+    kubernetes_namespace_v1.argocd,
+    azurerm_role_assignment.aks_rbac_cluster_admin
+  ]
 }

@@ -8,7 +8,7 @@ resource "azurerm_container_registry" "acr" {
     type = "SystemAssigned"
   }
 
-  admin_enabled = false
+  admin_enabled = true
 
   # In case of prod env. make sure it is false to avoid accidental deletion of registry and images
   lifecycle {

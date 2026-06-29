@@ -45,8 +45,8 @@ When using AKS, you usually don’t manually create contexts. Instead, use Azure
 
 az login
 az aks get-credentials \
-  --resource-group my-rg \
-  --name my-aks-cluster
+  --resource-group dev \
+  --name aks-allinall-dev-se-01
 
 1. kubectl config get-contexts
 2. kubectl config use-context aks-dev

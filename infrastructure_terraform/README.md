@@ -23,17 +23,6 @@ az account show
 
 ---
 
-🧱 1. Clone / Create Repo
-mkdir infrastructure
-
-cd infrastructure
-
-📁 2. Repository Structure (IMPLEMENT THIS)
-
-```
-
-```
-
 🧱 2. Deploy
 
 ```bash
@@ -47,14 +36,21 @@ terraform destroy -var-file=envs/dev.tfvars
 
 infrastructure/shared/acr/main.tf
 
-🧱 4. Connect to AKS
+🧱 4. Connect to AKS & Get ARGOCD URL & Password
 
 ```
+az login
+
 az aks get-credentials \
   --name aks-allinall-dev-se-01 \
-  --resource-group rg-allinall-dev-se
+  --resource-group dev
 
-kubectl get nodes
+kubectl port-forward svc/argocd-server -n argocd 8080:443
+
+kubectl -n argocd get secret argocd-initial-admin-secret \
+  -o jsonpath="{.data.password}" | base64 -d
+
+kubectl apply -f infrastructure_terraform/argocd/root-app.yaml
 ```
 
 ### 🚀 Authenticate
@@ -75,11 +71,9 @@ Benefits
 👉 For CI/CD pipelines (recommended setup)
 
 Use:
-- Service Principal (App Registration)
-- Even better → Workload Identity Federation (no secrets)
+- Managed Identity for AKS
 
-
-We can not use Managed Identity, as Managed Identity does not work with:
+Note: Managed Identity does not work with:
 - GitHub Actions (hosted runners)
 - Azure DevOps (Microsoft-hosted agents)
 
