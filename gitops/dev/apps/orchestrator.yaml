@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: orchestrator
+  namespace: apps
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/repository4poc/all-in-all.git
+    targetRevision: main
+    path: helm/orchestrator
+    helm:
+      valueFiles:
+        - values-dev.yaml
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: apps
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

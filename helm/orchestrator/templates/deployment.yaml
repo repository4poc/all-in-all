@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orchestrator-deployment
+  namespace: apps
+  labels:
+    app: orchestrator
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: orchestrator
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+
+  template:
+    metadata:
+      labels:
+        app: orchestrator
+        workload: apps
+
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - orchestrator
+                topologyKey: kubernetes.io/hostname
+
+      nodeSelector:
+        workload: apps
+
+      tolerations:
+        - key: workload
+          operator: Equal
+          value: apps
+          effect: NoSchedule
+
+      containers:
+        - name: orchestrator
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag | default "main" }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | default "Always" }}
+          ports:
+            - containerPort: 5000
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 15
+            periodSeconds: 20
