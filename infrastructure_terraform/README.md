@@ -1,4 +1,4 @@
-🧱 0. Prerequisites (DO THIS FIRST)
+0. Prerequisites (DO THIS FIRST)
 
 Install:
 
@@ -23,7 +23,7 @@ az account show
 
 ---
 
-🧱 2. Deploy
+2. Deploy
 
 ```bash
 terraform init -backend-config=backend/dev.hcl
@@ -36,7 +36,7 @@ terraform destroy -var-file=envs/dev.tfvars
 
 infrastructure/shared/acr/main.tf
 
-🧱 4. Connect to AKS & Get ARGOCD URL & Password
+4. Connect to AKS & Get ARGOCD URL & Password
 
 ```
 az login
@@ -50,15 +50,19 @@ kubectl port-forward svc/argocd-server -n argocd 8080:443
 kubectl -n argocd get secret argocd-initial-admin-secret \
   -o jsonpath="{.data.password}" | base64 -d
 
+# One Time Activity
 kubectl apply -f infrastructure_terraform/argocd/root-app.yaml
+
+kubectl get applications -n argocd
+kubectl describe application frontend -n argocd
+kubectl describe application backendexpress -n argocd
 ```
 
-### 🚀 Authenticate
+### Authenticate
 
 ## As per Best practices
 
-```bash
-👉 For Local development
+```bash For Local development
 
 Use:
  `az login` (with contritutor accesss to my person account on the dev, staging and prod env.)
@@ -68,7 +72,7 @@ Benefits
 - No need to manage secrets locally
 - Terraform automatically picks it up
 
-👉 For CI/CD pipelines (recommended setup)
+For CI/CD pipelines (recommended setup)
 
 Use:
 - Managed Identity for AKS
@@ -77,10 +81,10 @@ Note: Managed Identity does not work with:
 - GitHub Actions (hosted runners)
 - Azure DevOps (Microsoft-hosted agents)
 
-👉 Why?
+Why?
 Because those runners are not inside your Azure tenant, so they can't have your Managed Identity.
 
-👉 When Managed Identity works
+When Managed Identity works
 
 You can use Managed Identity if your pipeline runs on:
 - Azure VM
