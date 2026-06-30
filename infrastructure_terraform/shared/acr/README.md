@@ -9,6 +9,7 @@ Environments
   ├── staging
   └── prod
 
+
 ```
 
 👉 ACR is provisioned once, everything else consumes it
