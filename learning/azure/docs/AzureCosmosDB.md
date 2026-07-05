@@ -310,12 +310,14 @@ Portal IAM ❌ usually not visible in your current UI
 1. Assign cosmosdb sql role "Cosmos DB Built-in Data Contributor" to the user
    Note: This role can not create database and containers.
 
+Here User/ServicePrincipal Object Id = Principal ID
+
 ```
 az cosmosdb sql role assignment create \
   --resource-group "dev" \
-  --account-name "mycosmosdb2284" \
-  --role-definition-name "Cosmos DB Built-in Data Contributor" \
-  --principal-id "7b83bf86-8ca7-41d4-a300-cb53f61f773d" \
+  --account-name "cosmosdb2284" \
+  --role-definition-name 'Cosmos DB Built-in Data Contributor' \
+  --principal-id "1db50690-1e2f-4911-a925-48dcbcc74811" \
   --scope '//'
 ```
 
