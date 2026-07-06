@@ -11,15 +11,21 @@
     "cdk": "cdk"
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.162",
     "@types/jest": "^30",
     "@types/node": "^24.13.2",
     "aws-cdk": "2.1109.0",
     "aws-cdk-lib": "^2.261.0",
     "cdk-nag": "^3.0.1",
     "constructs": "^10.6.0",
+    "esbuild": "^0.28.1",
     "jest": "^30",
     "ts-jest": "^29",
     "ts-node": "^10.9.2",
     "typescript": "~5.9.3"
+  },
+  "dependencies": {
+    "@types/uuid": "^10.0.0",
+    "uuid": "^14.0.1"
   }
 }
