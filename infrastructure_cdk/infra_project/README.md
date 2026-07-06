@@ -25,3 +25,5 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
 - `npm run build` compile typescript to js
 - `npm run watch` watch for changes and compile
 - `npm run test` perform the jest unit tests
+
+![alt text](images/{8B004D73-9C39-448C-B4F6-3C27AF1F0497}.png)

@@ -7,6 +7,8 @@ export class InfraProjectStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
+    const stackName = this.getStackName();
+
     // Define SQS resource
     const queue = new sqs.Queue(this, "InfraProjectQueue", {
       visibilityTimeout: cdk.Duration.seconds(300),

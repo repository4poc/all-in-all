@@ -20,7 +20,9 @@
     "strictPropertyInitialization": false,
     "skipLibCheck": true,
     "typeRoots": ["./node_modules/@types"],
-    "types": ["node", "jest"]
+    "types": ["node", "jest"],
+    "rootDir": ".",
+    "outDir": "dist"
   },
   "exclude": ["node_modules", "cdk.out"]
 }
