@@ -27,3 +27,12 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
 - `npm run test` perform the jest unit tests
 
 ![alt text](images/{8B004D73-9C39-448C-B4F6-3C27AF1F0497}.png)
+![alt text](images/{C4C39C1A-62EC-4BA3-ACB2-61005F5EB009}.png)
+
+To Manually run Test
+
+```
+ ts-node test/slack-webhook-handler.test.ts
+```
+
+![alt text](images/{29FF1AFC-B540-47A3-AB2D-EDBB45D0CEA8}.png)

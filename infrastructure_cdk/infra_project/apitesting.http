@@ -1,9 +1,9 @@
 ### Say Hello
-GET https://rlg3g7eol6.execute-api.eu-north-1.amazonaws.com/prod/sayhello
+GET https://2p796oxvp2.execute-api.eu-north-1.amazonaws.com/prod/sayhello1
 
 ###
 
-POST https://rlg3g7eol6.execute-api.eu-north-1.amazonaws.com/prod/sayhello
+POST https://2p796oxvp2.execute-api.eu-north-1.amazonaws.com/prod/sayhello
 Content-Type: application/json
 
 {
