@@ -18,5 +18,6 @@ export class ApiGatewayStack extends cdk.Stack {
     // Define the /sayhello resource and integrate it with the Lambda function
     const sayHello = api.root.addResource("sayhello");
     sayHello.addMethod("GET", props.lambdaIntegration);
+    sayHello.addMethod("POST", props.lambdaIntegration);
   }
 }

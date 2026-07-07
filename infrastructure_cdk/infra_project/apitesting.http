@@ -1,2 +1,11 @@
+### Say Hello
+GET https://rlg3g7eol6.execute-api.eu-north-1.amazonaws.com/prod/sayhello
 
-GET https://7d4kdnmzn0.execute-api.eu-north-1.amazonaws.com/prod/sayhello
+###
+
+POST https://rlg3g7eol6.execute-api.eu-north-1.amazonaws.com/prod/sayhello
+Content-Type: application/json
+
+{
+    "name": "John"
+}

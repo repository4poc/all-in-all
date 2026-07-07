@@ -4,6 +4,7 @@ import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as path from "path";
 import * as apigateway from "aws-cdk-lib/aws-apigateway";
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
+import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 // Define an interface for the stack properties that includes the DynamoDB table
 interface LambdaStackProps extends cdk.StackProps {
@@ -28,6 +29,15 @@ export class LambdaStack extends cdk.Stack {
         TABLE_NAME: props?.table.tableName || "",
       },
     });
+
+    // Grant the Lambda function permissions to list all S3 buckets by adding a policy statement to its role
+    sayHelloLambda.addToRolePolicy(
+      new PolicyStatement({
+        effect: Effect.ALLOW,
+        actions: ["s3:ListBucket", "s3:ListAllMyBuckets"],
+        resources: ["*"],
+      }),
+    );
 
     // Create a Lambda integration for the API Gateway using the created Lambda function
     this.sayHelloLambdaIntegration = new apigateway.LambdaIntegration(
