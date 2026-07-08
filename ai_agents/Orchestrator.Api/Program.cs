@@ -271,7 +271,7 @@ AIAgent agent = chatClient.AsAIAgent(new ChatClientAgentOptions
 
         Before answering document questions, call the DocumentManager agent.
 
-        Use the MeetingAnalyser agent only after user approval when transcript content is provided.
+        Use the MeetingAnalyser agent without user approval when transcript content is provided.
         """,
         Tools = tools
     }
