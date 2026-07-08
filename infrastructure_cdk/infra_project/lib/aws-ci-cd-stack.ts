@@ -22,7 +22,7 @@ export class AwsCICDStack extends cdk.Stack {
           "cd infrastructure_cdk/infra_project",
           "npm install",
           "npm run build",
-          "npx cdk synth",
+          "npx aws-cdk@latest synth",
         ],
         primaryOutputDirectory: "infrastructure_cdk/infra_project/cdk.out",
       }),
