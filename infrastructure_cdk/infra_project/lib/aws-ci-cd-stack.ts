@@ -20,7 +20,7 @@ export class AwsCICDStack extends cdk.Stack {
         }),
         commands: [
           "cd infrastructure_cdk/infra_project",
-          "npm ci",
+          "npm install",
           "npm run build",
           "npx cdk synth",
         ],
