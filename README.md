@@ -43,8 +43,27 @@ You need to have docker desktop running on local machine
 
 **Build images**
 
-- docker compose down
-- docker compose build
+```
+$ cd all-in-all
+$ docker compose down
+$ docker compose build OR %module% --no-cache
+$ docker compose up
 
-  **Specific module**
-  - docker compose build < backendexpress >
+
+$ docker images
+$ docker rmi %image%
+```
+
+## IAM Roles
+
+Service Principal Roles required for (add details in .env for local setup)
+
+- Orchestrator.Api
+  - CosmosDB Data Reader
+  - CosmosDB Operator
+  - Cosmos DB Built-in Data Contributor (Not available Azure UI : Ref. CosmosDB Document)
+  - Reader
+
+- CostManagement.MCP
+  - Cost Management Reader
+  - Advisor Reader
