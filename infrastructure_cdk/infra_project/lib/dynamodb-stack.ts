@@ -14,6 +14,7 @@ export class DynamoDbStack extends cdk.Stack {
     const table = new dynamodb.TableV2(this, "Order", {
       tableName: "Order",
       partitionKey: { name: "OrderId", type: dynamodb.AttributeType.NUMBER },
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
     // Assign the created table to the public readonly property
