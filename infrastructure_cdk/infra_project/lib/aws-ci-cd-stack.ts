@@ -18,7 +18,12 @@ export class AwsCICDStack extends cdk.Stack {
             "github_token_aws_cdk",
           ),
         }),
-        commands: ["npm ci", "npm run build", "npx cdk synth"],
+        commands: [
+          "cd infrastructure_cdk/infra_project",
+          "npm ci",
+          "npm run build",
+          "npx cdk synth",
+        ],
         primaryOutputDirectory: "infrastructure_cdk/infra_project/cdk.out",
       }),
     });
