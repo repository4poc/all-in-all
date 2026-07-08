@@ -9,6 +9,7 @@ import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 // Define an interface for the stack properties that includes the DynamoDB table
 interface LambdaStackProps extends cdk.StackProps {
   table: cdk.aws_dynamodb.ITable;
+  stageName?: string;
 }
 
 // Define the LambdaStack class that extends cdk.Stack

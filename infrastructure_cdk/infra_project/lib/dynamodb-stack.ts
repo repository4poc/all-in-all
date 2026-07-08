@@ -2,12 +2,16 @@ import * as cdk from "aws-cdk-lib";
 import { Construct } from "constructs";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 
+interface DynamoDbStackProps extends cdk.StackProps {
+  stageName?: string;
+}
+
 export class DynamoDbStack extends cdk.Stack {
   // Define a public readonly property for the DynamoDB table
   public readonly table: dynamodb.ITable;
 
   // Define the constructor for the DynamoDbStack class
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props?: DynamoDbStackProps) {
     super(scope, id, props);
 
     // Create a DynamoDB table with the specified properties
