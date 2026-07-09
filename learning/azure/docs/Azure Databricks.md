@@ -286,3 +286,45 @@ Each Catalog can have one or more schema.
 - Test access to `Storage Account Container` using `External Location`
   ![alt text](images/{0CCD894C-B732-4AA9-8B02-61A7B0ACC6C7}.png)
   ![alt text](images/{6EFC3F2F-1C9B-436F-82D0-741699D7F247}.png)
+
+## Project - Data Source
+
+![alt text](images/{21EE9A69-35C0-45E4-96DF-31548B1D456B}.png)
+![alt text](images/{9C1DB63E-C8EB-4EB9-81B3-126A2071834E}.png)
+![alt text](images/{AC19E4CF-1295-4235-ADDA-C6AC05EDFD7E}.png)
+![alt text](images/{4D451CB6-0C88-4F72-B776-A7AC00B509EB}.png)
+![alt text](images/{2DAF9A23-5160-4109-B9D7-47EE1CC707E9}.png)
+
+## Project - Requirements
+
+![alt text](images/{365CD872-E040-4333-B620-AC0E87C8170B}.png)
+![alt text](images/{D104C9B0-BCE8-4DA1-A1D3-737258CAF698}.png)
+![alt text](images/{968FA1F9-FFDC-4906-BEEA-6FFF764C03FA}.png)
+![alt text](images/{D1CE7796-253F-45C7-B94D-C425077E1B28}.png)
+![alt text](images/{9E225590-18C7-4E27-A488-0B3847E1988D}.png)
+**Steps**
+![alt text](images/{2192025C-F3BB-40E6-82A8-46092CAFA2E7}.png)
+
+## Data Lakehouse
+
+![alt text](images/{31F7FE48-CD4B-40D9-BC71-634BB47833CF}.png)
+![alt text](images/{B3B15504-A69C-4E82-B6FA-E121D84CCE09}.png)
+![alt text](images/{04E88114-617A-4C15-B927-ABC8FDF2E9D6}.png)
+Dataware house does not support unstructured data, only strcutred and semi-structured data
+Datalake came into picture to resolved this drawback, support all 3 data types
+![alt text](images/{3DEFC06E-D267-4542-B369-42F88419800B}.png)
+Datalake lack in supporting streaming, data science and ML/AI workloads
+![alt text](images/{E9A2A12D-872C-4F15-8587-D9FA8607DE88}.png)
+![alt text](images/{8655F633-4BDF-45A8-9DE4-DD95858AF65A}.png)
+
+## Medallion Architecture
+
+- It is a data design pattern
+- 3 layer structure, with each layer, the data quality improves
+- Some use 4 layers like platinum and simple projects use 2 layers.
+- Each layer has its own characteristics
+  ![alt text](images/{22ED048D-DC57-4046-839F-3AFF94F921A8}.png)
+
+## Solution Architecture Overview
+
+![alt text](images/{CBD624F0-ABD6-4154-9570-60AD7CD2A771}.png)
