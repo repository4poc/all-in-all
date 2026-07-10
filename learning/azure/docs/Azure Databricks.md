@@ -328,3 +328,22 @@ Datalake lack in supporting streaming, data science and ML/AI workloads
 ## Solution Architecture Overview
 
 ![alt text](images/{CBD624F0-ABD6-4154-9570-60AD7CD2A771}.png)
+
+## Setting up Data lake project environment
+
+![alt text](images/{AB6A45E6-24A4-449F-809C-B67B5DD554FF}.png)
+
+![alt text](images/{05C85A96-D395-4ACF-9876-A078DB121E76}.png)
+
+```
+%sql
+CREATE EXTERNAL LOCATION IF NOT EXISTS databricks_external_location_2284
+URL 'abfss://racingdata@racingstroageaccount2284.dfs.core.windows.net'
+WITH (STORAGE CREDENTIAL `storage_credentials`)
+COMMENT 'External location for the racing data container in the storage account'
+```
+
+```
+%fs
+ls 'abfss://racingdata@racingstroageaccount2284.dfs.core.windows.net'
+```
