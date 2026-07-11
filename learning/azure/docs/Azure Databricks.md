@@ -469,6 +469,16 @@ https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/io.html
 ![alt text](images/{480DC4FF-35E9-4242-A9A4-0BAA6D51D27C}.png)
 ![alt text](images/{EECD2963-3180-42F9-9972-635D743AD7D6}.png)
 
-- with options 'header', you get the columns also
+- header
+  ![alt text](images/{701EEA3C-BF51-4061-A8B5-DD73FF2732D3}.png)
 
-![alt text](images/{701EEA3C-BF51-4061-A8B5-DD73FF2732D3}.png)
+- inferSchema
+  - Good for dev, not for production. as datatype changes with data, so unpredictable. Use StructType for prod
+    ![alt text](images/{B919FCB1-CDB0-4C94-9B6C-72D2B670BEBF}.png)
+    ![alt text](images/{532F0CA4-576D-4B6F-BFB6-A5F15EF43221}.png)
+
+## Define Schema
+
+![alt text](images/{918D9C54-0008-45B9-98FD-D71295FB8A42}.png)
+![alt text](images/{17738AB7-7C00-4D30-8BE7-7645E772A8C1}.png)
+![alt text](images/{6D40E645-12B6-40B3-8430-DEBAA48B0C93}.png)
