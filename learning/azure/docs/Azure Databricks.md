@@ -347,3 +347,128 @@ COMMENT 'External location for the racing data container in the storage account'
 %fs
 ls 'abfss://racingdata@racingstroageaccount2284.dfs.core.windows.net'
 ```
+
+![alt text](images/{485DFDC5-E544-4D05-B36A-0F2C460FE6F9}.png)
+
+## Setting up Unity Catelog Project Environment
+
+![alt text](images/{0C129FD3-DC6D-4624-AFFC-9E4EBEF816FE}.png)
+
+![alt text](images/{9DFE360C-19C9-401B-8672-C72A357BF1BA}.png)
+
+**Catelogs**
+![alt text](images/{0AE0BFCF-FCCD-47AC-BFFE-9CF5B3BA7D40}.png)
+
+Databricks create a catelog for every databricks workspace.
+![alt text](images/{2FC73E6B-CA77-4408-AFAF-9D1A2E7A02D6}.png)
+
+```
+%sql
+SHOW CATALOGS
+```
+
+![alt text](images/{16F4816F-4C3C-4C6D-9EC4-D9B2F8B4D072}.png)
+
+## Create a new catalog
+
+```
+%sql
+CREATE CATALOG IF NOT EXISTS formula1
+    MANAGED LOCATION 'abfss://racingdata@racingstroageaccount2284.dfs.core.windows.net'
+    COMMENT 'Catalog for formula1 dataset'
+```
+
+![alt text](images/{B1F11D51-5C79-434B-9DC0-B9C59C83A526}.png)
+
+## Check schema using Command Line
+
+![alt text](images/{3325BA90-9B62-4983-AA03-6F0F44586B5F}.png)
+
+**Documentation Link**
+
+https://learn.microsoft.com/en-us/azure/databricks/schemas/create-schema
+
+![alt text](images/{F348D822-0CAA-4698-8C59-45F65E7D9B0D}.png)
+
+![alt text](images/{FF6F22EE-1BC6-4BB3-B9D5-2998AF753AF0}.png)
+
+- Enternal Location point to the container
+- Schema uses the External location (Pointing to container) + Folder inside it (bronze/silver/gold). That we need to create manually before we create schema.
+
+  ![alt text](images/{8906333D-9958-46D9-BD05-8EB849B82733}.png)
+
+## Check schema from UI
+
+![alt text](images/{647DAB08-3D56-4933-8304-CC976024992B}.png)
+
+- default and information_schema are databricks managed schemas.
+
+## Check schema using Command Line
+
+![alt text](images/{3325BA90-9B62-4983-AA03-6F0F44586B5F}.png)
+
+This command is not listing the gold, silver etc schema , because we are not using the formula1 catalog
+
+![alt text](images/{01EF547A-19EC-4622-AE5F-8ED800DA05D5}.png)
+
+## Use different catalog
+
+![alt text](images/{510CB69E-49EB-4D9C-9F7C-A4B0D2BCD840}.png)
+
+![alt text](images/showschema.png)
+
+## Create Volumn
+
+![alt text](images/{E373C019-5533-41F3-B10C-9DA5D4C841AE}.png)
+
+```
+%sql
+CREATE EXTERNAL VOLUME formula1.landing.files
+LOCATION 'abfss://racingdata@racingstroageaccount2284.dfs.core.windows.net/landing/files';
+```
+
+![alt text](images/{9C7790AF-B5B6-4FB9-9DE6-08A0405CE435}.png)
+
+![alt text](images/{90EFC5A2-C783-4ADB-A26E-C024BA93E1A6}.png)
+
+![alt text](images/{4071BDC4-2E3F-479E-AE9C-740CE04F28AA}.png)
+
+| External Location                                         | Volume                                                                         |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| A secure pointer to cloud storage (S3, ADLS, GCS).        | A managed storage object within a Unity Catalog schema.                        |
+| Used to grant governed access to existing cloud storage.  | Used to store and organize non-tabular files (images, PDFs, models, etc.).     |
+| Doesn't itself contain data—it references a storage path. | Stores files under a catalog/schema and is accessed using Unity Catalog paths. |
+| Typically created by data/platform admins.                | Used by data engineers, analysts, and ML users for file management.            |
+
+## Data Ingestion - Bronze
+
+![alt text](images/{2AAC0B77-9315-4157-BB7F-B65CEACE06BB}.png)
+
+![alt text](images/{83A969B5-5684-4CF1-8D2B-142EE5F57C9C}.png)
+
+**Delta** : Default format for managing tables in Databricks
+
+- Allows us to interact with data as regular table, along with reliability and transactional guarantee.
+
+## Requirements
+
+![alt text](images/{347692B7-9C93-43A5-94A4-763B42B44480}.png)
+
+![alt text](images/{559807E1-2893-42B5-8DB0-5B74705690EC}.png)
+
+## Dataframe Reader
+
+Sparks Documentation
+
+https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/io.html
+
+![alt text](images/{9C049B42-8AF0-4556-B6A0-C36980A3161E}.png)
+![alt text](images/{81975B99-6846-4E9D-BA8B-7DE533AE4F5E}.png)
+![alt text](images/{F9B2345F-9A2C-4651-9067-37C9905D141F}.png)
+
+![alt text](images/{480DC4FF-35E9-4242-A9A4-0BAA6D51D27C}.png)
+![alt text](images/{EECD2963-3180-42F9-9972-635D743AD7D6}.png)
+
+- with options 'header', you get the columns also
+
+![alt text](images/{701EEA3C-BF51-4061-A8B5-DD73FF2732D3}.png)
