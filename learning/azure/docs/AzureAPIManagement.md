@@ -302,15 +302,16 @@ Thought for a few seconds
 
 Yes — implement OAuth2/JWT in Azure API Management like this.
 
-Target flow
-Client app → gets OAuth2 token from Microsoft Entra ID
-Client app → calls APIM with Authorization: Bearer <token>
-APIM → validates JWT
-APIM → forwards request to backend only if token is valid
+**Target flow**
+
+1. Client app → gets OAuth2 token from Microsoft Entra ID
+2. Client app → calls APIM with Authorization: Bearer <token>
+3. APIM → validates JWT
+4. APIM → forwards request to backend only if token is valid
 
 APIM does not issue OAuth tokens. It validates tokens issued by Microsoft Entra ID or another identity provider. Microsoft recommends validate-azure-ad-token for Entra tokens, or validate-jwt for generic identity providers.
 
-Step 1: Register backend API in Microsoft Entra ID
+**Step 1:** Register backend API in Microsoft Entra ID
 
 Go to:
 
@@ -337,7 +338,8 @@ Who can consent: Admins and users
 Final scope will look like:
 
 api://my-private-api/access_as_user
-Step 2: Register client application
+
+**Step 2:** Register client application
 
 Create another app registration for the caller:
 
@@ -355,7 +357,7 @@ Grant admin consent if required.
 
 For service-to-service flow, create a client secret or certificate for this client app.
 
-Step 3: Get a JWT access token
+**Step 3:** Get a JWT access token
 
 For client credentials flow:
 
@@ -376,7 +378,7 @@ This returns:
 
 Microsoft notes that access tokens should be validated by the resource server/API, not by the client application.
 
-Step 4: Add APIM inbound JWT validation policy
+**Step 4:** Add APIM inbound JWT validation policy
 
 In Azure Portal:
 
@@ -424,14 +426,15 @@ Minimum version:
     <audience>api://my-private-api</audience>
   </audiences>
 </validate-azure-ad-token>
-Step 5: Call APIM with token
+
+**Step 5:** Call APIM with token
 curl https://<apim-name>.azure-api.net/my-api/orders \
-  -H "Authorization: Bearer <access-token>" \
-  -H "Ocp-Apim-Subscription-Key: <subscription-key>"
+ -H "Authorization: Bearer <access-token>" \
+ -H "Ocp-Apim-Subscription-Key: <subscription-key>"
 
 Subscription key is optional depending on your APIM product settings. It is useful for API access control, but OAuth/JWT is the real authentication layer.
 
-Step 6: Secure APIM to backend
+**Step 6:** Secure APIM to backend
 
 Best practice: APIM validates the caller token, then APIM authenticates to backend separately using Managed Identity. Microsoft’s APIM managed identity policy obtains an Entra token and sets it as a Bearer token to the backend.
 
