@@ -3,7 +3,7 @@ A Central Service to store common application configuration/settings and feature
 ### Configuration
 
 - subscription :
-- resource group
+  - resource group
 - region : Sweden Central
 - Pricing Tier :
   - Free
