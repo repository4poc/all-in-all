@@ -4,7 +4,19 @@
   - Customer API (Port:8000)
   - User API (Port:9000)
 
+  ![alt text](images/{147C55D8-6051-4347-88E5-2BE10B564B5B}.png)
   ![alt text](images/{1F2A003B-C5E0-43A1-AC00-CC45007AD9C0}.png)
+
+## Key Security Benefits of using API Management
+
+- Authentication (via APIM Subscription Key)
+  ![alt text](images/{7247447E-CA40-45B7-B989-F88FB079A86A}.png)
+  ![alt text](images/{5ACBF99D-37E8-4C12-B2EE-4074D697A805}.png)
+- Rate Limiting (throttling and quotas)
+- Versioning
+- Analytics (Build-in)
+- Apply Policies - Cache, IP Restriction, URL ReWrite
+- Provides developer portal
 
 ## Azure API Management vs Azure Application Gateway
 
@@ -67,6 +79,7 @@ Backend APIs / AKS / App Services
 **API Management**
 
 - Is a PaaS service.
+- Azure API Management (APIM): It is primarily a regional service. When you create an APIM instance, you deploy it into a specific Azure region.
 - Can be connected to a VNet.
 - Focuses on API policies, authentication, throttling, versioning, and developer experience rather than traffic distribution.
 
@@ -96,6 +109,8 @@ Features
 
 ## Create Azure API Management
 
+![alt text](images/{C2A1D2DC-F78F-4251-8547-1E14F062DEB8}.png)
+
 **Project Details**
 
 - Subscription
@@ -117,7 +132,7 @@ Features
   - Standard (99.95% SLA)
   - Standard v2 (99.95% SLA)
   - Premium (99.95% or 99.99% SLA)
-  - Premium (99.95%)
+  - Premium V2 (99.95%)
   - Consumption (99.95% SLA)
 
     ![alt text](images/{9C3015AC-F362-4C3D-83BC-D683D5CF8220}.png)
@@ -200,6 +215,14 @@ Microservices
 
 To access the Backend APIs via ApI managment, you need subscription key, that need to be passed as (Ocp-Apim-Subscription-Key) while making the call.
 
+![alt text](images/{9FA005CF-7BB8-4924-819F-6865E0C8D1DA}.png)
+
+So here the client App refer to the API Management URL, that call to the API deployed on an Azure Web App, which further connect to the DB, so the Client APP does not have any reference to the Database.
+
+You can access the Ocp-Apim-Subscription-Key, via Portal under Test as API Management Instance Admin or from the APIM subscritions
+
+![alt text](images/{AC7A432E-BDC2-4DA8-8634-296D2EA71A42}.png)
+
 APIs > Subscription
 
 - Primary Key
@@ -215,12 +238,12 @@ Restrict API access via Web App public URL,
 
 1. Go to the Web App
 2. Go to Networking
-   - Public Network Access
-     - Enabling access from all networks
-     - Enabling access from selected vNets and Ips (**Enabled**)
-     - None
-
-   **Site Access and Rules**
+   - Network Access(Access Restrictions)
+   - All networks
+   - Selected vNets and Ips (**Enabled**)
+   - None
+     ![alt text](images/{DD90551C-5258-4FC2-9FAB-66EC60B33673}.png)
+     **Site Access and Rules**
    - Add Rule
      - Name : Allow APIM
      - Action : Allow
@@ -230,6 +253,10 @@ Restrict API access via Web App public URL,
      - Description
      - Type : IPV4
      - Value : < **Public IP of APIM** >
+       ![alt text](images/{B8B14C02-0E2F-4DD5-BE0A-BC6D58B2D7B8}.png)
+       ![alt text](images/{3F6AEAD3-EBB2-45E1-AE65-E0535391B58A}.png)
+       Deny all other traffic except traffic from APIM public IP
+       ![alt text](images/{653EFDF5-B83D-4714-9F74-252A90ABDCF2}.png)
 
 ## API Management Policy - IP Restriction
 
@@ -293,6 +320,18 @@ Policy can be applied at **API** level as well as **Operation** level
 ## APIM - Virtual Network Integration
 
 UseCase : Backend Private API hosted on a VM within a virtual network
+
+![alt text](images/{E5039085-CD6C-45EC-B0E9-A857A54A3A12}.png)
+
+As APIM is a public resource like SQL Database Server or App Service so , cant deploy it into a vNet, but it can access the Backend API deployed within a VM instance (without public IP) inside a vNet
+
+Have a subnet to hold APIM instance
+
+![alt text](images/{A42FFC22-9D8D-48BF-9375-22E2800C2BE4}.png)
+
+APIM vNet Integration
+
+![alt text](images/{471167EA-2101-4D8F-8F11-36DD41FB3C30}.png)
 
 ## How to setup Authentication in API Management
 
