@@ -2,6 +2,8 @@
 
 A centralized logs storage
 
+![alt text](images/{07C8B5A0-150B-425C-BDD9-776E315FC6D7}.png)
+
 We can direct logs from various resources types
 
 - Azure Web Apps

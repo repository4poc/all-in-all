@@ -5,6 +5,8 @@ A complete monitoring solution where you can collect, analyse and respond to the
 - Pre-existing, we don't create any resource
 - You can monitor both cloud and on-premise resources
 
+![alt text](images/{3F6C64EF-E9D3-474A-B00C-A66F3BC9DED7}.png)
+
 ## Features
 
 - Metrics : Numeric values collected over time
@@ -95,10 +97,15 @@ Investigates
 
 - Application Dashboard : At a-glance assessment of application health and performance
 - Live Metrics : A real-time analytics dashboard for insights into application activity and performance
+  ![alt text](images/{96F83FD4-F3AB-4DD4-BC40-298B43E53269}.png)
 - Search View
-- Availability View
+- Availability : Provide Availability Test for synthetic test to test application from various different regions.
+  ![alt text](images/{A9ECE24E-0161-45E8-B98A-C3246D27C98F}.png)
+- Application Map
+  ![alt text](images/{0CA61F04-BC4E-489D-B981-56FA1C22F1AB}.png)
 - Failures View
 - Performance View
+  ![alt text](images/{A564EBE0-2814-487D-90A1-7BABCECF6F82}.png)
 - Agent Details
 
 - Monitoring

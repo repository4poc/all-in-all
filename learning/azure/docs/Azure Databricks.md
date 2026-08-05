@@ -482,3 +482,7 @@ https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/io.html
 ![alt text](images/{918D9C54-0008-45B9-98FD-D71295FB8A42}.png)
 ![alt text](images/{17738AB7-7C00-4D30-8BE7-7645E772A8C1}.png)
 ![alt text](images/{6D40E645-12B6-40B3-8430-DEBAA48B0C93}.png)
+
+## Add Metadata for traceability and auditiong
+
+Spark dataframes are immutable
