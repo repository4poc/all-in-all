@@ -101,6 +101,8 @@ Investigates
 - Search View
 - Availability : Provide Availability Test for synthetic test to test application from various different regions.
   ![alt text](images/{A9ECE24E-0161-45E8-B98A-C3246D27C98F}.png)
+  ![alt text](images/{148573CA-5F38-4CE7-8EA0-5B7DDEA74FD6}.png)
+  ![alt text](images/{A83DBB44-ADB4-4DE1-B5C3-D4D88A184331}.png)
 - Application Map
   ![alt text](images/{0CA61F04-BC4E-489D-B981-56FA1C22F1AB}.png)
 - Failures View

@@ -1,6 +1,6 @@
 ## Overview
 
-- Apache Spark is an Open Source Distributed Compute Engine used for Big Data and ML Projects
+- Apache Spark is an Open Source Distributed Compute Engine used for Big Data and ML (Data Analytics) Projects
 - Databricks is based on Apache Spark, and developed by Apache Spark Developers, to make working with Apache Spark Easier by providing the esential management layers.
 - Databricks is available on all major cloud providers, Azure Databricks is managed Databricks Service on Azure Cloud.
 
@@ -21,8 +21,10 @@
 - Tier : Trial
   - Trial (Premium - 14 days)
   - Premium
-    - Serverless
-    - Hybrid (Custom Compute)
+    - Workspace Type
+      - Serverless
+      - Hybrid (Custom Compute)
+        ![alt text](images/{4675BEC4-AC84-4A4E-AC01-E43007FDA9A5}.png)
 - Managed Resource Group name:
 
 **Networking**

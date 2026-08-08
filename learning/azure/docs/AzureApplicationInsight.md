@@ -24,6 +24,9 @@ Azure Application Insight is used for Application performance monitoring.
 
 ![alt text](images/{2782C09B-DC79-42CC-9C52-546C56B79D5D}.png)
 
+![alt text](images/{E81A5601-5749-4D12-8651-461AA6656004}.png)
+![alt text](images/{1D347418-D10F-4230-A886-DEAAD9183756}.png)
+
 ## How to monitor a web application deployed on Azure Web App using Azure Application Insight
 
 **Step 1:** Associate Azure Application Insight Resource with Azure Web App
