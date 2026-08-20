@@ -1,6 +1,6 @@
 ## Overview
 
-Helm is a package manager for kubernetes
+Helm is a package manager for kubernetes. It uses a package format called charts, which include all the resources needed to run application or a complete cloud-native stack inside kubernetes.
 
 Like
 
@@ -18,8 +18,8 @@ Like
 Similarly we use
 
 ```
-helm add helm-repo
-helm install helm-package-name
+helm add repo <repo-URL>
+helm install <helm-package-name>
 ```
 
 help-package-name
@@ -101,7 +101,7 @@ helm search repo <local-repo-name> | grep <chart-name>
 
 helm install <local-chart-name> <package/chart-name>
 
-# List releases/local-chart-names
+# List all helm charts
 
 helm list
 
@@ -118,8 +118,19 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 
 helm install prometheus bitnami/prometheus
 
-kubectl get pods
+kubectl get pods -w
 ```
+
+![alt text](images/{6AC82446-0328-42A5-8DE7-FE78D7292C12}.png)
+
+So pod is running but not ready, so it is restarting. Root Causes
+
+- ImagePullIssue
+- Liveness and ReadinessProbe endpoint not available
+
+![alt text](images/Probe.png)
+
+![alt text](images/{2FD49DC1-2DD8-4E89-8774-932CAE5608AD}.png)
 
 Ubundu - apt use archieve.ubuntu.com repository automatically added so no need to add expicitly
 
@@ -154,10 +165,11 @@ helm install <local-chart-name> eks/aws-load-balancer-controller
 In helm, you deal with docker images and kubernetes pods
 
 ```
+# Create Basic helm folder structure with base templates
 
-helm create <Folder-name>
+helm create <chart-name>
 
-<Folder>
+<chart-name>
 |
 -- Chart.yaml
 |
@@ -179,6 +191,8 @@ helm create <Folder-name>
    - serviceaccount.yaml
    - service.yaml
    - configmap.yaml
+   - secretes.yaml
+   - Other menifest files
    - Notes.txt
 - values.yaml : To make any customization to the environment
    - replica count
@@ -224,8 +238,26 @@ helm add index .
 
 ```
 
+![alt text](images/{C5D05E8F-AF9D-4E51-99A3-2B9EC481C5E9}.png)
+
+![alt text](images/{0ABA2063-FA7E-4997-9115-5D620E56C1EB}.png)
+
+![alt text](images/{D714DAD5-6652-467A-896C-D49BB6F83BFE}.png)
+
+How Front-end application points to the Database service.
+
+![alt text](images/{864431C6-29EF-496F-9141-D9DDCF2A31B9}.png)
+
+![alt text](images/{A1193151-FB83-4DDB-84FD-E3B38478A65B}.png)
+
 ## How to check what all values a chart needed
 
 ```
 helm show values <chart>
 ```
+
+## How to use environment variables
+
+**values.yaml**
+
+![alt text]({E3020C5F-29A4-4E65-BE99-5594B2518FE5}.png)
