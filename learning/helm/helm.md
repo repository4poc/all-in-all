@@ -250,6 +250,24 @@ How Front-end application points to the Database service.
 
 ![alt text](images/{A1193151-FB83-4DDB-84FD-E3B38478A65B}.png)
 
+![alt text](images/{5A7CF113-0AAA-4A66-AF2F-8DB4C62527AC}.png)
+
+![alt text](images/{B2C8B980-180B-431E-9EB8-DBD4A2597D35}.png)
+
+A simple rule of thumb:
+
+- DB container → ClusterIP
+- Web app/API → LoadBalancer or Ingress
+- Testing/direct node access → NodePort
+
+You generally avoid NodePort or LoadBalancer for a database unless you have a specific reason to expose the DB outside the cluster, because that increases security risk.
+
+## How to check the runtime values of a helm chart
+
+![alt text](images/{60D26CA4-D5CD-45E2-A494-AB6CEA2C490B}.png)
+
+![alt text](images/{2E66783F-0839-452C-AFEB-50ED0803FF5D}.png)
+
 ## How to check what all values a chart needed
 
 ```
@@ -261,3 +279,34 @@ helm show values <chart>
 **values.yaml**
 
 ![alt text]({E3020C5F-29A4-4E65-BE99-5594B2518FE5}.png)
+
+## How to push helm chart to container registry (Azure ACR, AWS ECR, Docker Hub, GitLab)
+
+Steps
+
+```
+Create Helm chart
+      ↓
+helm package
+      ↓
+front-end-app-0.1.0.tgz
+      ↓
+Login to registry (helm registry login myregistry.example.com)
+      ↓
+helm push (helm push front-end-app-0.1.0.tgz https://myregistry.example.com/helm)
+      ↓
+Registry stores the Helm chart (https://myregistry.example.com/helm/front-end-app)
+      ↓
+helm install from registry (helm install frontend \
+                            https://myregistry.example.com/helm/front-end-app \
+                            --version 0.1.0)
+
+```
+
+```
+myregistry.example.com/
+├── images/
+│   └── front-end-app:1.0
+└── helm/
+    └── front-end-app:0.1.0
+```
