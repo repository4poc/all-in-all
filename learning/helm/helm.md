@@ -234,7 +234,6 @@ Chart.yaml
 ```
 helm package <frontend-app>
 helm package <backend-app>
-helm add index .
 
 ```
 
