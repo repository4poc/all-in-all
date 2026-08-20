@@ -333,3 +333,81 @@ helm upgrade
        ↓
 front-end-app 1.2.0
 ```
+
+## How do you validate a Helm chart?
+
+```
+helm lint frontend-app
+```
+
+It checks the chart for common errors and formatting issues.
+
+## What is the difference between version and appVersion in Chart.yaml
+
+- version is the Helm chart version.
+- appVersion represents the application version being deployed.
+
+```
+name: frontend-app
+version: 1.2.0
+appVersion: "2.0"
+```
+
+## How do you see the generated Kubernetes YAML without deploying it?
+
+```
+helm template frontend frontend-app
+```
+
+## What is a Helm release
+
+A release is an installed instance of a Helm chart.
+
+```
+helm install frontend ./frontend-app
+
+```
+
+Here, frontend is the release name
+
+## What is helm upgrade --install
+
+It upgrades the release if it exists, otherwise installs it.
+
+```
+helm upgrade --install frontend ./frontend-app
+```
+
+Very used in CI/CD Pipelines, we upgrade rathen then uninstalling it
+
+## How do you roll back a Helm deployment?
+
+1. Check History
+
+```
+helm history frontend
+```
+
+2. Install previous version
+
+```
+helm rollback frontend 2
+```
+
+Here 2 is the revision version
+
+## What is the difference between chart version and Helm revision?
+
+Chart version comes from Chart.yaml, such as
+
+```
+1.2.0
+```
+
+Revision is created by Helm every time you install, upgrade, or roll back a release:
+
+```
+REVISION 1
+REVISION 2
+REVISION 3
+```
