@@ -302,6 +302,8 @@ helm install from registry (helm install frontend \
 
 ```
 
+with helm push, you generally do not tag the .tgz separately like you would a Docker image while using docker push command.
+
 ```
 myregistry.example.com/
 ├── images/
