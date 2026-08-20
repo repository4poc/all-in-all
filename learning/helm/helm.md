@@ -311,3 +311,25 @@ myregistry.example.com/
 └── helm/
     └── front-end-app:0.1.0
 ```
+
+## How to upgrade to new chart version
+
+```
+helm upgrade frontend \
+  oci://myregistry.example.com/helm/front-end-app \
+  --version 1.2.0
+```
+
+```
+__Currently deployed__
+
+front-end-app 1.1.0
+       ↓
+Create/package 1.2.0
+       ↓
+Push 1.2.0 to registry
+       ↓
+helm upgrade
+       ↓
+front-end-app 1.2.0
+```
