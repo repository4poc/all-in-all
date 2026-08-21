@@ -84,18 +84,18 @@ Key Components
 - Exporters :
   - Exporters are small applications/add-ons/plugins that collect metrics from various third-party systems and expose them in a format Prometheus can scrape.
   - They are essential for monitoring systems that do not natively support Prometheus.
-- Types of Exporters:
-  - Node Exporter
-    - For Infrastrcture Monitoring
-    - For VMs metrics via system files - CPU, Memory, RAM
-  - Kube-state-metrics Exporter
-    - For Kubernetes Monitoring
-    - Via Kubernets API Server - Pod events, Config Maps, Secrets)
-  - Custom developed /metrics API endpoing
-    - For Application Monitoring
-    - For application level metrics
-  - MySQL Exporter (for database metrics)
-  - various other application-specific exporters.
+  - Types of Exporters:
+    - Node Exporter
+      - For Infrastrcture Monitoring
+      - For VMs metrics via system files - CPU, Memory, RAM
+    - Kube-state-metrics Exporter
+      - For Kubernetes Monitoring
+      - Via Kubernets API Server - Pod events, Config Maps, Secrets)
+    - Custom developed /metrics API endpoing
+      - For Application Monitoring
+      - For application level metrics
+    - MySQL Exporter (for database metrics)
+    - various other application-specific exporters.
 
 ![alt text](images/{6BC52B60-041E-42BD-BFB0-DA88CDAE83ED}.png)
 
