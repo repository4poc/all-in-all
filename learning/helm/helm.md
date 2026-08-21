@@ -101,7 +101,7 @@ helm search repo <local-repo-name> | grep <chart-name>
 
 helm install <local-chart-name> <package/chart-name>
 
-# List all helm charts
+# List all helm charts deployed onto the current kubernetes context
 
 helm list
 
@@ -344,8 +344,25 @@ It checks the chart for common errors and formatting issues.
 
 ## What is the difference between version and appVersion in Chart.yaml
 
-- version is the Helm chart version.
-- appVersion represents the application version being deployed.
+- version :
+  - Helm chart version
+  - Used in .tgz filename
+  - Update when you update templates
+- appVersion :
+  - Application version metadata
+  - You can also use appVersion inside templates if you want, for example as the Docker image tag
+  - Update when you point to new docker image
+
+```
+  image: "myrepo/frontend-app:{{ .Chart.AppVersion }}"
+
+
+  You can see it when you inspect the chart, for example with:
+
+  helm show chart frontend-app-1.2.0.tgz
+
+  helm list
+```
 
 ```
 name: frontend-app
@@ -411,3 +428,95 @@ REVISION 1
 REVISION 2
 REVISION 3
 ```
+
+## How do you override values from values.yaml
+
+You can use another values file:
+
+```
+helm install frontend ./frontend-app \
+  -f values-prod.yaml
+```
+
+## Do OCI Helm registries require index.yaml
+
+No
+
+## What are Helm dependencies?
+
+A chart can depend on other charts. Dependencies are usually declared in Chart.yaml.
+
+```
+dependencies:
+  - name: redis
+    version: 20.0.0
+    repository: https://charts.example.com
+```
+
+```
+helm dependency update
+```
+
+## How would you use Helm in a CI/CD pipeline?
+
+```
+Developer pushes code
+        ↓
+Build Docker image
+        ↓
+Push image to registry
+        ↓
+Update Helm values/image tag
+        ↓
+helm lint
+        ↓
+helm package
+        ↓
+Push chart to registry
+        ↓
+helm upgrade --install
+        ↓
+Kubernetes deployment
+```
+
+## Quick Command List
+
+```
+helm create myapp
+
+helm lint myapp
+
+helm template myapp ./myapp
+
+helm install myapp ./myapp
+
+helm list
+
+helm status myapp
+
+helm upgrade myapp ./myapp
+
+helm upgrade --install myapp ./myapp
+
+helm history myapp
+
+helm rollback myapp 1
+
+helm uninstall myapp
+
+helm package myapp
+
+helm repo add myrepo https://example.com/charts
+
+helm repo update
+
+helm repo index .
+
+helm dependency update
+
+helm registry login myregistry.example.com
+
+helm push myapp-1.0.0.tgz oci://myregistry.example.com/helm
+```
+
+![alt text](images/{5CB897D3-C9C4-44C1-8ACF-9ABB448E9CE4}.png)
