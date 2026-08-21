@@ -114,8 +114,6 @@ helm repo update
 [Deploy the chart into new namespace]
 kubectl create ns monitoring
 
-cd day-2
-
 helm install monitoring prometheus-community/kube-prometheus-stack \
 -n monitoring \
 -f ./values.yml
