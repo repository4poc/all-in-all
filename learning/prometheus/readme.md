@@ -73,7 +73,7 @@ Alert
 Key Components
 
 - Prometheus Server
-  - Retrival : Pull the info from exporters.
+  - Retrival : Pull the info from exporters. so all the metrics data collected is stored in the TSDB
   - TSDB : Store the metrics information into a Time Serier Database
     - Timestamp -> Key / Value
   - HTTP Server : To get the information from Prometheus using PromQL
@@ -87,22 +87,111 @@ Key Components
   - Types of Exporters:
     - Node Exporter
       - For Infrastrcture Monitoring
-      - For VMs metrics via system files - CPU, Memory, RAM
+      - Runs on your kubernetes cluser as a pod and collect information from all your kubernetes nodes. Information like
+        - CPU Utalization
+        - Memory Utalization
+        - Disk Utalization
     - Kube-state-metrics Exporter
-      - For Kubernetes Monitoring
-      - Via Kubernets API Server - Pod events, Config Maps, Secrets)
-    - Custom developed /metrics API endpoing
+      - For Kubernetes Objects Monitoring
+      - Runs on your kubernetes cluser as a pod and collect information regarding kubernetes objects like Pod events, Config Maps, Secrets via API Server
+    - Custom metrics
       - For Application Monitoring
+      - Developed by the developer as /metrics endpoint collecting and returning information like
+        - Number of HTTP requests in last 5 minutes
+        - Average Request processing time
+        -
       - For application level metrics
-    - MySQL Exporter (for database metrics)
+    - MySQL Exporter (for MySQL database metrics)
     - various other application-specific exporters.
 
 ![alt text](images/{6BC52B60-041E-42BD-BFB0-DA88CDAE83ED}.png)
+
+![alt text](images/{3445D37B-8907-4F78-927E-3F7A5F4F5E50}.png)
+
+As clusterIP services can only be accessible from inside the Kubernetes, not from outside like your local browser, so you can login to the kubernetes cluster node and then access it from there.
+
+![alt text](images/{E25863A3-A09E-4D30-B011-3348C3FE0066}.png)
+
+![alt text](images/{4BA18E81-15EE-4B91-9210-B8D7EA768C10}.png)
+
+Below is the list of information your node exporter collecting periodically.
+
+The information is in the format, prometheus understand. Thats the purpose of an exporter.
+
+![alt text](images/{8CC31B04-99EB-441A-B72D-E6342CB44757}.png)
+
+**For kube-state-exporter**
+
+![alt text](images/{F031D77C-43BE-4860-A2C5-FDE23E9570D0}.png)
+
+From within the kubernetes node.
+![alt text](images/{CB8C2BAA-D0AC-4E8D-9FA0-A00FAA67BBE9}.png)
+
+![alt text](images/{6AE6C5E7-EA44-460A-B8E5-DECF4ADF46CD}.png)
+
+## How to create a pod the crash for testing pod crash scenarios
+
+![alt text](images/{210B11B0-FDAF-4698-912D-7A4903C54419}.png)
+
+![alt text](images/{EF1CA9E1-592F-4C87-B6C6-8E9AD84F9117}.png)
+
+**PromQL Example**
+
+[For specific namespace]
+![alt text](images/{4B441C28-DD0D-499A-8AB0-899DC4F11747}.png)
+
+[For all namespaces]
+![alt text](images/{295A7A9E-A60F-4BA6-951E-1B906F6B6302}.png)
+
+[For PromQL : refer the /metrics]
+![alt text](images/{2AA9C512-ADDE-43FD-8E1C-66C8FECF4DC0}.png)
+
+As if you see the prometheus visualization is not that good, so we prefer to go with Grafana for visualization
+
+**Prometheus Autocomplete Feature**
+
+![alt text](images/{8532C2FF-BC51-4E34-B7BE-18E07509B1EC}.png)
+
+![alt text](images/{AD50630F-714A-4268-809C-665AAA1A85F0}.png)
+
+## Common Matrics
+
+- How many times the pod has crashed over 5 min
+- How many times config maps are created over a period of time
+- How many secrets are there in your kubernets cluster
+- CPU / Memory / Disk utalization
+- HTTP request, Users Created ,
 
 ## Grafana
 
 - Grafana is a powerful dashboard and visualization tool that integrates with Prometheus to provide rich, customizable visualizations of the metrics data.
 - Both Prometheus and Grafana used together as a monitoring stack.
+- Grafana supports data sources like
+  - prometheus
+  - graphite
+  - nagios
+  - influxDB
+
+![alt text](images/{33AB8BFC-ECE5-4FFD-B0BD-468AA6204661}.png)
+
+So you can chenage the data source keepting the visualiation intact
+
+- Grafana is a not a monitoring tool, it is a visualization tool.
+
+- Grafana also support authentication and authorization. where prometheus does not has any authentication and authorization. You can integrate it with IAM, EntraID or SSO
+
+- So you can have different dashboard for
+  - Developers
+  - QA
+  - Managers
+  - DevOps
+
+- Grafana provide pre-defined graphs, which is not in the case of prometheus, you have to write PromSQL for the graph.
+
+  ![alt text](images/{D07D4AF0-CEE1-4050-866A-F386B3C0FA76}.png)
+
+- Grafana uses the same PromQL for custom graphs
+  ![alt text](images/{2CB834D0-6A32-4966-BB70-7A46926D801D}.png)
 
 ## Install kube-prometheus-stack
 
