@@ -355,3 +355,17 @@ For custom metrics, to be queried from prometheus, you need to tell kubernetes w
 3. Service Discover (ServiceMonitor)
 
 ## Alert Manager
+
+![alt text](images/{C76D81A7-AA3E-477C-96D9-B28F383BD974}.png)
+
+![alt text](images/{E7A322D9-208A-4EF9-BC4A-210239FFCF9E}.png)
+
+![alt text](images/{FBCAC9AA-DE7E-4A7F-8958-E43B110AC3D6}.png)
+
+![alt text](images/{B58CFD51-0D3F-4017-9B47-4DC925379285}.png)
+
+![alt text](images/{8B54B54D-8B2A-4947-B7E0-D7170FBA8912}.png)
+
+![alt text](images/{5725E712-964F-4D7A-AC0D-8344F8B95E18}.png)
+
+![alt text](images/{6BC378C6-6278-4D3B-B0C9-3752B8F24317}.png)
