@@ -1,5 +1,6 @@
 ## Metrix
 
+- It is one of the piller in Observability along with Logging
 - Metrics are based on numeric information
 - that measurements based on data points what is happening about a specific aspect
   - Aspects like
@@ -498,3 +499,20 @@ topk(5,
 rate(process_cpu_seconds_total[5m])
 )
 ```
+
+## Why is Prometheus considered pull-based
+
+Prometheus initiates metric collection.
+
+Advantages:
+
+- Simpler architecture
+- Easier health checking
+- Automatic target validation
+
+## Prometheus memory usage suddenly increased from 4GB to 20GB after a deployment. What would you check?
+
+- Check newly added labels.
+- Review new exporters.
+- prometheus_tsdb_head_series
+- Remove unnecessary labels and restart scraping.
