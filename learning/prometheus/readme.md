@@ -296,3 +296,62 @@ Note: Instead of port-forwarding, use ingress controller as best practice
    ```
    avg(container_memory_usage_bytes) by (namespace)
    ```
+
+## Observability Stack
+
+Observability Stack
+
+- Prometheus : For Monitoring
+- Grafana : For advance dashboards
+- EFK : For log aggregation
+- Jaeger : For dynamic tracing
+
+![alt text](images/{98BED725-5EEA-4A8B-9557-3928DC758FBA}.png)
+
+## Prometheus Metrics Types
+
+- **Counter Metrics** : If the nature of metrics is always incrementing
+  - Total HTTP requests over last 10 days
+  - Total Account Created over last 10 days
+- **Gauge Metrics** : If the nature of metrics is incrementing as well as decrementing
+  - No. of Config Maps
+  - CPU/Memory Utalization
+- **Histogram** : If you need some bucket of information, rather than incrementing or decrementing.
+  - How many times CPU utalization go below 50%
+  - How many times HTTP request duration < 10 ms
+  - How many times HTTP request duration > 10 and < 100 ms
+  - How many times HTTP request duration > 100 ms
+
+![alt text](images/{4DA38ED8-C38A-4B56-BC63-4BCD209DAB82}.png)
+
+## Instrumenting custom metrics
+
+![alt text](images/{9225192A-2C8E-404A-9B35-88C1DFEFBFC3}.png)
+
+![alt text](images/{772CA6F4-27DA-432D-8797-580BA2E98395}.png)
+
+![alt text](images/{BDEC237E-58A8-455D-AD70-3FCD5EFBC9A4}.png)
+
+On deployment of your application you application must be ommitting matrics at the /metrics endpoint
+
+![alt text](images/{F1E1BAF2-A65C-45A3-8EA7-71D6DF1DEA03}.png)
+
+## Service Discovery
+
+For custom metrics, to be queried from prometheus, you need to tell kubernetes what all custom metrics to fetch.
+
+![alt text](images/{DF93292F-A714-40BB-9044-F13B77B2F10D}.png)
+
+[Service Monitor]
+
+![alt text](images/{49D3730E-E05C-4187-9D61-F7A90A6838B8}.png)
+
+![alt text](images/{2864D491-A687-4B86-B27E-53DF02C3115C}.png)
+
+**Steps**
+
+1. Instrument the metrics
+2. Setup of Prometheus
+3. Service Discover (ServiceMonitor)
+
+## Alert Manager
