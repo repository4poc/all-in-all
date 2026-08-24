@@ -250,3 +250,49 @@ Note: Instead of port-forwarding, use ingress controller as best practice
 - Graphite
 - InfluxDB
 - Nagios
+
+## Basic Examples of PromQL
+
+1. Return all time series with the metric container_cpu_usage_seconds_total
+
+   ```
+   container_cpu_usage_seconds_total
+   ```
+
+2. Return all time series with the metric container_cpu_usage_seconds_total and the given namespace and pod labels.
+
+   ```
+   container_cpu_usage_seconds_total{namespace="kube-system",pod=~"kube-proxy.*"}
+   ```
+
+3. Return a whole range of time (in this case 5 minutes up to the query time) for the same vector, making it a range vector.
+
+   ```
+   container_cpu_usage_seconds_total{namespace="kube-system",pod=~"kube-proxy.*"}[5m]
+   ```
+
+## Aggregation & Functions in PromQL
+
+1. Total increase in container restarts over the last hour.
+
+   ```
+   increase(kube_pod_container_status_restarts_total[1h])
+   ```
+
+2. Calculates the rate of CPU usage over 5 minutes
+
+   ```
+   rate(container_cpu_usage_seconds_total[5m])
+   ```
+
+3. aggregates the CPU usage across all nodes
+
+   ```
+   sum(rate(node_cpu_seconds_total[5m]))
+   ```
+
+4. Average memory usage grouped by namespace.
+
+   ```
+   avg(container_memory_usage_bytes) by (namespace)
+   ```
