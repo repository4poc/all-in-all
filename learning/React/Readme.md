@@ -309,3 +309,5 @@ We can use JavaScript function on string values
 - message.toUpperCase()
 - message.toCamelCase()
 - message.toLowerCase()
+
+## Props
