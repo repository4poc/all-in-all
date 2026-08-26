@@ -284,6 +284,7 @@ return (
 - { expression } - Must return some value
 
 ```
+const title = "Title Text"
 const heading = "This is the heading";
 
 const randomMessage = (message) => {
@@ -295,9 +296,10 @@ const randomMessage = (message) => {
 
 return (
   <>
+    <img src={img} alt={title}>
     <h1>{heading}</h1>
     <h2>{randomMessage(heading)}</h2>
-  </>
+  </img>
 )
 
 ```
@@ -310,4 +312,86 @@ We can use JavaScript function on string values
 - message.toCamelCase()
 - message.toLowerCase()
 
-## Props
+We can have multiple React Components within a file, but only one can be exported.
+
+![alt text](images/{7CCA52BF-BAF1-4989-BDE7-E42B934D3CAF}.png)
+
+The downside of this appraoch is that the `Book` Component is private and can't be reused with other components.
+
+## Arguments and Paramters
+
+In vanila JavaScript,
+
+- `Parameters` are defined while defining a function
+- `Arguments` are actual values , passed during calling that function.
+
+In React, we pass values to the Componets using `Props`
+
+![alt text](images/{B5DB956C-9986-417C-AAF3-09B0312D3FCB}.png)
+
+![alt text](images/{BC977760-6B28-4AC0-A13C-2BDBD8EDBBBA}.png)
+
+If you dont provide the props values, either you will be displayed nothing or get an error.
+
+## Dynamic Parameters
+
+![alt text](images/{83DFEE94-05A5-4C40-8344-3AFA310E400A}.png)
+
+## Props Multiple Approaches
+
+```
+const book1 = {
+  title : 'Atomic Habits',
+  description : "Self Improvement",
+  price : 130
+}
+
+
+// Option 1
+return (
+  <Book
+    title={book1.title}
+    description={book.description}
+    price={book1.price}
+  />
+)
+
+// Option 2
+const {title, description, price} = book1;
+
+return (
+  <Book
+    title={title}
+    description={description}
+    price={price}
+  />
+)
+
+```
+
+Similary with `Props`, a JS Object
+
+![alt text](images/{A017FD2A-740D-41D8-BFA5-F37AC7C10667}.png)
+
+will be replaced with
+
+![alt text](images/{C7BBD2F4-FC54-468E-9F02-2B5975A541F8}.png)
+
+Alternate Approach
+
+![alt text](images/{047D11AC-E02A-4F57-BA08-AFA7F54F57C4}.png)
+
+Downside, you can't log `props` within the component.
+
+## Children Props
+
+- Everything we rendered within the Component tags
+- Used while setting up Context API
+
+![alt text](images/{D481302B-5344-4785-A655-8371EC960DE4}.png)
+
+![alt text](images/{6DF7591E-6FCA-45DF-B046-2FA97E63F025}.png)
+
+`children` is a keyword, cant use any name.
+
+So if we have multiple books, few have children, few not. Used in those scenarios.
