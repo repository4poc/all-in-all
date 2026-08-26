@@ -142,18 +142,27 @@ In react you can many component but only one root component that contains all th
 - ES7 + React/Redux-Native Snippets ()
   - rafce (An Arrow function with export)
   - rfce (An regular function with export)
+
     ![alt text](images/{056EED7D-D4B6-429B-B2B0-A5E5528A8EC0}.png)
+
   - Auto import react at top
+
     ![alt text](images/{96B8061D-80CF-48A6-8EDB-65360D95465B}.png)
     - prior to react 17 we had to import react at top, but no longer now.
+
       ![alt text](images/{F984F5A5-F0C0-4C61-B841-73508666E8EA}.png)
 
 - Prettier - Code Formatter
   - settings
+
     ![alt text](images/{29243F03-0CFE-4B0D-B952-51110C35FEAC}.png)
+
   - Format on save/paste
+
     ![alt text](images/{1416C3A1-08E9-4EE2-9549-4413340C8E84}.png)
+
   - Default Formatter : Prettier
+
     ![alt text](images/{D30B5E43-3BF4-4D92-9E1C-B08E9274210D}.png)
 
 ![alt text](images/{429723C3-71C2-477C-804A-0D9E44C37E31}.png)
@@ -169,7 +178,10 @@ In react you can many component but only one root component that contains all th
   - htmlFor
   - readOnly
 - Use className instead of class (reserved for native HTML)
+
   ![alt text](images/{68F2993B-166B-4B01-BE47-7285EBE8B4FE}.png)
+
 - All tags have closing tags (In native HTLM we have few exceptions like img)
 - Use paranthesis while returning
+
   ![alt text](images/{293BC8EA-117F-4668-AFFE-92E25EBA8AD7}.png)
