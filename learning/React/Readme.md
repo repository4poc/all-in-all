@@ -20,6 +20,7 @@
 
 - Browser
   - Google Chrome
+    - React Developer Tool Extension
 - Text Editor
   - VS Code
 - Node.js
@@ -139,7 +140,7 @@ In react you can many component but only one root component that contains all th
 
 - Auto rename tags
 - Highlight matching tags
-- ES7 + React/Redux-Native Snippets ()
+- ES7 + React/Redux-Native Snippets (dsznajder)
   - rafce (An Arrow function with export)
   - rfce (An regular function with export)
 
@@ -185,3 +186,47 @@ In react you can many component but only one root component that contains all th
 - Use paranthesis while returning
 
   ![alt text](images/{293BC8EA-117F-4668-AFFE-92E25EBA8AD7}.png)
+
+## Nested Components
+
+![alt text](images/{17E1CB6B-4898-4D20-9F32-660BB31D607F}.png)
+
+## React Developer Tool
+
+This extension allow us to inpect and debug the component hierarchy, state and props in the react appication.
+
+![alt text](images/{9C4EEEB5-0148-48BC-BB33-BE691B10E6ED}.png)
+
+![alt text](images/{66ABEF73-F75B-4BF7-AE75-BBA5CBE4E3E1}.png)
+
+![alt text](images/{7863D1CD-66F2-481E-94DE-85E029E8C3C3}.png)
+
+![alt text](images/{80FAE5FB-54A7-4353-B9A6-F33A678CE7A7}.png)
+
+Very useful in understanding and debugging components
+
+React Component is defined as a JS Function, but is used in JSX like `<Book\>` not Book(),
+
+## Advantage of Components based Architecture
+
+- Moduler codebase
+- Easy to maintain
+- Reusability
+
+## Local Images (public folder)
+
+- Remote Images
+  - hosted outside like on S3 Buckets or Azure Storage Account
+  - Use URL to the Image
+- Local Images
+  - In public folder
+    - Not a best practice
+    - less performant
+  - In src folder
+    - Prefred approach
+    - under the hood they are optimized
+  - replace `url` with `relative path` for image `src`
+
+    ![alt text](images/{25075372-B377-4FBA-9A1B-1B391E781022}.png)
+
+## JSX - CSS
