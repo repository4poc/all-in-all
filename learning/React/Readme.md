@@ -178,7 +178,7 @@ In react you can many component but only one root component that contains all th
   - onClick
   - htmlFor
   - readOnly
-- Use className instead of class (reserved for native HTML)
+- In JSX, Use `className` prop to assign a `CSS Class` instead of `class` (which is a JavaScript reserved keyword)
 
   ![alt text](images/{68F2993B-166B-4B01-BE47-7285EBE8B4FE}.png)
 
@@ -230,3 +230,82 @@ React Component is defined as a JS Function, but is used in JSX like `<Book\>` n
     ![alt text](images/{25075372-B377-4FBA-9A1B-1B391E781022}.png)
 
 ## JSX - CSS
+
+**Inline CSS**
+In JSX, for inline CSS, use `style` prop, which uses a JavaScript Object Format, enable dynamic styling.
+
+```
+return (
+  <>
+    <div style={
+      ## JS Object
+      {
+        background :'red',
+        color : 'black'
+      }
+    }>
+
+
+
+    </div>
+  </>
+)
+```
+
+We can also change CSS dynamially like for profile using inline style CSS
+
+![alt text](images/{406AB210-E165-4538-9663-03EFCD95165C}.png)
+
+**External CSS**
+
+```
+.book {
+  background : red,
+  color : black
+}
+```
+
+```
+return (
+  <>
+    <div className="book">
+
+
+
+    </div>
+  </>
+)
+
+```
+
+## JSX - JavaScript
+
+- {} in JSX can contains JavaScript expression returning a value
+- { expression } - Must return some value
+
+```
+const heading = "This is the heading";
+
+const randomMessage = (message) => {
+  if(message.length() > 0)
+    return "I have title";
+  else
+    return "I have no title";
+}
+
+return (
+  <>
+    <h1>{heading}</h1>
+    <h2>{randomMessage(heading)}</h2>
+  </>
+)
+
+```
+
+This is very useful in making reusable components, where the value come either from inside the component or from outside via props
+
+We can use JavaScript function on string values
+
+- message.toUpperCase()
+- message.toCamelCase()
+- message.toLowerCase()
