@@ -282,6 +282,7 @@ return (
 
 - {} in JSX can contains JavaScript expression returning a value
 - { expression } - Must return some value
+- { \` # {expression} \` } ` - string + expression
 
 ```
 const title = "Title Text"
@@ -311,8 +312,6 @@ We can use JavaScript function on string values
 - message.toUpperCase()
 - message.toCamelCase()
 - message.toLowerCase()
-
-We can have multiple React Components within a file, but only one can be exported.
 
 ![alt text](images/{7CCA52BF-BAF1-4989-BDE7-E42B934D3CAF}.png)
 
@@ -676,4 +675,4 @@ Deploy it onto platforms :
 
 - Azure
 - AWS
-- Netify
+- Netlify
