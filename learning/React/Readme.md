@@ -410,6 +410,12 @@ So if we have multiple books, few have children, few not. Used in those scenario
 
 - Avoid using `key={index}`, rather use `key={book.id}` as using index as a key can cause issue, when reorder or modify the items, as the React rely on unique keys for stable updates.
 
+- Here the `number` prop passes the current index from the books array to the `Book` component
+
+  ```
+  <Book {...book} key={book.id} number={index} />;
+  ```
+
 ```
 const newArray = oldArray.map((item,key) => {
   console.log(item);
@@ -585,3 +591,57 @@ const findBook(id) {
 
 ## ES6 Modules
 
+- `Named Export` : Name in `{book}` during import must match the export name
+
+  ![alt text](images/{A6677F79-D436-49A2-8186-E68DB37F73B0}.png)
+
+  ![alt text](images/{09BB7AA6-F21E-470D-9EB9-1B6B8E67F696}.png)
+
+- `Default Export`: Only one default export per file. Name during import can be differnet and no `{}`
+
+  ![alt text](images/{4CE05E49-64B4-4973-978C-61681399D6D4}.png)
+
+  ![alt text](images/{948BF222-2234-435C-822A-0568BF4B76E0}.png)
+
+## Local Images (src folder )
+
+![alt text](images/{59619AEF-21E0-4C8D-B2FB-366E434C0D2A}.png)
+
+## JSX - String + expression
+
+```
+<h1>`string ${expression}`</h1>
+```
+
+JavaScript
+
+```
+const number = 5;
+
+<h1>{number + 1}</h1>
+```
+
+HTML Output
+
+```
+<h1>6</h1>
+```
+
+JSX
+
+```
+const number = 5;
+
+<h1>`Euro {number + 1}`</h1>
+
+<h1>{`Euro ${number + 1}`}</h1>
+```
+
+HTML Output
+
+```
+<h1>Euro number + 1</h1>
+
+<h1>Euro 6</h1>
+
+```
