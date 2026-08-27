@@ -645,3 +645,35 @@ HTML Output
 <h1>Euro 6</h1>
 
 ```
+
+## Build Folder
+
+When we deploy the application, we need to build the application and put it into a specific format to be deplyed, as it will not follow the development setup format with
+
+- src
+- public
+- node_modules
+- ..
+- ..
+
+**package.json** has scripts
+
+![alt text](images/{E6B20005-D49B-442C-A44F-3953EC335EB8}.png)
+
+The below command will do the job and create deployable version of the application into a new folder `build`
+
+So `build` folder contains the production ready application
+
+```
+npm run build
+```
+
+![alt text](images/{2A71BD10-88B5-4AE5-8A4F-711FE54C288A}.png)
+
+## Deployment
+
+Deploy it onto platforms :
+
+- Azure
+- AWS
+- Netify
