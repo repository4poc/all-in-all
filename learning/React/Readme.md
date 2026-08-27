@@ -404,6 +404,8 @@ So if we have multiple books, few have children, few not. Used in those scenario
 
 - key must be unique, any property, and can be of any datatype string, number.
 
+- `key` is used while we render list using `map(item,key)`
+
 - key prop is very important,while rendering a list of items in React, because React uses the key prop to uniquely identify a list item and update only the changed element during rerendering (Optimized updates and rendering)
 
 - Avoid using `key={index}`, rather use `key={book.id}` as using index as a key can cause issue, when reorder or modify the items, as the React rely on unique keys for stable updates.
@@ -483,3 +485,67 @@ so `{...book}` flattens the book Object and pass each property like (id,title,au
 [For Object]
 
 ![alt text](images/{3FAF5DF7-A667-4BFF-9685-FD774384A6B3}.png)
+
+## Events Basics
+
+[In JavaScript]
+
+```
+const btn = document.getElementById("submitBtn");
+
+// Callback function
+btn.addEventListener("click", function(e){
+    // Access event object e
+    // Do Operations
+    // ----
+})
+```
+
+[In React]
+
+```
+const handleButtenClickEvent = (e) => {
+    // Prevent the default action of the form submission, that is refreshing the page.
+    e.preventDefault();
+
+    // Event object properties
+    e.target.name
+    e.target.value (Input value)
+
+    // Do Operations
+    // ----
+}
+
+<Book onClick={handleButtenClickEvent} />
+
+```
+
+**Different Events**
+
+- onClick (Click Event)
+- onSubmit (Submit Form)
+- onChange (Input Change)
+
+## Form Submission.
+
+- Define a `const handleSubmit = (e) => {..}`
+- Specify `<form onSubmit={handleSubmit}` at Form
+- Include `<button type="submit"/>`
+
+![alt text](images/{965F0B25-9E2F-4CE2-B4B8-5BE7ACDF3071}.png)
+
+![alt text](images/{5BB4AA64-EC5D-4CB3-9F41-60E90FADFACC}.png)
+
+## Anonymous Function
+
+Anonymous function only executes when the button is clicked or when the event occur
+
+![alt text](images/{22AD3A6A-B6DF-437A-9100-61077E5B01C6}.png)
+
+## Components Feature
+
+Components are independent by default.
+
+So the function can access to props, specific to that component.
+
+![alt text](images/{7751A5E2-9CF1-4F17-BBC1-4B1C3E2ED7F4}.png)
