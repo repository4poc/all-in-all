@@ -395,3 +395,89 @@ Downside, you can't log `props` within the component.
 `children` is a keyword, cant use any name.
 
 So if we have multiple books, few have children, few not. Used in those scenarios.
+
+## Array of Objects in React
+
+- In React we use JavaScript `map()` method to workd with Arrays
+
+- `map(item, key)` create a new array by calling a function for every array element
+
+- key must be unique, any property, and can be of any datatype string, number.
+
+- key prop is very important,while rendering a list of items in React, because React uses the key prop to uniquely identify a list item and update only the changed element during rerendering (Optimized updates and rendering)
+
+- Avoid using `key={index}`, rather use `key={book.id}` as using index as a key can cause issue, when reorder or modify the items, as the React rely on unique keys for stable updates.
+
+```
+const newArray = oldArray.map((item,key) => {
+  console.log(item);
+  return <p>{item}</p>
+})
+```
+
+```
+const booksArray = [
+  {
+    id : 1,
+    title : 'Atomic Habits',
+    description : 'Self Improvement',
+    price : 145
+  },
+  {
+    id : 2,
+    title : 'Stop Worring & Start Living',
+    description : 'Motivational',
+    price : 350
+  }
+];
+
+```
+
+**First Approach**
+
+![alt text](images/{1A2C38B6-1292-4B80-8894-13B45F05D60A}.png)
+
+**Second Approach**
+
+when we have smaller JSON object, But in case we have big JSON object, there is an alternate approach is, pass the entire JSON as props.
+
+![alt text]({8514032F-3074-4087-A4EA-FF41AF9363B8}.png)
+
+**Third Approach**
+
+Use spread operator
+
+- const newFriendsList = [...friends, newFriend] copy values
+
+```
+const book = {
+  id: 1,
+  title: "Harry Potter",
+  author: "J.K. Rowling",
+  image: "cover.jpg"
+};
+
+Then
+
+<Book {...book} key={book.id} />
+
+Equivalent to
+
+<Book
+  id={book.id}
+  title={book.title}
+  author={book.author}
+  image={book.image}
+  key={book.id}
+/>
+```
+
+![alt text](images/{4438B7EF-792E-44D9-9A6B-FFB4C52332A1}.png)
+
+[For Arrys]
+
+![alt text](images/{FAF3EBA8-FB8B-44EF-8829-FEF97CDF8037}.png)
+
+[For Object]
+
+![alt text](images/{3FAF5DF7-A667-4BFF-9685-FD774384A6B3}.png)
