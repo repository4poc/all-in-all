@@ -17,7 +17,7 @@ that help an Organization succeed in Cloud Adoption Journey
   5. Governance (Govern the Cloud)
   6. Manage (Manage the Cloud environment Properly)
 
-## 1. Strategy
+## 1. Strategy Phase
 
 - **1. Document Motivations**
   - Why are you moving to the cloud
@@ -63,3 +63,16 @@ As it is difficult to gather all together, So the best practise is
 ![alt text](images/{ACFFDB74-D30D-4746-B92D-C5F4AA6C7938}.png)
 
 - So these assessments gives us technical and financial consideration, business outcomes for your cloud journey
+
+## 2. Planning Phase
+
+- Identify your digital estate
+  - If you have any on-premise infrastructure, then you create an invetory of existing digital assets that you plan to migrate to the cloud
+  - Azure Migrate for discovery and migration
+- Organization Alignment
+  - Involve right people involve in the migration from technical as well as cloud governance standpoint
+  - Who is responsible and accountable for what
+
+![alt text](images/{150AAAA9-7245-481D-8B7E-10350C7087BE}.png)
+
+-
