@@ -66,14 +66,27 @@ As it is difficult to gather all together, So the best practise is
 
 ## 2. Planning Phase
 
-- Identify your digital estate
+- **1.Identify your digital estate**
   - If you have any on-premise infrastructure, then you create an invetory of existing digital assets that you plan to migrate to the cloud
   - Azure Migrate for discovery and migration
-- Organization Alignment
+- **2.Organization Alignment**
   - Identify and Involve right people involve in the migration from technical as well as cloud governance standpoint
   - Who is responsible and accountable for what
   - Organizations setup Cloud(COE), that ensure that there are specific set of people who are totally focused on cloud journey and address this cultural change, addressing the skills and systems, required to build the cloud competency.
-- Skill Readiness Plan
+- **3.Skill Readiness Plan**
   - Have a plan to build those skills, as these would be people resistant to new technologies and changes.
-- Cloud Adoption Plan - A comprehensive plan that brings together the development, Operations and Business teams towards a shared cloud adoption goal. - Here we have a plan that - Defined the pre-requisites - Prioritizes the workloads - 10 workload that can be migrated to the cloud - align assets to the workloads - Review your decisions along with other peers. - Do you want to migrate or innovate - There are 5 R's in migration strategy - Rehost - Revise - Refactor - Rebuild - Replace - Define rough timeline for releasing the project and go ahead with the initial estimates.
+- **4.Cloud Adoption Plan**
+  - A comprehensive plan that brings together the development, Operations and Business teams towards a shared cloud adoption goal.
+  - Here we have a plan that - Defined the pre-requisites - Prioritizes the workloads
+    - 10 workload that can be migrated to the cloud
+    - align assets to the workloads
+    - Review your decisions along with other peers.
+    - Do you want to migrate or innovate
+    - There are 5 R's in migration strategy
+      - Rehost
+      - Revise
+      - Refactor
+      - Rebuild
+      - Replace
+    - Define rough timeline for releasing the project and go ahead with the initial estimates.
   ![alt text](images/{150AAAA9-7245-481D-8B7E-10350C7087BE}.png)
