@@ -549,3 +549,39 @@ Components are independent by default.
 So the function can access to props, specific to that component.
 
 ![alt text](images/{7751A5E2-9CF1-4F17-BBC1-4B1C3E2ED7F4}.png)
+
+## Prop Drilling
+
+In react we can only pass the data down (Parent -> Child), not otherway around. So you have to pass the data through each componennt in between the source to destination component. This process is called `Prop Drilling`
+
+Alternative to this are
+
+- Context API
+- Redux
+- Other state liberary
+
+## Get a particular item from the list
+
+![alt text](images/{504D9589-EB52-4631-8747-D796F86B0B68}.png)
+
+![alt text](images/{0DA80666-AB56-46ED-BC03-364F735300A5}.png)
+
+`onClick={getBook(id)}` will not work, here it invokes the getBookId function immediately when the component renders, rather on button click.
+
+[FIX A] : Use Function reference
+
+![alt text](images/{1DB67E68-AF32-4341-94D3-AE94C5DEE30C}.png)
+
+[FIX B] : Use Anonymous Function
+
+![alt text](images/{C9862259-E314-461B-BFED-A79054DF48B4}.png)
+
+```
+const findBook(id) {
+  const book = books.find( (book) => book.id === id);
+  return book;
+}
+```
+
+## ES6 Modules
+
