@@ -441,7 +441,7 @@ const booksArray = [
 
 when we have smaller JSON object, But in case we have big JSON object, there is an alternate approach is, pass the entire JSON as props.
 
-![alt text]({8514032F-3074-4087-A4EA-FF41AF9363B8}.png)
+![alt text](images/{8514032F-3074-4087-A4EA-FF41AF9363B8}.png)
 
 **Third Approach**
 
@@ -471,6 +471,8 @@ Equivalent to
   key={book.id}
 />
 ```
+
+so `{...book}` flattens the book Object and pass each property like (id,title,author,image) as a separate prop to the Book component
 
 ![alt text](images/{4438B7EF-792E-44D9-9A6B-FFB4C52332A1}.png)
 
