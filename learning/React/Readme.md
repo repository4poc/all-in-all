@@ -799,3 +799,213 @@ With Vite you need to use:
 - fevicon.ico and logo.png still in the `public` folder
 - instead of `index.js`, it uses `main.jsx` or `main.tsx`
 - to spin up dev server `npm run dev` instead of `npm start`
+- `npm run build` create `dist` folder instead of `build` folder for bundling production ready application.
+
+## Advance React Topics
+
+- Hooks
+  - useState
+  - useEffect
+  - useRef
+  - useContext
+  - useReducer
+- Forms
+  - controlled/uncontrolled inputs, values,
+  - onChange
+  - FormData API
+- Other Topics
+  - Context API
+  - Prop Drilling
+  - Custom Hooks
+  - Performance
+
+## useState Hook
+
+`Problem Statement`
+
+The onClick increasing the count, but not updating it in the UI
+
+![alt text](images/{36535B3E-6982-4ADD-8846-07DC69E40C3F}.png)
+
+`Root Cause`
+
+We are not triggering the rerender of ReactJS component.
+
+So the vanila JS is working fine, but not React.
+
+`Fix`
+
+If we want to see the latest changes in the browser in React, we need to perform 2 tasks:
+
+1. Set a state value
+2. Trigger Rerender.
+
+## Set state value using useState Hook
+
+- Import it using Named import
+
+  ```
+  import {useState} from 'react'
+  ```
+
+- useState() is a function that returns an Array with two values
+  - state value (preserved with rerenders)
+  - function
+
+  ```
+  console.log(useState());
+  ```
+
+  ![alt text](images/{A27ED69B-A15C-420A-A0F3-377EBDC8B43A}.png)
+
+  ```
+  console.log(useState('bob'));
+  ```
+
+  ![alt text](images/{853602B6-DEC0-44FB-A19F-3C573A9D9655}.png)
+
+  ```
+  console.log(useState(1));
+  ```
+
+  ![alt text](images/{3F3D37AE-F9C5-4AF9-91F3-06F0C9EB2981}.png)
+
+  ```
+  const value = useState('hello')[0];
+  console.log(value);
+  ```
+
+  ![alt text](images/{B7C63367-39E7-4E81-957D-9314A76455B8}.png)
+
+  ```
+  const func = useState('hello')[1];
+  console.log(func);
+  ```
+
+  This print the default function, that control that value.
+
+  ```
+  const [count,setCount] = useState(0)
+
+  ```
+
+  ![alt text](images/{8E6380DA-FEED-4D69-854F-3F324CDE05B4}.png)
+
+  ![alt text](images/{FCABBA4E-AED4-47C9-B15A-A498D0E11FAF}.png)
+
+## Initial Render and Rerender
+
+- Initial Render happens when the application first loads or when the root component is first rendered. This is also called mounting the components
+
+- Rerender happens when the component's state or props change, and component need to be updated in the DOM, to reflect the changes. React uses Virtual DOM to optimize the process of updating the Actual DOM, so that only necessary changes are made.
+
+- We no longer need to import "react"
+
+  ```
+  No Longer needed..
+
+  import React from 'react'
+  ```
+
+## General rules for Hooks
+
+- Name start with `use` for both build-in and custom hooks
+- Invoked inside the Component body, not outside the Component body
+- Hooks does not work inside conditions like if-else.
+- Set function does not update state immediately. So don't expect synchronous behaviour.
+
+## useState with Arrays
+
+1. Import Data
+
+   ```
+   import {data} from './data'
+   ```
+
+   ```
+   [./data.js]
+
+   export const data = [
+    {
+      name: 'ram',
+      age: 10
+    },
+    {
+      name: 'sham',
+      age: 20
+    }
+   ]
+   ```
+
+2. Set Initial State
+
+   ```
+   import {useState} from 'react'
+   .
+   .
+
+   const [customers,setCustomers] = useState(data)
+
+   ```
+
+3. Render the Array items
+
+   ```
+    .
+    .
+    .
+
+   return (
+      <>
+        {
+          costomers.map( (customer,id) => {
+                                        const {id,name} = customer;
+
+                                        return (
+                                          <div key={id}>
+                                            <h1>{customer.name}<h1>
+                                            <button>Clear All</button>
+                                            <button>Delete Item</button>
+                                          </div>
+                                        );
+                                      }
+                        )
+        }
+      </div>
+   );
+
+   ```
+
+4. ClearAll and RemoteItem functionality
+
+   ```
+
+   const clearAll = () => {
+    setCustomers([])
+   }
+
+
+   const remoteItem = (id) => {
+    const newArray = customers.filter((customers) => customer.id !== id);
+
+    setCustomers(newArray);
+   }
+
+   ```
+
+5. Attach the ClearAll and RemoteItem functions to the HTML
+
+   ```
+   <button onClick={clearAll}>Clear All</button>
+
+   <button onClick={() => remoteItem(id)}>Delete Item</button>
+
+   ```
+
+   ![alt text](images/{878E077E-FAAB-45B4-BC04-C8211CF2B90E}.png)
+
+## useStae Optional or Mandatory
+
+- useState is quite useful, if you are adding/updating/deleting the items, if you are just rendering, then you donot need useState. But as a best practice to use useState, so in the future you can add functionality.
+
+  ![alt text](images/{CD18F8BC-E81D-47DC-89C1-E417BE135297}.png)
