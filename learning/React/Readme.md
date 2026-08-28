@@ -234,6 +234,8 @@ React Component is defined as a JS Function, but is used in JSX like `<Book\>` n
 **Inline CSS**
 In JSX, for inline CSS, use `style` prop, which uses a JavaScript Object Format, enable dynamic styling.
 
+The value should be an object with camelCase property names.
+
 ```
 return (
   <>
@@ -282,7 +284,7 @@ return (
 
 - {} in JSX can contains JavaScript expression returning a value
 - { expression } - Must return some value
-- { \` # {expression} \` } ` - string + expression
+- { \` # {expression} \` } : For string with expression
 
 ```
 const title = "Title Text"
@@ -411,9 +413,11 @@ So if we have multiple books, few have children, few not. Used in those scenario
 
 - Here the `number` prop passes the current index from the books array to the `Book` component
 
-  ```
-  <Book {...book} key={book.id} number={index} />;
-  ```
+- If you map over an array in JSX without providing a key prop, React will throw a warning in the console about missing keys.
+
+```
+<Book {...book} key={book.id} number={index} />;
+```
 
 ```
 const newArray = oldArray.map((item,key) => {
@@ -676,3 +680,122 @@ Deploy it onto platforms :
 - Azure
 - AWS
 - Netlify
+
+## Why is StrictMode included in a React project by default?
+
+StrictMode is included by default in many React project templates (such as those created with older versions of Create React App and some Vite templates) because it helps developers find potential problems early during development.
+
+```
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+```
+
+It enables additional development-time checks and warnings, such as:
+
+- Warning about deprecated APIs
+- Highlighting issues that may cause bugs in future React versions
+- Identifying unexpected side effects
+- Encouraging reusable and resilient components
+
+StrictMode:
+
+- ✅ Runs only in development
+- ✅ Does not affect production behavior
+- ✅ Helps detect bugs and unsafe patterns
+- ✅ Is included by default to encourage better React code quality and future compatibility
+
+When you run:
+
+```
+npm run dev
+
+or
+
+npm start
+```
+
+your tooling loads React's development build.
+
+This build includes:
+
+- StrictMode checks
+- Extra warnings
+- Detailed error messages
+- Development-only validations
+
+When you run
+
+```
+npm run build
+```
+
+the creates an optimized production bundle and uses React's production build.
+
+This build removes:
+
+- StrictMode double-invocation behavior
+- Most warning messages
+- Extra validation code
+
+![alt text](images/{5B6C3D30-18DC-4481-8923-DC0403A3FE2D}.png)
+
+- Only comes with `create-react-app`, not with `vite`
+
+## How can you pass the entire book object as a prop in a React component?
+
+Use the spread operator `{...Book}` to pass all properties at once.
+
+## In React, why is using camelCase important for attribute names in JSX
+
+Because JSX attributes map directly to JavaScript properties.
+
+JSX attributes like className correspond to JavaScript DOM properties.
+
+## JSX Comments
+
+```
+{/*  ---  */}
+```
+
+![alt text](images/{AB2CFB6E-F46C-4E08-A5BF-23FD44DDEC76}.png)
+
+## Vite
+
+- Faster than create-react-app
+- Out-of-the-box support for TypeScript, JSX, CSS
+
+## Vite Commands
+
+```
+npm create vite@latest <app-name> -- --template <template-name>
+```
+
+![alt text](images/{27E00EC9-ADD1-4722-9F54-5412CECE6EBD}.png)
+
+[package.json]
+
+![alt text](images/{1B27090E-B61C-478D-83B8-4C8FF200553C}.png)
+
+```
+npm install
+
+npm run dev       (http://localhost:5173, where create-react-app uses http://localhost:3000)
+
+
+npm run build
+```
+
+With Vite you need to use:
+
+- Need to use .jsx or .tsx extension
+- index.html is in the `src` folder, instead of `public`
+- fevicon.ico and logo.png still in the `public` folder
+- instead of `index.js`, it uses `main.jsx` or `main.tsx`
+- to spin up dev server `npm run dev` instead of `npm start`
