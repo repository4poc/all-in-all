@@ -1009,3 +1009,31 @@ If we want to see the latest changes in the browser in React, we need to perform
 - useState is quite useful, if you are adding/updating/deleting the items, if you are just rendering, then you donot need useState. But as a best practice to use useState, so in the future you can add functionality.
 
   ![alt text](images/{CD18F8BC-E81D-47DC-89C1-E417BE135297}.png)
+
+## Auto batching
+
+![alt text](images/{A30384A5-50A0-4F7B-BA04-0E6AF3D3BA90}.png)
+
+The below will perform only 1 rerender not 3 rerenders
+
+![alt text](images/{54119FE1-7740-4E87-BD1D-E9C50B41DBFB}.png)
+
+## useState with JS Object
+
+![alt text](images/{392DA90B-799B-42F2-9FA0-EC5302C1685A}.png)
+
+![alt text](images/{19558B52-91EC-4C0C-A12F-6F2562BAF766}.png)
+
+## useState is not synchronous
+
+See the console.log still prining the old value.
+
+![alt text]({D6428207-E019-4D6A-A412-081AD6A09614}.png)
+
+## useState function update approach
+
+Fix to the synch issue.
+
+![alt text](images/{8D66E6C1-472F-432F-8E57-C1B322C3B269}.png)
+
+![alt text](images/{CDB257EE-1304-4449-932E-FC44EA913909}.png)
