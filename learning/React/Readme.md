@@ -1037,3 +1037,69 @@ Fix to the synch issue.
 ![alt text](images/{8D66E6C1-472F-432F-8E57-C1B322C3B269}.png)
 
 ![alt text](images/{CDB257EE-1304-4449-932E-FC44EA913909}.png)
+
+## useEffect Hook
+
+`Problem Statement`
+
+![alt text](images/{C922E447-2FB3-4D6E-B76F-3C834F91CED3}.png)
+
+The sayHello() invoked on every rerender. So everytime component is rerendered, react create the function, and if there is invocation as shown it will invoke.
+
+So this might cause issue if seyHello function has code that update the state, in that case it will get into infinite loop.
+
+![alt text](images/{E0835E91-8108-49B2-9174-E51B23C9E231}.png)
+
+`Fix`
+
+useEffect Hook helps us to invoke code conditionally.
+
+![alt text](images/{3D032486-E069-489C-8041-CEEA8B95D095}.png)
+
+So in useEffect, the callback function will be invoked on every rerender by default
+
+![alt text](images/{6AFB3C36-CCE4-42FF-BCBB-34D4E340A444}.png)
+
+But if we pass the second argument as [], it will be invoked only on initial render
+
+![alt text](images/{9291E585-F690-4D0D-A96E-193704DE9AC9}.png)
+
+useEffect can not use async callback function, as async function return promise
+
+`This is not allowed`
+
+![alt text](images/{9FB13B54-2B99-4D34-864A-D444BB94AE0C}.png)
+
+`But invocing async function inside the callback function is OK`
+
+![alt text](images/{34A0DEC0-AFA6-4C4E-A177-05F01A42B1BB}.png)
+
+## useEffect - multiple Effects
+
+How we can have multiple effects in our application using depdendency array.
+
+The below useEffect make the callback function invoke only once, during initial render.
+
+![alt text](images/{41AC182A-CD0E-457D-AEDE-3709A40D38F4}.png)
+
+Here below the first useEffect will be invoked on updated of firstValue and SecondValue
+
+![alt text](images/{73D8F109-C16C-471A-ACB3-EBEA64C3564E}.png)
+
+Here below the first useEffect will be invoked on updated of firstValue and second useEffect will be invoked on SecondValue update.
+
+![alt text](images/{11C87E85-E771-4F2C-9A45-92AEDC8C038D}.png)
+
+## useEffect with Fetch API
+
+- fetch API, does not catch 404 error, so on exception, the catch block will be skipped.
+
+Here the error is from the first log inside try.
+
+![alt text](images/{7EDC2C34-A0B7-4120-8022-93C1319EC734}.png)
+
+To check the JS object properties, log the object
+
+![alt text](images/{9978E858-8982-4050-8B1F-2C9760BEEFAE}.png)
+
+![alt text](images/{342F2134-6BCA-4875-84E2-9C2E6D67A3AF}.png)
