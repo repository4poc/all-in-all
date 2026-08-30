@@ -976,7 +976,7 @@ If we want to see the latest changes in the browser in React, we need to perform
 
    ```
 
-4. ClearAll and RemoteItem functionality
+4. ClearAll and RemoveItem functionality
 
    ```
 
@@ -985,7 +985,7 @@ If we want to see the latest changes in the browser in React, we need to perform
    }
 
 
-   const remoteItem = (id) => {
+   const removeItem = (id) => {
     const newArray = customers.filter((customers) => customer.id !== id);
 
     setCustomers(newArray);
@@ -1004,7 +1004,7 @@ If we want to see the latest changes in the browser in React, we need to perform
 
    ![alt text](images/{878E077E-FAAB-45B4-BC04-C8211CF2B90E}.png)
 
-## useStae Optional or Mandatory
+## useState Optional or Mandatory
 
 - useState is quite useful, if you are adding/updating/deleting the items, if you are just rendering, then you donot need useState. But as a best practice to use useState, so in the future you can add functionality.
 
@@ -1028,7 +1028,7 @@ The below will perform only 1 rerender not 3 rerenders
 
 See the console.log still prining the old value.
 
-![alt text]({D6428207-E019-4D6A-A412-081AD6A09614}.png)
+![alt text](images/{047D11AC-E02A-4F57-BA08-AFA7F54F57C4}.png{D6428207-E019-4D6A-A412-081AD6A09614}.png)
 
 ## useState function update approach
 
@@ -1103,3 +1103,93 @@ To check the JS object properties, log the object
 ![alt text](images/{9978E858-8982-4050-8B1F-2C9760BEEFAE}.png)
 
 ![alt text](images/{342F2134-6BCA-4875-84E2-9C2E6D67A3AF}.png)
+
+## What will happen if you call setState directly within a function outside useEffect
+
+It will cause an infite render loop if the function is invoked during render.
+
+## What happens when the dependency array of a useEffect is left empty ([])
+
+The effect runs only once during the component's initial render.
+
+## Multiple Returns in React Component
+
+- JS reads from top to bottom. so make sure you load data before returning JSX
+
+- useState is used for
+  - defining state variable with initial value
+  - defing the function for update the state
+  - Components using the state variable will automatically rerender. (`Biggest Advantage`)
+
+- useEffect is used in two scenrios
+  - Load external data via fetch API, before the component return JSX.
+  - invoke a function on state value update
+
+- Component
+  1. Define the state variable using useState
+     ![alt text](images/{0B5ED73E-651C-438C-BFC0-57E14B7E179F}.png)
+  2. Defind the useEffects for
+     - Loading external data
+
+       ![alt text](images/{6F5EEEE9-1695-473D-8269-176C22ABB593}.png)
+
+  3. Multiple Return JSX based on state value
+
+     ![alt text](images/{22AED4EF-1FB9-4B44-8982-8032ED0D2688}.png)
+
+## Fetch skips 4xx or 5xx error - Work around
+
+![alt text]({EF54024E-AAC9-448D-AD29-41A60BF9013E}.png)
+
+![alt text](images/{66F5547F-21EE-40F1-B5D1-406230F6E4F0}.png)
+
+## Order Matters
+
+Always make sure you put the error returns first before successful fetch return.
+
+![alt text](images/{9070D31C-29AF-4D87-A7A6-9CB1C4877A62}.png)
+
+## Avoid putting function outside the useEffect
+
+Avoid below approach as it causes multiple issues
+
+![alt text](images/{E757B537-3B51-4C80-A247-52488B1146E2}.png)
+
+## React Hook rules
+
+- Never put hooks in condition like if-else
+- always put hooks before functions return, else will be skipped
+
+![alt text](images/{D27AB303-FC57-412A-AEEF-1E2A9EE566B3}.png)
+
+## What is the purpose of multiple returns in a React Component
+
+To handle conditional rendering scenarios like
+
+- loading
+- error
+- success states
+
+## What happend if you destructure a property from a null object in a React Component
+
+JavaScript throws an error, breakinig the application
+
+## When using fetch API, why is it important to check the resp.ok property after making a request
+
+To ensure the response status is successful (eg: 200 Ok)
+
+## JS "truthy" / "falsy"
+
+![alt text](images/{79FAAC95-B7F2-40BC-A3FD-1511921AD3E1}.png)
+
+![alt text](images/{A0E9F76F-7324-4ED6-A132-032BBBD87DF0}.png)
+
+![alt text](images/{7BB6F10B-F78B-4535-9FE0-22A0CFDB28F2}.png)
+
+## Short Circuit
+
+![alt text](images/{F6B07EBB-8317-4B30-A100-D238939F2ECB}.png)
+
+## Ternary Operator
+
+![alt text](images/{EEB70056-F873-4DBF-99AA-0B40F22C4005}.png)
