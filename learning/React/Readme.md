@@ -1299,4 +1299,55 @@ export default UserChallenge;
 
 ![alt text](images/{EA85BDB1-BD2A-4799-B866-9DD941B87594}.png)
 
-## Project Structure - Export Group
+## JSON Parsing
+
+![alt text](images/{995FACAA-DD47-4A44-B8CB-BB2B1DD32DD0}.png)
+
+![alt text](images/{22F51ED3-9AA5-4D26-8A68-211E05BA0D15}.png)
+
+With the map() => { return } - return JSX is mandatory
+
+## || vs ??
+
+const img = image?.[0]?.url || "default Image"
+
+const img = image?.[0]?.url ?? "default Image";
+
+```
+
+const url = "";
+console.log(url ?? "default Image");
+// ""
+
+const url = 0;
+console.log(url ?? "default Image");
+// 0
+
+const url = null;
+console.log(url ?? "default Image");
+// "default Image"
+
+const url = undefined;
+console.log(url ?? "default Image");
+// "default Image"
+```
+
+# What is the purpose of the optional chaining operator (?.) in JavaScript?
+
+![alt text](images/{363311AD-8358-4BAD-99DB-0CDC31760185}.png)
+
+It prevents errors when accessing properties of null or undefined objects by safely returning undefined without throwing error. (?.) checks if the object or property exists before trying to access it.
+
+## In the Person component, what is the fallback value for the nickName prop
+
+![alt text](images/{6075637A-837C-4614-9741-CC8382D384CD}.png)
+
+shakeAndBake
+
+## In the Person component, what happens if the images array is undefined?
+
+![alt text](images/{680F31CD-DF65-47CF-AA5F-0EB80AFA71EF}.png)
+
+An Avatar image is displayed
+
+## Forms in React
