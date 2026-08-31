@@ -1501,3 +1501,29 @@ If you working with form, make sure you have `name` property for all the HTML el
 3. Clear the Form after submit
 
    ![alt text](images/{157CB09B-0A0A-4F96-B9CF-30E5AE53DFE9}.png)
+
+## In the ControlledInputs component, what happens if you do not call e.preventDefault() in the handleSubmit function?
+
+Without e.preventDefault(). it will trigger default browser behaviour, which is reload the page on form submit
+
+## In the MultipleInputs component, what ensures that each input updates the correct property in the user state object
+
+```
+const handleChange = (e) => {
+  setUser({ ...user, [e.target.name]: e.target.value });
+};
+```
+
+Each HTML element must have `name` property.
+
+The name attribute on each input allows the handleChange function dynamically update the corresponding property in the state object using [e.target.name: e.target.value]
+
+## In the UncontrolledInputs component, how is the FormData API used to retrieve form data after submission?
+
+```
+  const formData = new FormData(e.currentTarget);
+  const newUser = Object.fromEntries(formData);
+  console.log(newUser);
+```
+
+The FormData Object create key-value pairs from input fields
