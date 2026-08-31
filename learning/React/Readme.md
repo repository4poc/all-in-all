@@ -1469,3 +1469,35 @@ export default UserChallenge;
 3. Define the handler function
 
    ![alt text](images/{563979A8-0F52-4F14-9BC5-1593871BB6AB}.png)
+
+## Select input
+
+1. Define the state variables
+
+   ![alt text](images/{AAECD95D-73B7-4222-86E7-AB6301418293}.png)
+
+   ![alt text](images/{CD8134F0-2CD8-455D-8323-AACA5E776C47}.png)
+
+2. Define the HTML Element
+
+   ![alt text](images/{52E68901-3600-4DF4-9565-1E38FDCB7B17}.png)
+
+3. Define the handler function
+
+   ![alt text](images/{FA437654-6EA2-4485-9624-EDE82B56245D}.png)
+
+## FormData API
+
+If you working with form, make sure you have `name` property for all the HTML elements, along with `id` property
+
+1. Define the `onSubmit={handleSubmit}` at form
+
+   ![alt text](images/{59235B37-DF3A-4C6E-976B-B7C0EC5B868A}.png)
+
+2. Access the form elements values using `FormData`
+
+   ![alt text](images/{E2FD699E-B8D6-48C5-887E-B3971E8D670D}.png)
+
+3. Clear the Form after submit
+
+   ![alt text](images/{157CB09B-0A0A-4F96-B9CF-30E5AE53DFE9}.png)
