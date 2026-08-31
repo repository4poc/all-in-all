@@ -1193,3 +1193,110 @@ To ensure the response status is successful (eg: 200 Ok)
 ## Ternary Operator
 
 ![alt text](images/{EEB70056-F873-4DBF-99AA-0B40F22C4005}.png)
+
+## Toggle Alert
+
+![alt text](images/{38C060AC-3FDF-486E-B4EE-02FE9AC0DE67}.png)
+
+## User Challenge
+
+![alt text](images/{A4FE0556-45B8-4934-B497-41F78721E582}.png)
+
+```
+import { useState } from "react";
+
+type User = {
+  name: string;
+};
+
+function UserChallenge() {
+  const [user, setUser] = useState<User | null>(null);
+
+  const login = () => {
+    setUser({ name: "varinder" });
+  };
+
+  const logOut = () => {
+    setUser(null);
+  };
+
+  return (
+    <>
+      {user ? (
+        <>
+          <h4>Hello there {user.name}</h4>
+          <button onClick={logOut}>LogOut</button>
+        </>
+      ) : (
+        <>
+          <h4>Please Login </h4>
+          <button onClick={login}>Login</button>
+        </>
+      )}
+    </>
+  );
+}
+
+export default UserChallenge;
+
+```
+
+## useEffect Function in a child component with condition
+
+If you render the child component conditionally, the useEffect even with empty dependency array will be executed everytime it is render and rerendered. As the component mounts and unmounts.
+
+![alt text](images/{92CEDAD2-2BB4-4F5A-A1B4-F3A74F2D9F9D}.png)
+
+```
+import { useState } from "react";
+
+function UserChallenge() {
+  const [toggle, setToggle] = useState(false);
+
+  const handleToggle = () => {
+    setToggle(!toggle);
+  };
+
+  return (
+    <>
+      <button className="btn" onClick={handleToggle}>
+        Click Toggle
+      </button>
+
+      {/* Ternary Operate always inside { } */}
+
+      {toggle ? <RandomComponent /> : <></>}
+
+      {toggle && <RandomComponent />}
+    </>
+  );
+}
+
+const RandomComponent = () => {
+  return <h1>Hello There</h1>;
+};
+
+export default UserChallenge;
+```
+
+## Project Structure - Folder
+
+`components/Navbar`
+
+![alt text](images/{B41ED8C8-3195-4ED5-9D40-997758C40EA1}.png)
+
+`index.jsx`
+
+![alt text](images/{B3EC5593-CB84-46A5-BE18-C5A3AFBD4B53}.png)
+
+## Project Structure - Named Export
+
+`ìndex.jsx`
+
+![alt text](images/{9C5F34B4-B6D4-4009-87E5-775EE67D70D3}.png)
+
+`App.jsx`
+
+![alt text](images/{EA85BDB1-BD2A-4799-B866-9DD941B87594}.png)
+
+## Project Structure - Export Group
