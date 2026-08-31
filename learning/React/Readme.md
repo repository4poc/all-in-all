@@ -1351,3 +1351,121 @@ shakeAndBake
 An Avatar image is displayed
 
 ## Forms in React
+
+![alt text](images/{4F6F1D0B-F539-4AB0-BC16-0D22F6883309}.png)
+
+## Controlled inputs
+
+![alt text](images/{78CD7DFC-7D86-4D8C-98A8-DFF0C5B1562B}.png)
+
+## User Challenge
+
+![alt text](images/{A857D7FF-B71D-4C94-BEE7-F24C42B05E7B}.png)
+
+```
+import { useState, useEffect } from "react";
+import { UsersData } from "./UsersData";
+
+function UserChallenge() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [users, setUsers] = useState(UsersData);
+
+  // Fix : React State Sync Issue
+  useEffect(() => {
+    console.log(email, password);
+  }, [email, password]);
+
+  // Handle Submit
+  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    setEmail(e.currentTarget.email.value);
+    setPassword(e.currentTarget.password.value);
+
+    const newuser = {
+      id: Date.now(),
+      name: e.currentTarget.email.value,
+      age: 10,
+    };
+
+    setUsers([...users, newuser]);
+  };
+
+  // Handle Remove
+  const handleRemove = (id: Number) => {
+    const newArray = users.filter((user) => user.id !== id);
+    setUsers(newArray);
+  };
+
+  return (
+    <>
+      <div className="container">
+        <form className="form" onSubmit={handleSubmit}>
+          <div className="form-row">
+            <label className="form-label" htmlFor="email">
+              Email
+            </label>
+            <input className="form-input" type="text" id="email"></input>
+          </div>
+
+          <div className="form-row">
+            <label className="form-label" htmlFor="password">
+              Password
+            </label>
+            <input className="form-input" type="password" id="password"></input>
+          </div>
+          <button type="submit">Submit</button>
+        </form>
+
+        <h3>List users</h3>
+        {users.map((user) => {
+          const { id, name, age } = user;
+          return (
+            <div key={user.id}>
+              <p>{user.name}</p>
+              <button onClick={() => handleRemove(id)}>Remote</button>
+            </div>
+          );
+        })}
+      </div>
+    </>
+  );
+}
+
+export default UserChallenge;
+```
+
+## Multiple Inputs
+
+1. Define the intitial state as Object intead,
+
+   ![alt text](images/{ECDAA25C-5BDB-49AD-AD20-828934B6B186}.png)
+
+2. Define onChange={handleChange} with each Fields has `name` property
+
+   ![alt text](images/{164BFECC-9654-4326-8D9E-5C1119B174BE}.png)
+
+   The `JSON property` and `HTML name ` much be same
+
+3. Add HTML with `name` and `onChange={handleChange}`
+
+   ![alt text](images/{3A21D7FC-7CDF-4672-B4AA-87EC0A6FCD27}.png)
+
+4. Define the `onSubmit={handleSubmit}` at form level
+
+   ![alt text](images/{4DABB83B-A710-4F06-99D3-D4FA7743FE42}.png)
+
+## Checkbox Input
+
+1. Define the state variable
+
+   ![alt text](images/{CEC0EFA9-5AD3-4628-BB7E-F5BC49D3FFDE}.png)
+
+2. Define the HTML Element
+
+   ![alt text](images/{7B4569D2-07D6-416E-B0FD-E867250D747B}.png)
+
+3. Define the handler function
+
+   ![alt text](images/{563979A8-0F52-4F14-9BC5-1593871BB6AB}.png)
