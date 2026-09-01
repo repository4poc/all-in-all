@@ -1527,3 +1527,89 @@ The name attribute on each input allows the handleChange function dynamically up
 ```
 
 The FormData Object create key-value pairs from input fields
+
+## useRef Hook
+
+Quite similar to useState Hook, persists state value.
+
+The only difference is updating state with useRef, does not trigger rerender.
+
+1. Define the state Variable
+
+   ![alt text](images/{1158CF52-B1D7-413A-A55F-95261878BFFA}.png)
+
+   ![alt text](images/{FB7650DE-E559-44A1-9284-A2E5AF518D78}.png)
+
+   React save the useRef variable as an JS Object with `current` property value set to the default value.
+
+   ![alt text](images/{101227E8-62DB-4787-9E19-EBBE7B52B51A}.png)
+
+   ![alt text](images/{BC613BB3-7FB0-4D47-B30E-439F4449AB1D}.png)
+
+2. Access the state value
+
+   ![alt text](images/{C3584682-F03F-454F-BEBA-378E71654906}.png)
+
+   ![alt text](images/{93025607-C93B-4D77-86C4-B3F6D5A67F70}.png)
+
+## useRef - Initial Render
+
+1.  Define a state variable and a ref variable
+
+    ![alt text](images/{AB47FA37-D633-4662-9766-C62B6B9D7C93}.png)
+
+    ![alt text](images/{DFFF4656-6DB8-4FFF-8ABA-73B398CD6C33}.png)
+
+2.  Define a useEffect, with dependency array with state variable `value`, so it gets triggered whenever `value` state variable value is changed.
+
+    ![alt text](images/{E4269AB0-343E-44A8-80CB-3BD1002AE1DE}.png)
+
+    ![alt text](images/{6798973E-E2A7-475E-8713-025D0293021B}.png)
+
+3.  Lets suppose you want to skill a function invocation at initialization and invoke afterwords whenever the state value changes, you can do as below
+
+    ![alt text](images/{2FB53A1F-DA29-453B-8148-85028E468515}.png)
+
+- During the page load, the `value` state variable is initialized.
+- As useEffect has dependency on `value`, it will be invoked, the if condition passes and it set the Ref variable ´isMounted´ to true and return, without invoking the `console.log("re-render")`. So on initialization of `value` state variable, we skipped the `console.log("re-render")` execution using the Ref variable `isMounteed`. Afterwords it will be invoked on every `value` state change as `isMounteed` is set to true during initialization of `value`
+
+We can think, why we can't use a simple variable, in that case we can't use `useRef{isMounted}` inside the HTML, to get the current value from an HTML element, without rerendering the HTML
+
+We can think, why we can't use another state variable, in that case we can't skip the rerender, `useState{isMounted}` inside the HTML, will perform the rerender.
+
+## How does the useRef hook assist in accessing DOM nodes in the example below?
+
+```
+const refContainer = useRef(null);
+
+useEffect(() => {
+  refContainer.current.focus();
+});
+```
+
+useRef stores the reference of DOM Object in `current` property
+
+## Custom Hook
+
+A reusable functionality can be implemented as a custom hook, if it is being used in multiple components
+
+![alt text](Images/{83EE0541-35B6-435B-8931-C673B5B7CD35}.png)
+
+Let's suppose we want to use this toggle functionality in multiple components, so rather than implementing this in a single component, we can put this functionality in a separte file as a custom hook, and can use in multiple components.
+
+Below are the steps
+
+1. Put the reusable function into a separate file with its state variables and function
+
+- Name must start with `use`
+- Must return `{state`,`setState}`
+
+  ![alt text](images/{AAB33BDE-89DA-466A-B6D1-CF96EA4FA9CA}.png)
+
+2. Use the custom Hook
+
+   ![alt text](images/{0ACEAAB6-9F82-458B-A318-AAB52E6286E6}.png)
+
+   ![alt text](images/{1FB290CA-21B7-4C0F-AEA4-4AF63AB31CDE}.png)
+
+   ![alt text](images/{EFE3AE46-2C92-4F27-92E4-7D2744CCB624}.png)
