@@ -1613,3 +1613,57 @@ Below are the steps
    ![alt text](images/{1FB290CA-21B7-4C0F-AEA4-4AF63AB31CDE}.png)
 
    ![alt text](images/{EFE3AE46-2C92-4F27-92E4-7D2744CCB624}.png)
+
+## Difference between React Component and Custom Hook
+
+- React Component has its own state and return JSX
+- Custom Hook has its own state and return `{state,setState}`
+
+- React Compoent name must be UpperCase
+- Custom Hook name starts with `use`Toggle
+
+- React Component is used as HTML with props
+- Custom Hook is used as a variable
+  ```
+  const {show,toggle} = useToggle(false)
+  ```
+
+## Create a custom Hook - Toggle
+
+![alt text](images/{0E69EE78-E1C9-44B3-AA0F-FC1A2BE7F494}.png)
+
+![alt text](images/{60B9CFAD-ED80-4B88-9345-A2AE7D14EEB8}.png)
+
+![alt text](images/{246526FD-B6E7-4151-A7B2-BA17AFD66BF6}.png)
+
+![alt text](images/{FB0662EF-26AE-4D6E-97DF-8E583F61F9FC}.png)
+
+## Custom Hooks - Fetch User
+
+![alt text](images/{A01F0342-E9D5-480B-A3C5-D4ACA19707B7}.png)
+
+1. Define the Custom Hook
+
+   ![alt text](images/{F5B97F84-4469-46A3-8CB2-017B49D79FF1}.png)
+
+   ![alt text](images/{115B9D0B-6310-4D12-B219-D212DA4A6CB8}.png)
+
+2. Use the Custom Hook
+
+   ![alt text](images/{4D0FB86F-CE56-40DB-8CFF-6D9824D9EB9C}.png)
+
+## Custom Hook - Generic Fetch
+
+1. Create custom hook with generic name
+
+   ![alt text]({37BFE1CB-46CB-4CD7-AF15-ED25F156A4B9}.png)
+
+2. Use the custom hook
+
+   ![alt text]({B719AC48-3093-429C-B6DD-BABC1DBAE10C}.png)
+
+## What is the primary purpose of custom hooks in React?
+
+To extract and encapsulate reusable logic, reduce duplication and simplify component code.
+
+## Context API
