@@ -1667,3 +1667,201 @@ Below are the steps
 To extract and encapsulate reusable logic, reduce duplication and simplify component code.
 
 ## Context API
+
+It solves the Prop Drilling issue, As prop drilling becomes complicated when we have many components in a page.
+
+`Problem Statement : Prop Drilling`
+
+![alt text](images/{113C8A69-BAC4-4464-BF46-DBD819817FD9}.png)
+
+![alt text](images/{8C5812BF-46FC-4ACA-98FE-FA3D46C3905B}.png)
+
+![alt text](images/{9CB5A728-1122-4F03-BE48-B52A114CF3C9}.png)
+
+`Solution - Context API`
+
+1. import the context from 'react'
+
+   ![alt text](images/{008C1EF7-902E-48A6-A602-74E0730A4149}.png)
+
+2. Initialize and export the context, so can be imported in other components
+
+   ![alt text](images/{47544259-B15F-4071-8400-581ED208E467}.png)
+
+   ![alt text](images/{47C9CEF5-D6AC-4C8A-A252-C73F774B2F17}.png)
+
+   The Context Object has Provider and Consumer
+
+3. In Apps.js, Enclose the Top Component into Context Provider and pass it value to store.
+
+   ![alt text](images/{C39F6A33-428D-436F-A547-B298760457CF}.png)
+
+4. In the consuming Component, use the `useContext` Hook to fetch the context.
+
+   ![alt text](images/{65BF76F7-A8D6-4538-9D66-36D15A086CFF}.png)
+
+## Context API - Custom Hook
+
+1. Define Custom Hook
+
+   ![alt text](images/{A5350021-3F90-40F7-8BE5-1E3A101C9AC1}.png)
+
+2. Use this Hook
+
+   ![alt text](images/{3A27449B-E995-476A-A3AC-A013950FDE59}.png)
+
+## Context API - Global Setup
+
+![alt text](images/{FD0737BD-AEA1-4693-96E4-AD4DDCFC8BBF}.png)
+
+```
+{name,setName}
+
+OR
+
+{name: name, setName: setName}
+```
+
+![alt text](images/{6D906AC2-7986-4AF7-A03E-6AE5CF61FD4C}.png)
+
+OR
+
+![alt text]({02BECBAB-3440-4ACA-A38E-166041F7C1C2}.png)
+
+`Steps regarding Global Context.`
+
+1. Define the Global Context with Custom Hook
+
+   ![alt text](images/{667EB367-6183-4B09-8CF6-262C349CF2EF}.png)
+
+2. Apply the Global Context at Root Component
+
+   ![alt text](images/{FD242C05-7FF9-4970-8C8C-2549C0DC381A}.png)
+
+3. Use the Global Context within a Component to access state.
+
+   ![alt text]({4F8BACEC-4D12-4577-B469-72704279C534}.png)
+
+## What is the purpose of the GlobalContext.Provider in the Context API?
+
+![alt text](images/{013604E1-74F6-43BD-BBE0-AFF3EE4097C2}.png)
+
+To provide access to user state and setUser function to all nested components
+
+## In the following UserContainer component, what will be displayed when user is null?
+
+![alt text](images/{BF875137-CA49-4FB1-89DA-A4A9FB76CD83}.png)
+
+Please login
+
+## Why would you use a custom hook with the Context API?
+
+![alt text](images/{D92DF1EE-BAE1-4FCC-B988-BFF93B86EAB5}.png)
+
+To Simplify access to context value and avoid importing useContext repeatedly.
+
+## useReducer Hook
+
+Light version of Redux (State Mananagement Library)
+
+As your project grows, it becomes difficult to manage state, as multiple developers work in your project.
+
+But using Redux library also include much boiler point code.
+
+React introduces useReducer to do the same job
+
+`Problem Statement`
+
+![alt text](images/{5C6AE63B-B607-4348-8867-DA5172686DD5}.png)
+
+![alt text](images/{2F2E1B35-DF1D-4720-828D-5100C2DD6173}.png)
+
+`Solution`
+
+**Option 1**
+
+![alt text](images/{66B1974F-BD7A-40E3-9B32-C06E6EED902E}.png)
+
+![alt text](images/{6FB5B5B2-6A6A-4081-A9B9-99218D25E24E}.png)
+
+**Option 2** - useReducer
+
+1. Import `useReducer` from 'react'
+
+   ![alt text](images/{C2E370CD-4B23-4702-8D6A-1D3C66BB94FF}.png)
+
+2. Define default state
+
+   ![alt text](images/{3EF260AF-6F4D-420B-B0C3-62CA52B59F45}.png)
+
+3. Defind Reducer Function
+
+   ![alt text](images/{A24EBA83-1DD3-49F3-A243-C0714C67B2AC}.png)
+
+   ![alt text](images/{569C40DB-01A6-4D7A-9ACC-227C90DA6AED}.png)
+
+   ![alt text]({031D3A50-BDD3-4B32-B39E-B667470DFE15}.png)
+
+   ![alt text]({C2664AF8-E854-414B-B9B9-696E62B542A4}.png)
+
+4. Define the `useReducer(reducer(),defaultState)` within the Top Component
+
+   ![alt text](images/{97013053-2702-4961-9436-85B95907C25C}.png)
+
+   ![alt text](images/{59EF31FD-6A9B-47BF-B600-CFD8B0BA4CB1}.png)
+
+5. Use `state` object
+
+   ![alt text]({7F233120-4A60-48F9-B3CE-F8CC427BCE99}.png)
+
+you dispatch an action, and the action is handled in the reducer.
+
+## useReducer - Actions and Default State
+
+![alt text](images/{E77A4BDF-B331-467C-99A8-349402AD2575}.png)
+
+![alt text](images/{C697E8EC-33ED-47A1-90E5-2989A0E2DB0C}.png)
+
+OR
+
+![alt text](images/{F9766985-CA61-44D4-A241-4F0DEDA60698}.png)
+
+## useReducer - Reset
+
+![alt text](images/{8A1760CA-62CB-4112-B51D-1D898A673FBE}.png)
+
+![alt text](images/{BD252579-499A-4F93-B0B3-AA7663022750}.png)
+
+## useReducer - Remove Item
+
+![alt text](images/{0599DB64-7A14-4D60-9E12-D5A6FDD04B69}.png)
+
+![alt text](images/{1DB92264-B689-4E34-9F83-41B721A135D4}.png)
+
+![alt text](images/{22ED7847-DFB5-434D-8D4F-8A9FD8D2574E}.png)
+
+## useReducer - Import/Export
+
+- Create action.js and put all actions there and import/export
+
+  ![alt text](images/{8C9DD756-3EC6-44EE-9BC3-8192C35ACACD}.png)
+
+  ![alt text](images/{445A5DFF-F92A-4A9E-83EC-41A04E529BB1}.png)
+
+- Create reducer.js and put the reducer there and import/export
+
+  ![alt text](images/{81497862-EDA0-44EC-A922-6647F302E46D}.png)
+
+  ![alt text](images/{53D5A1E5-ED2C-43A5-A73A-3906665D7443}.png)
+
+## What is the purpose of the action.type in a reducer function?
+
+Identifies the specific action to handle in the reducer function
+
+## What is the role of dispatch in the useReducer hook?
+
+```
+const [state, dispatch] = useReducer(reducer, defaultState);
+```
+
+It triggers an action to update the state using the reducer logic
