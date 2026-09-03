@@ -1865,3 +1865,80 @@ const [state, dispatch] = useReducer(reducer, defaultState);
 ```
 
 It triggers an action to update the state using the reducer logic
+
+## Performance Intro
+
+React is fast by default.
+
+Components rerender, when state or props changes.
+
+`Problem Statement`
+
+Here the entire `List` rerenders everytime, the `count` is changed
+
+![alt text]({C24086C8-722A-4EB6-8023-4F746E5438B7}.png)
+
+`Root Cause`
+
+When the parent element re-renders, even if the component's state or props have not changed.
+
+`Fix`
+
+1. useEffect() : will be invoked on first component render, not on rerender
+
+   ![alt text](images/{4349BC37-9381-498E-BF7F-CAB7C324D43F}.png)
+
+2. Encapsulate the state within the component.
+
+   ![alt text](images/{0AAE6289-6CAB-46B4-A0B1-28FBF51E95B9}.png)
+
+   `Validate by - Profiler`
+   - Recoerd
+     ![alt text](images/{DE3C1A78-D261-455A-80C6-A1CFAB9FB8A3}.png)
+
+   - Validate
+     ![alt text](images/{6D30C275-700E-44B8-B8FD-726B1F4264C5}.png)
+
+## Axios
+
+A promise based HTTP Client for browser and node.js
+
+## Install Axios
+
+```
+npm install axios
+```
+
+## GET Request
+
+![alt text](images/{49B2E920-9913-40E0-870F-A6A0C7F4727A}.png)
+
+![alt text](images/{B2C86B2F-FCA2-492E-A72E-A671DD12B8BA}.png)
+
+![alt text](images/{DAB11EE7-BE64-4A03-B4FB-C869A53BFBAB}.png)
+
+![alt text](images/{B88E8B60-9F48-4381-8B02-6111896B5BD9}.png)
+
+![alt text](images/{DBBA04FF-2B84-48AB-9A99-DF4E869A5A22}.png)
+
+![alt text](images/{24967562-F69B-43BF-8CE3-7EB3B4A22037}.png)
+
+Fetch API does not identity 4** 5** error code, the issue is handled by Axios
+
+## Setup Header
+
+![alt text](images/{A2790476-144A-4AEC-BB2E-B58BD00BA32C}.png)
+
+## POST Request
+
+![alt text](images/{CEB17446-05A3-41E7-A521-81F402800F63}.png)
+
+![alt text](images/{993A9F82-26E7-48E4-977F-51A87C2602DB}.png)
+
+## Global Axios Defaults
+
+![alt text](images/{76A0721E-ED05-4017-82CC-12BEA6139643}.png)
+
+![alt text](images/{36310F1E-8659-48C3-8021-63D25BFD1B3E}.png)
+
+![alt text](images/{403EBA05-76DE-4F2B-8EC1-BEAC09F450A6}.png)
