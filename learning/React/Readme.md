@@ -1942,3 +1942,177 @@ Fetch API does not identity 4** 5** error code, the issue is handled by Axios
 ![alt text](images/{36310F1E-8659-48C3-8021-63D25BFD1B3E}.png)
 
 ![alt text](images/{403EBA05-76DE-4F2B-8EC1-BEAC09F450A6}.png)
+
+## Tailwind CSS
+
+```
+C:\Users\varin\varinder_workspace\vscode-workspace\all-in-all\learning\TailwindCSS\Readme.md
+```
+
+## React Cache
+
+Manage and Cache Remote Data Fetching
+
+## Setup Express Project
+
+You can have a single vite react project with server application in that as well
+
+`Steps`
+
+1. Create a `server` folder parallel to `src`, add the index.ts file into that with express code
+2. Update package.json with
+   - Dependencies regarding express project
+
+     ```
+     npm install express cors morgan
+
+     npm install -D @types/express @types/cors @types/morgan @types/node
+     ```
+
+3. Update the package.json for scripts
+
+   ```
+    "server": "ts-node server/index.ts"
+   ```
+
+4. If you want to run both Client/Server application together
+
+   ```
+   npm install -D concurrently
+
+   "both": "concurrently \"npm run dev\" \"npm run server\"",
+   ```
+
+   ```
+   npm run both
+   ```
+
+## Axios Custom Instance
+
+`util.js`
+
+![alt text](images/{5F14DA1A-E625-4344-9749-84661FC18A37}.png)
+
+## HTTP Methods
+
+- Define the type of actions that can be performed on the web server
+-
+
+![alt text](images/{DBA574FB-5980-40C5-B00A-C781E042EA5A}.png)
+
+`CRUD Operations`
+
+![alt text](images/{21B912B7-EA64-435D-B47A-01A10C66E69A}.png)
+
+![alt text](images/{E0B8F922-BE7A-41F0-9284-481AD0F06285}.png)
+
+![alt text](images/{10D61605-98A1-4F10-99DE-36C71A0F64FB}.png)
+
+![alt text](images/{24E833FA-035A-4724-ABD2-8662CF9636D5}.png)
+
+## API Docs
+
+For each API you develop you need to provide the documentation regarding the usage of that applicaiton
+
+- How to authenticate
+- Different Endpoints with detailed description, input format, output format
+
+## React Query
+
+`Approach 1` : Using useEffect
+
+![alt text](images/{0AC407BB-C3A8-47C9-A34B-1E7A9BBBAF64}.png)
+
+Challenge : Keeping out app state in sync with the server.
+
+`Approach 2`
+
+![alt text](images/{69303868-2DDC-45DB-A822-50DA51C70D29}.png)
+
+## React Query - Installation
+
+```
+npm install @tanstack/react-query
+```
+
+![alt text](images/{0828025E-7C09-4736-A4ED-4DE59B5A351C}.png)
+
+In the latest version of React Query (V5), the 'isLoading' property has been replaced with 'isPending'.
+
+A common rule of thumb:
+
+- React Query → manages server state (data from APIs).
+- Context API → manages client/UI state that needs to be shared across components.
+
+If userData comes from an API, React Query already provides caching and sharing. Any component can access it, so no context API is needed.
+
+## First Query
+
+![alt text](images/{62F1B0EC-5652-47A5-AB42-0E17930693B1}.png)
+
+![alt text](images/{930EB2B6-7B5A-4163-B172-B5AD918D6396}.png)
+
+## Render Data
+
+![alt text](images/{16D0059E-5D65-4ADB-8D3D-4E5F38C9C7F5}.png)
+
+![alt text](images/{8C562C85-F160-4725-B106-97464A1FB712}.png)
+
+To see, how the applicaiton loads in slow mode
+
+![alt text](images/{F7C75B96-A16B-482E-804A-1AA370BD8A84}.png)
+
+## Error Handling
+
+![alt text](images/{D6C49028-4505-4239-A3E5-EF4C56D33FDA}.png)
+
+`Backend API`
+
+![alt text](images/{4D2171C4-B2FD-480C-ADB8-26466C59B209}.png)
+
+![alt text](images/{EF7787CF-0CA7-4358-9F87-2DE7E61FBC7F}.png)
+
+![alt text](images/{77EBACC7-FAB7-4D15-BE53-F2AC6720C723}.png)
+
+![alt text](images/{2BB6022C-BF83-4DF6-BF4F-35DFBB18AA3E}.png)
+
+![alt text](images/{0B3EC7E4-28A2-47C7-82AB-DCDE080BE3D2}.png)
+
+## Thunder Client
+
+VS Code Plugins for Testing API, like Postman
+
+![alt text](images/{5785E3DA-ED63-4B24-AB81-E456788DB38A}.png)
+
+## ADD - POST Request
+
+- useQuery : Hook for GET
+- useMutation : Hook for POST, PUT, DELETE
+
+![alt text](images/{9EAD8BA0-F281-44AE-8DB1-56B4588991EB}.png)
+
+![alt text](images/{F5860A82-1180-4E6A-8706-11D041BA5443}.png)
+
+![alt text](images/{349FE9FA-2416-47E5-9E28-3B341AA76D96}.png)
+
+![alt text](images/{8A2D34D4-9893-4CF9-BAE7-CCBA859349DF}.png)
+
+## useMutation Helper
+
+![alt text](images/{F9558DE3-344A-40A5-86EA-4A4D0DF43E50}.png)
+
+For server side errors
+
+![alt text](images/{8B98BB9A-7307-4FBD-AEE7-50BE61F99891}.png)
+
+`Toast Effect`
+
+![alt text](images/{D311EAC4-2B62-4A15-89A7-1914F5B422AD}.png)
+
+![alt text](images/{78218C4B-A71F-4D7F-AC65-1F835E2B23C7}.png)
+
+![alt text](images/{94D2F7DC-20E3-411B-817C-9F505300E1F4}.png)
+
+![alt text](images/{F4D66344-2AD5-4663-A00E-4B5B080FD08B}.png)
+
+So `invalidateQueries` keep the server state and client state in sync.
