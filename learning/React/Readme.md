@@ -613,7 +613,7 @@ const findBook(id) {
 ## JSX - String + expression
 
 ```
-<h1>`string ${expression}`</h1>
+<h1>{`Euro ${count + 1}`}</h1>
 ```
 
 JavaScript
@@ -1028,7 +1028,9 @@ The below will perform only 1 rerender not 3 rerenders
 
 See the console.log still prining the old value.
 
-![alt text](images/{047D11AC-E02A-4F57-BA08-AFA7F54F57C4}.png{D6428207-E019-4D6A-A412-081AD6A09614}.png)
+![alt text](images/{047D11AC-E02A-4F57-BA08-AFA7F54F57C4}.png)
+
+![alt text](images/{D6428207-E019-4D6A-A412-081AD6A09614}.png)
 
 ## useState function update approach
 
@@ -2115,4 +2117,16 @@ For server side errors
 
 ![alt text](images/{F4D66344-2AD5-4663-A00E-4B5B080FD08B}.png)
 
-So `invalidateQueries` keep the server state and client state in sync.
+So `invalidateQueries` keep the server state and application state in sync.
+
+## Edit Task
+
+![alt text](images/{7269C68E-9EBD-47C0-9A51-68A933B2D708}.png)
+
+![alt text](images/{DA19DB94-4376-4B95-BF26-F9469F0B4669}.png)
+
+## Delete Tasks
+
+![alt text](images/{50FBCD52-20D2-4ABD-BA19-C9BD1E99526A}.png)
+
+![alt text](images/{3079A947-6A6C-45A8-ADF4-DD392459F27F}.png)
