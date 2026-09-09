@@ -1,6 +1,14 @@
 ## Metrix
 
-- It is one of the piller in Observability along with Logging
+- It is one of the piller in Observability along with Logs and traces
+
+| Pillar  | Purpose                               | Example Tool               |
+| ------- | ------------------------------------- | -------------------------- |
+| Metrics | Measure system health and performance | Prometheus                 |
+| Logs    | Detailed event records                | ELK, Loki                  |
+| Traces  | End-to-end request tracking           | Jaeger, Tempo              |
+| Events  | Record significant changes            | Kubernetes Events, Datadog |
+
 - Metrics are based on numeric information
 - that measurements based on data points what is happening about a specific aspect
   - Aspects like

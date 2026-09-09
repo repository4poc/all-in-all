@@ -24,7 +24,9 @@
     - Workspace Type
       - Serverless
       - Hybrid (Custom Compute)
+
         ![alt text](images/{4675BEC4-AC84-4A4E-AC01-E43007FDA9A5}.png)
+
 - Managed Resource Group name:
 
 **Networking**
@@ -42,19 +44,105 @@
 
 - Key/Value
 
-## Databricks UI
+## How to access Databricks workspace
 
-![alt text](images/{887AA18C-2B2D-4FA7-9657-FBA2E38D4074}.png)
+![alt text](images/{1DE2889C-BB41-442D-A70E-7438BC7A47D4}.png)
 ![alt text](images/{52BA6125-4A86-4386-947C-920AA22EDEA5}.png)
 
-Each user has its own workspace folder
+## Databricks workspace UI Overview
 
 ![alt text](images/{7D8A50BA-00A3-4492-AC7F-7F7E280EED2B}.png)
 
-## Databricks Architecture
+Key menu items related to Data Engineering
+
+- Workspace : Container for
+  - Folders
+  - Notebooks
+  - Libraries
+  - Files
+  - Each user has its own workspace folder
+    ![alt text](images/{3EE094B3-A4CB-4B94-AC93-17C49F9D813C}.png)
+  - There is also shared folder used for collaboration
+  - If you right click, you can
+    - import
+      - Folders
+      - Notebooks
+      - ML Flows
+    - Download notebook files
+
+      ![alt text](images/{36D31C11-E29C-42C9-AE98-C9D8FD267C1F}.png)
+
+      ![alt text](images/{DB6C9C3B-B2C8-4B8F-88DB-11FA39DE29F9}.png)
+
+- Catelog : Allow you to view and interact with the
+  - Tables
+  - Views
+  - Volumns
+  - Files
+
+  That already exists within databricks
+
+  ![alt text]({52F985E9-F4D1-4AD4-B9C7-DD593EDE0A96}.png)
+
+- Jobs & Pipelines : allow you to create
+  - Data Ingestion Pipeline
+  - ETL Pipeline
+  - Lake Flow jobs : Allow you to run notebooks and pipelines to run automatically
+
+    ![alt text](images/{E1554BD1-7279-4E4E-920D-F29FD481ED37}.png)
+
+- Compute : Allow you to create various types of computes Like
+  - Jobs computes
+  - SQL warehouses
+  - Cluster Pools : Reduce compute startup time
+  - Cluster Policies
+
+  ![alt text](images/{40057CD8-C9CC-4A43-8873-181351F0F2B9}.png)
+
+- Data Ingestion : Allows you to
+  - Create tables from local files
+  - Upload data into databricks
+  - Integrates with 3rd party data ingestion engine like firetrone
+
+  ![alt text](images/{D104ADBA-919A-490B-B142-202D0E441042}.png)
+
+## Databricks Architecture Overview
 
 ![alt text](images/{D5AF2924-1005-4700-A4D4-1341482F66D7}.png)
+
+Databricks architecture is mainly devided into 2 parts
+
+- Control Plan
+  - UI : Access Databricks from Browser
+  - Compute Orchestration : Compute Cluster Management - scaling
+  - Unity Catelog : Data Governance and Access Management
+  - Query & Code : Query storage and workspace meta data storage
+- Compute Plan : Where data processing takes place
+  - Compute Types
+    - Classic Compute : Databricks provision cluster directly within your subscription
+    - Serverless : Use databricks subscription rather than your subscription, use compute resources readily available within its subscription, reduce cluster startup time.
+
+- Workspace cloud storage : Created within your subscription, When you create a databricks workspace
+  - In Azure it is Azure Datalake storage Gen2
+  - In AWS, its is S3 Bucket
+  - In GCP, its Google Cloud Storage
+  - Store system data like
+    - Notebook revisions
+    - Job run details
+    - Spark logs
+    - Temp data
+  - Tied to the workspace lifecycle
+
+**Subscription View**
+
 ![alt text](images/{0752843F-57AF-495B-9112-EF92180E5C63}.png)
+
+Customer Resource onCloud and onPremise resources
+
+## Resources crated on DB workspace Creation
+
+All these resource created under your subscription, not databricks subscription
+
 ![alt text](images/{354CA403-BAA1-4E2C-B8A3-710941A57E8F}.png)
 
 ## Databricks Compute

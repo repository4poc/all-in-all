@@ -1129,7 +1129,9 @@ The effect runs only once during the component's initial render.
 
 - Component
   1. Define the state variable using useState
+
      ![alt text](images/{0B5ED73E-651C-438C-BFC0-57E14B7E179F}.png)
+
   2. Defind the useEffects for
      - Loading external data
 
@@ -1141,7 +1143,7 @@ The effect runs only once during the component's initial render.
 
 ## Fetch skips 4xx or 5xx error - Work around
 
-![alt text]({EF54024E-AAC9-448D-AD29-41A60BF9013E}.png)
+![alt text](images/{EF54024E-AAC9-448D-AD29-41A60BF9013E}.png)
 
 ![alt text](images/{66F5547F-21EE-40F1-B5D1-406230F6E4F0}.png)
 

@@ -317,3 +317,191 @@ Utilities for controlling gutters between grid and flexbox items.
 | `2xl:`          | 1536px    | Large desktop monitors, ultrawide screens                  |
 
 ![alt text](images/{BD36C61D-165C-417C-81E8-2DD135366AF9}.png)
+
+`Examples`
+
+## Text Size
+
+```
+      <p className='text-3xl'>Hello</p>
+
+```
+
+## Text Color
+
+```
+      <p className='text-blue-500'>About</p>
+
+```
+
+![alt text](images/{40381A26-676E-49B0-A912-BBC01AB2298B}.png)
+
+## font
+
+```
+font-bold
+font-light
+font-thin
+```
+
+```
+      <p className='text-3xl text-blue-700 font-bold'>{count}</p>
+```
+
+## Background
+
+```
+bg-blue-700
+
+bg-red-500
+```
+
+## Padding
+
+```
+p-1
+
+p-0
+
+pb-1
+
+pt-2
+
+pr-2
+
+pl-2
+
+px-1
+
+py-1
+```
+
+```
+      <button className='bg-blue-700 p-1' onClick={handleCount}>
+        Count
+      </button>
+
+```
+
+## Rounded
+
+```
+      <button className='bg-blue-700 rounded' onClick={handleCount}>
+        Count
+      </button>
+```
+
+## Flex
+
+```
+flex  gap-x-9
+
+flex flex-col items-center gap-x-9
+
+flex flex-row items-center gap-y-9
+```
+
+```
+    <div className='flex flex-col items-center'>
+      <p className='text-3xl text-blue-700 font-bold'>{count}</p>
+      <button className='bg-blue-700 rounded p-1' onClick={handleCount}>
+        Count
+      </button>
+    </div>
+```
+
+## Grid
+
+```
+grid md:grid-cols-2 gap-8
+```
+
+```
+<section>
+    <h1 className='text-blue-900 font-bold text-4xl'>Tour List</h1>
+    <div className='grid md:grid-cols-2 gap-8'>
+        {
+            data.map((tour) => {
+                return (
+                    <div id={tour.id} key={tour.id}>
+                        <Link href={`/tours/${tour.id}`}>{tour.name}</Link>
+                    </div>
+                );
+            })
+        }
+    </div>
+</section>
+
+```
+
+![alt text](images/{A866C002-B737-407D-B0CF-A546F36B9D44}.png)
+
+## Gap : Gap between containing items
+
+```
+gap-x-9
+```
+
+```
+    <nav className='py-4 flex gap-x-8'>
+      <Link href='/'>Home</Link>
+      <Link href='/about'>About</Link>
+      <Link href='/contact'>Contact</Link>
+      <Link href='/counter'>Counter</Link>
+      Counter
+    </nav>
+```
+
+## Margin
+
+```
+mt-1
+
+mb-2
+
+mx-2
+
+my-2
+
+mx-auto  - Bring it at center on x-axis
+```
+
+## MAX WIDTH
+
+```
+max-w-7xl  (Full Width of a laptop screen)
+
+max-w-3xl
+
+max-w-2xl
+```
+
+This below combination bring the div with width `max-x-3xl` at center of screen
+
+```
+mx-auto max-x-3xl
+```
+
+![alt text](images/{21EE4BC6-67D8-44A0-B1BE-50465CE6C791}.png)
+
+## Border
+
+```
+border-[color]-[10-700]
+
+border-red-300
+
+border-[0-7]
+
+```
+
+## rounded object-cover
+
+```
+<Image
+    src={mapsImg}
+    alt={tour.name}
+    className='rounded object-cover'
+    >
+</Image>
+```

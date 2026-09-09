@@ -89,4 +89,19 @@ As it is difficult to gather all together, So the best practise is
       - Rebuild
       - Replace
     - Define rough timeline for releasing the project and go ahead with the initial estimates.
-  ![alt text](images/{150AAAA9-7245-481D-8B7E-10350C7087BE}.png)
+      ![alt text](images/{150AAAA9-7245-481D-8B7E-10350C7087BE}.png)
+
+## 3. Readyness Phase - Landing Zone
+
+Before Deploying your applicaiton onto Cloud we have to look into design considerations as an architect.
+
+`Design Considerations` = Landing Zone
+
+- Security
+- Identity & Access Management
+- Connectiviity
+- Monitoring
+- Governance
+- DevOps
+
+`Landing Zone` : A full blown environment for an application
