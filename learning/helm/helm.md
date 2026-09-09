@@ -277,7 +277,7 @@ helm show values <chart>
 
 **values.yaml**
 
-![alt text]({E3020C5F-29A4-4E65-BE99-5594B2518FE5}.png)
+![alt text](images/{E3020C5F-29A4-4E65-BE99-5594B2518FE5}.png)
 
 ## How to push helm chart to container registry (Azure ACR, AWS ECR, Docker Hub, GitLab)
 
