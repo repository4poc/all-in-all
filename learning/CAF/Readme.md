@@ -200,3 +200,127 @@ You can migrate your on-premise applications using
      - How about innovate the deployment using Kubernetes services
 
 So in the phase we look into the ways to host workloads and data in the landing Zone, and start capitalizing the benefits of cloud.
+
+5. Governance Phase
+
+- Create a of rules / policies to control the environment
+- Enhance the data security & manages the risk
+- Ensure your IT spend is minimized
+
+**5 Diciplences of Cloud Governance**
+
+- Cost Management
+  - Cost Management Center
+    - Current and Estimated Cost
+      ![alt text](images/{5FF0E80F-CC1D-4C1C-BEBF-6730E86D0DC7}.png)
+  - Power BI Desktop Connector
+    - Great Visuals and Reports
+- Security Baseline
+  - Ensure expose minimal attach surface
+  - Azure Key Vault (secrets,certificates,Encryption Keys)
+    - Encrypt Virutal Drives
+    - Encrypt Paas
+  - Azure Entra ID / Active Directory
+    - For Hybrid Entities
+    - Multi-Factor Authentication
+  - Azure Policity
+    - To ensure Geo Regional Restrictions
+    - Detect Malitious Activitiees
+  - Defender For Cloud
+    - Monitor Security Health of Networks and Resources
+    - Detect Malitious Activitiees
+    - Detect Vulnerabilities
+  - Azure Monitor
+    - Detect and Alert Malitious Activities
+    - Monitor Security Health of Networks and Resources
+  - Storage Encryption Service
+  - Backup and Desaster recovery
+
+    `Security Features provided per Service`
+
+    ![alt text](images/{1B80DB5A-BC26-436C-8B57-C61F705FA703}.png)
+
+- Resource Consistency
+  - ARM Templates
+  - Azure Blueprints
+  - Azure Automation
+  - Azure Monitoring
+    - Application Insights
+      - You get telemetry data
+    - Log Analytics
+      - Aggregating all log data into single repository
+    - Azure Monitor REST API
+- Identity Baseline
+  - In Hybrid Environment, you can sync on-premise Active Directory with the Azure EntraID. So make the fedaration possible
+  - Azure AD - Sync Mechanisms : Sync On Premises uses with Azure AD.
+    - Password Hash Sync (Default)
+    - Pass Through Authentication (PTA)
+      - An Agent run on one or more on-premises servers and the sync is done after secure password verification with the on-premises authentication agent.
+      - Secure Password Exchange happens with your PTA Agent on-premises.
+  - IAM in control
+    - Whom you grant permission
+    - What you grant permission for.
+    - Principal of least previleges.
+  - Do you have particular workflow, that grants permissions to the users. Eg. Do you have a reviewer and approver process in place.For this you can use `Previleged Access Manageent` in Azure EntraID (Premium Feature)
+- Deployment Acceleration
+  - Reduce Time to market
+  - Automation and DevOps
+  - Tools
+    - Azure DevOps
+      - Deployment Pipelines
+      - Manage Configuration Drifts
+    -
+
+`Cloud is a journey, not a destination. As you ride in this journey you see different milestornes`
+
+- When you start this journey, you dont know what will be the final state of this cloud adoption
+
+## Which phase of CAF focus on Business Outcomes like Cost Reduction and Improved Agility
+
+Strategy Phase
+
+The Strategy phase helps define business goals, drivers, and justification for cloud adoption. It ensures alignment between Cloud Technology and Business Outcomes.
+
+## As per CAF, before deploying a workload, what should you implement to prepare the environment for scalable and secure Operations
+
+Azure Landing Zone
+
+It provides a read-made foundation with identity, security, networking and governence already configured following best practices.
+
+## Which CAF phase focues on modernize workloads.
+
+Adopt Phase
+
+It covers workload deployment, modernization, and scaling using tools, automation, and practices aligned to cloud-native principles.
+
+## Which CAF phase focus on policy enforcement and risk reduction
+
+Governance
+
+It focues on defining guardrails using Azure Policy, RBAC, Cost Controls, and resource consistency to manage risk in the cloud environments.
+
+## You are tasked with deploying a new Azure Environment using CAF. You want to follow a step-by-step guide for setup. What should you follow to implement best practices for the deployment
+
+The CAF radiness - Azure Setup Guide
+
+It provies step-by-step instructions for preparing your azure subscription and environment for deployment, ensuring compliance and scalability.
+
+## Your company is starting its cloud adoption journey using Azure. The CIO asks you to ensure the cloud strategy aligns with business priorities and regulatory needs. You're reviewing the Cloud Adoption Framework (CAF) to guide the process. What should you focus on first to ensure alignment?
+
+![alt text](images/{D98B0C3C-7D5A-43AE-BBCB-84D2F3B4FAFE}.png)
+
+## You’re working with a healthcare client subject to HIPAA regulations. You’re in the Planning phase of the Azure CAF and need to set up an Azure Landing Zone. What is the most appropriate next step?
+
+![alt text](images/{4F7CEC44-C613-4705-8618-1A3E69006E17}.png)
+
+# Helen Ward, Director of Infrastructure & Operations, is skeptical about the proposed Azure Landing Zone architecture. She’s concerned about over-engineering and disruption to existing systems. How should you address her concern?
+
+![alt text](images/{D4585141-C5CC-47F2-A2C2-F9AA46BC741A}.png)
+
+## During the CAF Readiness phase, your team identifies that your organization lacks a formal tagging policy for Azure resources, and identity management is inconsistent across business units. What should be your next action?
+
+![alt text](images/{7C07B893-50C0-4422-9C7C-771CD3657837}.png)
+
+## Your cloud team is entering the “Adopt” phase of Azure CAF. Business leadership wants quick wins to demonstrate value. What should you prioritize?
+
+![alt text](images/{46C6A885-C653-4926-A5B5-7394EDF04573}.png)
