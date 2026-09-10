@@ -93,15 +93,110 @@ As it is difficult to gather all together, So the best practise is
 
 ## 3. Readyness Phase - Landing Zone
 
-Before Deploying your applicaiton onto Cloud we have to look into design considerations as an architect.
+**What is a Landing Zone**
 
-`Design Considerations` = Landing Zone
+Before Deploying your applicaiton onto Cloud we have to look into `Design Considerations` as an architect. All these `Design Considerations` collectively refered as a `Landing Zone`.
 
+So `Landing Zone` Provides a full blown environment for an application, and the environment provides all the 6 design considerations.
+
+1. Scalability
+
+2. Security
+   - How data at transit and data at rest is secured
+
+3. Identity & Access Management
+   - Who gonna have access to these resources
+   - How your customers will access the data
+
+4. Connectiviity
+   - Connectiviy between resources like VM and Database
+     - Inbound and Outbound traffic
+     - Would you have network segmentation
+     - How about connectivity to other PAAS services
+     - How about Name Resolution Services like DNS
+
+5. Monitoring
+   - Do you want to use any kind of service that provide inventory of all the applications ans servers
+   - How about visibility
+   - Do you want to create dashboard
+
+6. Governance
+   - Keep Track the cost
+   - Optimize your cloud Investment
+   - Create Budgets
+
+7. DevOps
+   - Platform Automation
+   - DevOps Design Considerations
+   - Product Development Lifecycle
+   - Storing your code as far as Infrastructure As A Code is concerned
+
+So before your application is design, you gonna have infrastructure in Azure ready for your application to be hosted in Azure.
+
+So when the developer pushes the code through DevOps Automation, the application just sit inside this landing zone and automatically have all these integration design capabilities.
+
+So Landing Zone is a concept that is providing an application a destination to sit in.
+
+So all these design consideration you have to finalize before deploying a landing zone.
+
+**Landing Zone Architecture**
+
+![alt text](images/{5475134B-64C4-4038-BA1B-509B972A73F1}.png)
+
+It is having a decentralized model, as services are sitting in individual subscriptions, not in one.
+
+This type of design, provide your application
+
+- Full blown security
+- RBAC
+- Satisty the auditing team as you have Governance in place
+- Satisty the security team as you have Security in place
+- Network team can also provide therir inputs as far as network topology and connectivity is concerned.
+
+So Landing zone is an environment that provides full blown
+
+- Scalability
 - Security
 - Identity & Access Management
-- Connectiviity
+- Connectivity/Networking
 - Monitoring
 - Governance
 - DevOps
 
-`Landing Zone` : A full blown environment for an application
+for your application
+
+## 4. Adoption Phase
+
+Now you have landing zone in place, its time to host your applications
+
+These applications can be your existing on-premise application or start builing cloud-native applications
+
+![alt text](images/{BBE0CA6A-5332-4690-B306-479132B1BE1D}.png)
+
+**Migration Approaches**
+You can migrate your on-premise applications using
+
+1. Life and Shift / Rehosting:
+   - which is the fastest way to move your on-premise workloads to the cloud.
+
+2. Modernize the application
+   - take a bit loger time. But lays a rock solid foundation for the application in the cloud because it provide cost and performance efficiency
+
+   - When you think of modernizing your applications, you would like to relook at your on-premise applications, and see
+     - what components of the application are not utalized.
+     - What can be redone with the modern frameworks and moderan programming platforms.
+     - Can we use PAAS instead of hosting it onto VM
+     - Can we use Managed Services from the Cloud Provider
+
+3. Innovate
+   - Another way to adopt cloud is by innovating
+   - Innovation part of the Adoption phase focus of providing gratest business value
+   - Here we start putting out thoughts together and see where we can go from here.
+     - If we use CICD Pipelines
+     - Can I innovate with AI Based Applications or Agents
+     - Can I use ML algorithms
+     - How about cognitivite engines like Vision API or Face Recognition System.
+     - How about data related services in Azure
+     - How about innovate the deployment using Kubernetes services
+
+So in the phase we look into the ways to host workloads and data in the landing Zone, and start capitalizing the benefits of cloud.
