@@ -25,7 +25,7 @@ export async function createUser(formData: FormData) {
 }
 
 export const fetchUsers = async (): Promise<User[]> => {
-  const result = await readFile('users.json', { encoding: 'utf8' });
+  const result = await readFile('Users.json', { encoding: 'utf8' });
   return result ? JSON.parse(result) : [];
 };
 
@@ -34,7 +34,7 @@ export const saveUser = async (user: User): Promise<void> => {
 
   users.push(user);
 
-  await writeFile('users.json', JSON.stringify(users, null, 2), {
+  await writeFile('Users.json', JSON.stringify(users, null, 2), {
     encoding: 'utf8',
   });
 };
