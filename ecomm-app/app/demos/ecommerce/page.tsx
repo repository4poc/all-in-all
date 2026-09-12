@@ -1,5 +1,9 @@
-import React from 'react';
+import FeaturedProducts from '@/components/demos/ecommerce/FeaturedProducts';
 
 export default function page() {
-  return <div>ECom Demo</div>;
+  return (
+    <>
+      <FeaturedProducts />
+    </>
+  );
 }

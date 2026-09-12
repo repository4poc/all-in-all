@@ -5,6 +5,7 @@ import Navbar from '@/components/navbar/Navbar';
 import Container from '@/components/global/Container';
 import Providers from './providers';
 import Footer from '@/components/footer/footer';
+import { Separator } from '@/components/ui/separator';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
       <body className='min-h-full flex flex-col' suppressHydrationWarning>
         <Providers>
           <Navbar />
+          <Separator />
           <Container className='py-20'>{children}</Container>
           <Footer />
         </Providers>
