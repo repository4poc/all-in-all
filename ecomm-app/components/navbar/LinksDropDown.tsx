@@ -46,7 +46,7 @@ export function LinksDropDown() {
             <>
               <DropdownMenuItem>
                 <SignInButton mode='modal'>
-                  <button>Login</button>
+                  <button className='w-full text-center'>Login</button>
                 </SignInButton>
               </DropdownMenuItem>
 
@@ -54,7 +54,7 @@ export function LinksDropDown() {
 
               <DropdownMenuItem>
                 <SignUpButton mode='modal'>
-                  <button>Register</button>
+                  <button className='w-full text-center'>Register</button>
                 </SignUpButton>
               </DropdownMenuItem>
             </>

@@ -6,6 +6,8 @@ import { LogOut } from 'lucide-react';
 import { DarkMode } from './DarkMode';
 import { LinksDropDown } from './LinksDropDown';
 import { Suspense } from 'react';
+import { FcAbout } from 'react-icons/fc';
+import AboutLink from './AboutLink';
 
 export default function Navbar() {
   return (
@@ -15,6 +17,7 @@ export default function Navbar() {
           <Logo />
           <NavSearch />
           <div className='flex items-center gap-4'>
+            <AboutLink />
             <CartButton />
             <DarkMode />
             <LinksDropDown />
