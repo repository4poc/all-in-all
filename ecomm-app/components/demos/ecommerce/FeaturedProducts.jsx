@@ -1,6 +1,7 @@
 import SectionTitle from '@/components/global/SectionTitle';
 import ProductsGrid from '@/components/demos/ecommerce/ProductsGrid';
 import productsArray from '@/utils/products';
+import { Suspense } from 'react';
 
 async function FeaturedProducts() {
   //const products = await fetchFeaturedProducts();
