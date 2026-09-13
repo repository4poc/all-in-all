@@ -22,6 +22,7 @@ import { links } from '@/utils/links';
 import Link from 'next/link';
 import { useAuth, SignInButton, SignUpButton } from '@clerk/nextjs';
 import SignOut from './SignOut';
+import { toast } from '../ui/toast';
 
 export function LinksDropDown() {
   const { userId } = useAuth();

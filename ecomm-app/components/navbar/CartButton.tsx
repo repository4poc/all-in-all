@@ -1,12 +1,18 @@
+'use client';
+
 import Link from 'next/link';
 import { Button } from '../ui/button';
 import { LuShoppingCart } from 'react-icons/lu';
-async function CartButton() {
+import { usePathname } from 'next/navigation';
+function CartButton() {
+  const pathname = usePathname();
+
   return (
     <Button
       variant='outline'
       size='icon'
       className='flex justify-center items-center relative'
+      hidden={!pathname.endsWith('/demos/ecommerce')}
     >
       <Link href='/cart'>
         <LuShoppingCart />
