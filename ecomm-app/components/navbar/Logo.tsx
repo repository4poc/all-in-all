@@ -16,7 +16,7 @@ export default function Logo() {
             Varinder Gupta
           </span>
           <span className='text-xs md:text-sm font-medium text-slate-300 tracking-wide'>
-            Digital Profile
+            &nbsp; Digital Profile
           </span>
         </div>
       </a>
