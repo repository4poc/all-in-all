@@ -62,7 +62,7 @@ export function LinksDropDown() {
             <>
               {links.map((link) => (
                 <DropdownMenuItem key={link.href}>
-                  <Link href={link.href} className='capitalize'>
+                  <Link href={link.href} className='capitalize w-full'>
                     {link.label}
                   </Link>
                 </DropdownMenuItem>

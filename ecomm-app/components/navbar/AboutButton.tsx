@@ -7,7 +7,9 @@ export default function AboutButton() {
   return (
     <div>
       <Button variant='outline' className='relative'>
-        <Link href='/about'>About</Link>
+        <Link href='/about' className='font-serif w-full'>
+          About
+        </Link>
       </Button>
     </div>
   );

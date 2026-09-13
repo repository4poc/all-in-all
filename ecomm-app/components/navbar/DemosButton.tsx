@@ -7,7 +7,7 @@ export default function DemosButton() {
   return (
     <div>
       <Button variant='outline' className='relative'>
-        <Link href='/demos' className='font-serif'>
+        <Link href='/demos' className='font-serif w-full'>
           Demos
         </Link>
       </Button>
