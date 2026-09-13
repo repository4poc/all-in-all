@@ -21,7 +21,7 @@ import {
 import { links } from '@/utils/links';
 import Link from 'next/link';
 import { useAuth, SignInButton, SignUpButton } from '@clerk/nextjs';
-import SignOutLink from './SignOutLink';
+import SignOut from './SignOut';
 
 export function LinksDropDown() {
   const { userId } = useAuth();
@@ -71,7 +71,7 @@ export function LinksDropDown() {
               <DropdownMenuSeparator />
 
               <DropdownMenuItem>
-                <SignOutLink />
+                <SignOut />
               </DropdownMenuItem>
             </>
           )}

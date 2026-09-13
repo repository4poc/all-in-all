@@ -1,11 +1,12 @@
 'use client';
 
 import { SignOutButton } from '@clerk/nextjs';
-import Link from 'next/link';
 import { toast } from '../ui/toast';
 
 export default function SignOut() {
-  const onClickHanlder = () => {
+  const onClickHandler = () => {
+    console.log('------');
+
     toast.add({
       type: 'success',
       description: 'Logout Successful.',
@@ -14,9 +15,9 @@ export default function SignOut() {
 
   return (
     <SignOutButton>
-      <Link href='/' onClick={onClickHanlder}>
+      <button type='button' onClick={onClickHandler}>
         Logout
-      </Link>
+      </button>
     </SignOutButton>
   );
 }
