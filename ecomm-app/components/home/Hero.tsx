@@ -4,7 +4,7 @@ import { HeroCarousel } from './HeroCarousel';
 export default function Hero() {
   return (
     <>
-      <div className='flex lg:flex-row sm:flex-col lg:gap-50 sm:gap-15 items-center max-w-7xl'>
+      <div className='flex lg:flex-row sm:flex-col lg:gap-50 sm:gap-15 items-center lg:max-w-7xl'>
         <div>
           <h1 className='text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-[1.1] tracking-tight opacity: 1; transform: none; dark: text-fuchsia-500;'>
             Varinder Gupta

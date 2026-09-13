@@ -29,7 +29,7 @@ export default function NavSearch() {
       className='max-w-xs'
       value={value}
       onChange={(e) => handleSearch(e.target.value)}
-      hidden={!pathname.startsWith('/demos/ecommerce')}
+      hidden={!pathname.endsWith('/demos/ecommerce')}
     />
   );
 }
