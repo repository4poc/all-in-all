@@ -13,10 +13,10 @@ export default function Navbar() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <nav className='bg-cyan-950 dark:bg-muted max-w-auto py-4'>
-        <Container className='flex flex-row justify-between items-center'>
+        <Container className='flex flex-col lg:flex-row justify-between items-center'>
           <Logo />
           <NavSearch />
-          <div className='flex items-center gap-4'>
+          <div className='flex items-center gap-4 mt-4'>
             <AboutButton />
             <DemosButton />
             <CartButton />
