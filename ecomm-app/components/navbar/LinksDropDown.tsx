@@ -46,7 +46,9 @@ export function LinksDropDown() {
             <>
               <DropdownMenuItem>
                 <SignInButton mode='modal'>
-                  <button className='w-full text-center'>Login</button>
+                  <button className='capitalize w-full text-left mx-1'>
+                    Login
+                  </button>
                 </SignInButton>
               </DropdownMenuItem>
 
@@ -54,7 +56,9 @@ export function LinksDropDown() {
 
               <DropdownMenuItem>
                 <SignUpButton mode='modal'>
-                  <button className='w-full text-center'>Register</button>
+                  <button className='capitalize w-full text-left mx-1'>
+                    Register
+                  </button>
                 </SignUpButton>
               </DropdownMenuItem>
             </>
@@ -62,7 +66,10 @@ export function LinksDropDown() {
             <>
               {links.map((link) => (
                 <DropdownMenuItem key={link.href}>
-                  <Link href={link.href} className='capitalize w-full'>
+                  <Link
+                    href={link.href}
+                    className='capitalize w-full text-left mx-1'
+                  >
                     {link.label}
                   </Link>
                 </DropdownMenuItem>
