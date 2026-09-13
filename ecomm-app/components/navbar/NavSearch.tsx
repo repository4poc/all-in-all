@@ -26,7 +26,7 @@ export default function NavSearch() {
     <Input
       placeholder='Search product...'
       type='search'
-      className='max-w-xs mt-4'
+      className='max-w-xs mt-4 text-white'
       value={value}
       onChange={(e) => handleSearch(e.target.value)}
       hidden={!pathname.endsWith('/demos/ecommerce')}
