@@ -10,10 +10,12 @@ async function FeaturedProducts() {
   if (products.length === 0) return <EmptyList />;
 
   return (
-    <section className='flex flex-col items-center justify-center'>
-      <SectionTitle text='featured products' />
-      <ProductsGrid products={products} />
-    </section>
+    <Suspense fallback={<div>Loading...</div>}>
+      <section className='flex flex-col items-center justify-center'>
+        <SectionTitle text='featured products' />
+        <ProductsGrid products={products} />
+      </section>
+    </Suspense>
   );
 }
 export default FeaturedProducts;
