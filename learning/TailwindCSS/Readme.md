@@ -391,7 +391,22 @@ py-1
       </button>
 ```
 
-## Flex
+## flex
+
+This makes the element a flex container, so its children are arranged in a row by default.
+
+![alt text](images/{897AF530-0C2E-4E94-A606-B71158FDC044}.png)
+
+![alt text](images/{0BB177A4-DEBD-48EC-A9AD-FF55103A6E1A}.png)
+
+```
+flex            // display: flex
+flex-row        // horizontal (default)
+flex-col        // vertical
+items-center    // align children vertically in center
+justify-center  // align children along main axis center
+gap-4           // spacing between children
+```
 
 ```
 flex  gap-x-9
@@ -410,10 +425,51 @@ flex flex-row items-center gap-y-9
     </div>
 ```
 
+## justify-between
+
+puts equal space between flex items.
+
+![alt text](images/{DFA45460-7180-42EB-A2D2-4D07F71923DC}.png)
+
+![alt text](images/{B4F0BEBB-D753-4E7D-AC36-A36657D51B8F}.png)
+
 ## Grid
+
+grid grid-cols-\* and flex flex-col are different layout systems.
+
+- flex flex-col
+
+  Uses Flexbox and arranges items in a single column.
+
+  ![alt text](images/{81048081-B66F-4E72-A8A1-ABDEC42EEE65}.png)
+
+- grid grid-cols-\*
+
+  Uses CSS Grid and arranges items into rows and columns.
+
+  ![alt text](images/{AAEA0653-0047-4BFF-AE52-09BF562BB946}.png)
 
 ```
 grid md:grid-cols-2 gap-8
+```
+
+Equivalent to
+
+```
+grid lg:grid-cols-12 gap-4
+```
+
+grid-cols-12 is a Tailwind CSS utility class that defines a grid with 12 equal-width columns.
+
+```
+| 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |10 |11 |12 |
+```
+
+```
+<div className="grid grid-cols-12 gap-4">
+  <div className="col-span-3">Sidebar</div>
+  <div className="col-span-9">Main Content</div>
+</div>
 ```
 
 ```
@@ -504,4 +560,70 @@ border-[0-7]
     className='rounded object-cover'
     >
 </Image>
+```
+
+## Capitalize
+
+It makes the first letter of each word uppercase.
+
+```
+<p className="capitalize">hello world</p>
+```
+
+**Displays as:**
+
+Hello World
+
+```
+      <Button variant='default' size='sm' className='capitalize'>
+        default variant
+      </Button>
+```
+
+**Display**
+
+![alt text](images/{B1B37DDD-ACCB-4788-A02B-422F30CAD921}.png)
+
+## mx-auto
+
+mx-auto only works if the element has a width smaller than its container
+
+The x stands for the horizontal axis (left and right margins).
+
+```
+<div className="w-64 mx-auto bg-blue-200">
+  Centered box
+</div>
+```
+
+This creates a box with width 16rem (w-64) and centers it horizontally within its parent.
+
+## max-w-6xl
+
+Keep this content no wider than 1152px
+
+| Class       | Width          |
+| ----------- | -------------- |
+| `max-w-xl`  | 36rem (576px)  |
+| `max-w-2xl` | 42rem (672px)  |
+| `max-w-4xl` | 56rem (896px)  |
+| `max-w-6xl` | 72rem (1152px) |
+| `max-w-7xl` | 80rem (1280px) |
+
+So `max-w-6xl mx-auto` is essentially saying:
+
+Keep this content no wider than 1152px, and center it on the page
+
+| Class       | Effect                                                        |
+| ----------- | ------------------------------------------------------------- |
+| `max-w-6xl` | `max-width: 72rem` (1152px)                                   |
+| `mx-auto`   | Centers the element horizontally (`margin-left/right: auto`)  |
+| `px-1`      | Adds horizontal padding (`padding-left/right: 0.25rem` = 4px) |
+
+## cn()
+
+cn() often uses tailwind-merge, it can intelligently resolve conflicting Tailwind classes
+
+```
+cn("px-2", "px-4")
 ```
