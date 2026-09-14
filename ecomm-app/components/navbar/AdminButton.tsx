@@ -8,6 +8,8 @@ export default async function AdminButton() {
 
   const isAdminUser = userId === process.env.ADMIN_USER_ID;
 
+  console.log(`isAdminUser:  ${isAdminUser}`);
+
   return (
     <>
       <Button
