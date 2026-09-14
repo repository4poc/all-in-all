@@ -8,6 +8,7 @@ import { LinksDropDown } from './LinksDropDown';
 import { Suspense } from 'react';
 import AboutButton from './AboutButton';
 import DemosButton from './DemosButton';
+import AdminButton from './AdminButton';
 
 export default function Navbar() {
   return (
@@ -19,6 +20,7 @@ export default function Navbar() {
           <div className='flex items-center gap-4 mt-4'>
             <AboutButton />
             <DemosButton />
+            <AdminButton />
             <CartButton />
             <DarkMode />
             <LinksDropDown />
