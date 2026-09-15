@@ -8,7 +8,7 @@ export function CardImage({ product }: { product: ProductType }) {
       <CardContent className='p-2'>
         <div className='relative h-70 md:h-48 rounded overflow-hidden '>
           <Image
-            src={product.url}
+            src={product.image}
             alt=''
             fill
             priority

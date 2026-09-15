@@ -21,7 +21,7 @@ function ProductsGrid({ products }: { products: ProductType[] }) {
   return (
     <div className='pt-12 grid gap-4 sm:grid-cols-1 lg:grid-cols-3'>
       {filteredProducts.map((product) => {
-        const { id, name, price, url } = product;
+        const { id, name, price, image } = product;
         const productId = product.id;
         const dollarsAmount = price;
 
