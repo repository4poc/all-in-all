@@ -1,4 +1,5 @@
 import { PrismaClient } from '@/lib/generated/prisma/client';
+
 import { PrismaPg } from '@prisma/adapter-pg';
 
 const prismaClientSingleton = () => {
