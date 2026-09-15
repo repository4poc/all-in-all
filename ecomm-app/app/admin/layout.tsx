@@ -12,11 +12,11 @@ export default function DashboardLayout({
       <h2 className='text-2xl pl-8'>Dashboard</h2>
       <Separator className='mt-2' />
       <div className='mt-12 grid grid-cols-12'>
-        <div className='lg:col-span-2 col-span-4'>
+        <div className='lg:col-span-2 col-span-5'>
           <Sidebar />
         </div>
 
-        <div className='lg:col-span-10 col-span-8'>{children}</div>
+        <div className='lg:col-span-10 col-span-7'>{children}</div>
       </div>
     </>
   );
