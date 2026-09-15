@@ -3,6 +3,7 @@ export type Demo = {
   title: string;
   description: string;
   href: string;
+  techstack?: string;
 };
 
 export const demos = [
@@ -10,6 +11,8 @@ export const demos = [
     id: 1,
     title: 'E-commerce Application',
     description: 'An E-Comm Application with shoping cart and payment facility',
+    techstack:
+      'Next.js, React, TypeScript, Prisma, Supabase, Node.js, Tailwind CSS, Clerk, PostgreSQL, shadcn/ui, Vercel',
     href: '/demos/ecommerce',
   },
   {

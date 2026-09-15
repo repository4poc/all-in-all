@@ -1,4 +1,5 @@
 import { Demo } from '@/utils/demos';
+import { Separator } from '@base-ui/react/separator';
 import Link from 'next/link';
 
 type DemosListProps = {
@@ -28,10 +29,23 @@ export default function DemosList({ demos }: DemosListProps) {
                   <path d='M2 12h20M12 2v20' strokeWidth='2'></path>
                 </svg>
               </div>
-              <h3 className='text-xl font-semibold mb-3 dark:text-black'>
+              <h2 className='font-semibold mb-3 dark:text-black'>
                 {demo.title}
-              </h3>
-              <p className='text-gray-600 text-sm'>{demo.description}</p>
+              </h2>
+              <p className='text-gray-600 text-sm text-left'>
+                {demo.description}
+              </p>
+              <Separator className='mt-4' />
+              <>
+                <p className='w-full pl-1 text-black text-sm font-bold text-left'>
+                  Technology Stack
+                </p>
+                <ul className='w-full list-disc pl-5 text-black text-sm text-left'>
+                  {demo.techstack?.split(',').map((tech) => {
+                    return <li key={tech}>{tech}</li>;
+                  })}
+                </ul>
+              </>
             </div>
           </Link>
         );
