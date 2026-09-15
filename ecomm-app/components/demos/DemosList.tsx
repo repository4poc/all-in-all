@@ -1,5 +1,5 @@
 import { Demo } from '@/utils/demos';
-import { Separator } from '@base-ui/react/separator';
+import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
 
 type DemosListProps = {

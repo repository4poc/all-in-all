@@ -2,11 +2,12 @@ import SectionTitle from '@/components/global/SectionTitle';
 import ProductsGrid from '@/components/demos/ecommerce/ProductsGrid';
 import productsArray from '@/utils/products';
 import { Suspense } from 'react';
+import { fetchFeaturedProducts } from '@/utils/prismaactions';
 
 async function FeaturedProducts() {
-  //const products = await fetchFeaturedProducts();
+  const products = await fetchFeaturedProducts();
 
-  const products = productsArray;
+  //const products = productsArray;
 
   if (products.length === 0) return <EmptyList />;
 
