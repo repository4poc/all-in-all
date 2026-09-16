@@ -38,3 +38,10 @@ export const saveUser = async (user: User): Promise<void> => {
     encoding: 'utf8',
   });
 };
+
+export const createProductAction = async (
+  prevState: any,
+  formData: FormData,
+): Promise<{ message: string }> => {
+  return { message: 'string' };
+};

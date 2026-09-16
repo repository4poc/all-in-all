@@ -37,7 +37,7 @@ export default function DemosList({ demos }: DemosListProps) {
               </p>
               <Separator className='mt-4' />
               <>
-                <p className='w-full pl-1 text-black text-sm font-bold text-left'>
+                <p className='w-full pl-1 mt-4 text-black text-sm font-bold text-left'>
                   Technology Stack
                 </p>
                 <ul className='w-full list-disc pl-5 text-black text-sm text-left'>

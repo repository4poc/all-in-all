@@ -12,7 +12,7 @@ export const demos = [
     title: 'E-commerce Application',
     description: 'An E-Comm Application with shoping cart and payment facility',
     techstack:
-      'Next.js, React, TypeScript, Prisma, Supabase, Node.js, Tailwind CSS, Clerk, PostgreSQL, shadcn/ui, Vercel',
+      'Next.js, React, TypeScript, Prisma, Supabase, Node.js, Tailwind CSS, Clerk, PostgreSQL, shadcn/ui, Vercel, Faker Library',
     href: '/demos/ecommerce',
   },
   {
