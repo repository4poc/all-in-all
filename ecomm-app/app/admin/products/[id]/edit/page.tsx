@@ -3,13 +3,13 @@ import {
   updateProductAction,
   updateProductImageAction,
 } from '@/utils/actions';
-import FormContainer from '@/components/form/FormContainer';
-import FormInput from '@/components/form/FormInput';
-import PriceInput from '@/components/form/PriceInput';
-import TextAreaInput from '@/components/form/TextAreaInput';
-import { SubmitButton } from '@/components/form/SubmitButton';
-import CheckboxInput from '@/components/form/CheckboxInput';
-import ImageInputContainer from '@/components/form/ImageInputContainer';
+import FormContainer from '@/components/global/form/FormContainer';
+import FormInput from '@/components/global/form/FormInput';
+import PriceInput from '@/components/global/form/PriceInput';
+import TextAreaInput from '@/components/global/form/TextAreaInput';
+import { SubmitButton } from '@/components/global/form/SubmitButton';
+import CheckboxInput from '@/components/global/form/CheckboxInput';
+import ImageInputContainer from '@/components/global/form/ImageInputContainer';
 
 async function EditProductPage({
   params,

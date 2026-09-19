@@ -1,5 +1,5 @@
-import { Label } from '../ui/label';
-import { Input } from '../ui/input';
+import { Label } from '../../ui/label';
+import { Input } from '../../ui/input';
 
 function ImageInput() {
   const name = 'image';

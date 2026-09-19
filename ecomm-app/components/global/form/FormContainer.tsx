@@ -2,7 +2,7 @@
 
 import { useFormState } from 'react-dom';
 import { useActionState, useEffect } from 'react';
-import { toast } from '../ui/toast';
+import { toast } from '../../ui/toast';
 
 import { actionFunction } from '@/utils/types';
 

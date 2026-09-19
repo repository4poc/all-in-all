@@ -1,10 +1,10 @@
-import CheckboxInput from '@/components/form/CheckboxInput';
-import FormContainer from '@/components/form/FormContainer';
-import FormInput from '@/components/form/FormInput';
-import ImageInput from '@/components/form/ImageInput';
-import PriceInput from '@/components/form/PriceInput';
-import { SubmitButton } from '@/components/form/SubmitButton';
-import TextAreaInput from '@/components/form/TextAreaInput';
+import CheckboxInput from '@/components/global/form/CheckboxInput';
+import FormContainer from '@/components/global/form/FormContainer';
+import FormInput from '@/components/global/form/FormInput';
+import ImageInput from '@/components/global/form/ImageInput';
+import PriceInput from '@/components/global/form/PriceInput';
+import { SubmitButton } from '@/components/global/form/SubmitButton';
+import TextAreaInput from '@/components/global/form/TextAreaInput';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';

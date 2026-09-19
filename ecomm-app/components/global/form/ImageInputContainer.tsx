@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Image from 'next/image';
-import { Button } from '../ui/button';
+import { Button } from '../../ui/button';
 import FormContainer from './FormContainer';
 import ImageInput from './ImageInput';
 import { SubmitButton } from './SubmitButton';
