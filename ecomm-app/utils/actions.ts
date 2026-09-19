@@ -201,3 +201,17 @@ export const updateProductImageAction = async (
     return renderError(error);
   }
 };
+
+export const fetchAllProducts = async ({ search = '' }: { search: string }) => {
+  return db.product.findMany({
+    where: {
+      OR: [
+        { name: { contains: search, mode: 'insensitive' } },
+        { company: { contains: search, mode: 'insensitive' } },
+      ],
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+};
