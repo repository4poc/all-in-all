@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { createProductAction } from '@/utils/actions';
+import { Separator } from '@base-ui/react/separator';
 import { faker } from '@faker-js/faker';
 
 function CreateProductPage() {
@@ -17,10 +18,13 @@ function CreateProductPage() {
   const description = faker.lorem.paragraph({ min: 10, max: 12 });
   return (
     <section>
-      <h1 className='text-2xl font-semibold mb-8 capitalize'>create product</h1>
+      <Separator className='mt-2' />
+      <h1 className='text-2xl font-semibold mb-8 capitalize text-center'>
+        create product
+      </h1>
       <div className='border p-8 rounded-md'>
         <FormContainer action={createProductAction}>
-          <div className='grid gap-4 md:grid-cols-2 my-4'>
+          <div className='grid gap-4 md:grid-cols-2 my-2'>
             <FormInput
               type='text'
               name='name'

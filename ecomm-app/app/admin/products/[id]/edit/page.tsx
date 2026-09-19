@@ -41,7 +41,12 @@ async function EditProductPage({
               label='product name'
               defaultValue={name}
             />
-            <FormInput type='text' name='company' defaultValue={company} />
+            <FormInput
+              type='text'
+              name='company'
+              label='company'
+              defaultValue={company}
+            />
             <PriceInput defaultValue={price} />
           </div>
           <TextAreaInput

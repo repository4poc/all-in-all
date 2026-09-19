@@ -11,7 +11,7 @@ type CheckboxInputProps = {
 function CheckboxInput({
   name,
   label,
-  defaultChecked = false,
+  defaultChecked = true,
 }: CheckboxInputProps) {
   return (
     <div className='flex items-center space-x-2'>

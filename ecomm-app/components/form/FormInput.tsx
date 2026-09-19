@@ -26,7 +26,7 @@ export default function FormInput({
         id={name}
         name={name}
         type={type}
-        className='mt-4'
+        className='mt-2'
         defaultValue={defaultValue}
         required
       />
