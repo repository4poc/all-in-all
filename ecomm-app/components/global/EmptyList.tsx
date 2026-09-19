@@ -1,13 +1,12 @@
-import React from 'react';
+import { cn } from '@/lib/utils';
 
-export default function EmptyList({
-  text = 'No Items Found.',
+function EmptyList({
+  heading = 'No items found.',
+  className,
 }: {
-  text: String;
+  heading?: string;
+  className?: string;
 }) {
-  return (
-    <>
-      <h2>{text}</h2>
-    </>
-  );
+  return <h2 className={cn('text-xl', className)}>{heading}</h2>;
 }
+export default EmptyList;
