@@ -18,18 +18,16 @@ async function SingleProductPage({
   return (
     <section>
       <div className='mt-6 grid gap-y-8 lg:grid-cols-2 lg:gap-x-16'>
-        {/* IMAGE FIRST COL */}
-        <div className='relative h-full'>
+        <div className='relative aspect-square w-full'>
           <Image
             src={image}
             alt={name}
             fill
-            sizes='(max-width:768px) 100vw,(max-width:1200px) 50vw, 33vw'
+            className='rounded object-cover'
+            sizes='(max-width:508px) 100vw,(max-width:700px) 25vw,25vw'
             priority
-            className='w-full rounded object-cover'
           />
         </div>
-        {/* PRODUCT INFO SECOND COL */}
         <div>
           <div className='flex gap-x-8 items-center'>
             <h1 className='capitalize text-3xl font-bold'>{name} </h1>
