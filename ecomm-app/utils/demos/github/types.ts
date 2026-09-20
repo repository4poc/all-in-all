@@ -1,27 +1,40 @@
-export interface GitHubRepo {
-  id: number;
-  name: string;
-  full_name: string;
-  html_url: string;
-  description: string | null;
-  stargazers_count: number;
-  forks_count: number;
-  language: string | null;
-}
+export type LanguageEdge = {
+  node: {
+    name: string;
+  };
+  size: number;
+};
 
-export interface GitHubUser {
-  login: string;
-  name: string | null;
-  avatar_url: string;
-  html_url: string;
-  bio: string | null;
-  public_repos: number;
-  followers: number;
-  following: number;
-}
-
-export interface GitHubLanguage {
+export type Repository = {
   name: string;
-  count: number;
-  percentage: number;
-}
+  description: string;
+  stargazerCount: number;
+  forkCount: number;
+  url: string;
+  languages: {
+    edges: LanguageEdge[];
+  };
+};
+
+export type User = {
+  name: string;
+  avatarUrl: string;
+  bio: string;
+  url: string;
+  repositories: {
+    totalCount: number;
+    nodes: Repository[];
+  };
+  followers: {
+    totalCount: number;
+  };
+  following: {
+    totalCount: number;
+  };
+  gists: {
+    totalCount: number;
+  };
+};
+export type UserData = {
+  user: User;
+};

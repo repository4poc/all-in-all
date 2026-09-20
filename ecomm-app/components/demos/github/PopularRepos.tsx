@@ -1,4 +1,4 @@
-import { type Repository } from '@/utils/demos/github/types';
+import { Repository } from '@/utils/demos/github/types';
 import { calculateMostStarredRepos } from '@/utils/demos/github/utils';
 
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';

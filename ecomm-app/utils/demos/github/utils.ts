@@ -1,4 +1,4 @@
-import { Repository } from './types';
+import { LanguageEdge, Repository } from './types';
 
 /**
  * Calculates the top 5 most forked repositories
@@ -66,7 +66,7 @@ export const calculatePopularLanguages = (
     if (repo.languages.edges.length === 0) {
       return;
     }
-    repo.languages.edges.forEach((language) => {
+    repo.languages.edges.forEach((language: LanguageEdge) => {
       const { name } = language.node;
       languageMap[name] = (languageMap[name] || 0) + 1;
     });
