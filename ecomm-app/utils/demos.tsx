@@ -17,17 +17,20 @@ export const demos = [
   },
   {
     id: 2,
-    title: 'Global Compliance Alignment',
+    title: 'Search GitHub User',
     description:
-      'Aligned with ESRS, GRI, BRSR, and TCFD frameworks for universal ESG compatibility.',
-    href: '/demos/ecommerce',
+      ' Map your ESG topics to SDGs and international frameworks for transparent impact.',
+    href: '/demos/github',
+    techstack:
+      'GraphQL, Apollo Client, Next.js, React, TypeScript, Tailwind CSS',
   },
   {
     id: 3,
-    title: 'Sustainability Mapping',
+    title: 'DataBricks and GenAI',
     description:
-      ' Map your ESG topics to SDGs and international frameworks for transparent impact.',
-    href: '/demos/ecommerce',
+      'The project is based on Apache Spark and Build Custom Machine Learning, Deep Learning, GenAI models and RAG Chatbots.',
+    techstack: 'PySpark, Medallion Architecture, ',
+    href: '/demos/databricks',
   },
   {
     id: 4,

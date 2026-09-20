@@ -17,28 +17,30 @@ export default function Hero() {
             className='flex flex-wrap items-center gap-6 text-sm text-slate-400'
             style={{ opacity: '1', transform: 'none' }}
           >
-            {['Cloud Developer', 'Platform Engineer', 'DevOps Engineer'].map(
-              (skill) => {
-                return (
-                  <div className='flex items-center gap-2' key={skill}>
-                    <svg
-                      className='w-5 h-5 text-emerald-400'
-                      fill='none'
-                      viewBox='0 0 24 24'
-                      stroke='currentColor'
-                    >
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth='2'
-                        d='M5 13l4 4L19 7'
-                      ></path>
-                    </svg>
-                    <span>{skill}</span>
-                  </div>
-                );
-              },
-            )}
+            {[
+              'Full Stack Developer',
+              'DevOps/Platform Engineer',
+              'AI Engineer',
+            ].map((skill) => {
+              return (
+                <div className='flex items-center gap-2' key={skill}>
+                  <svg
+                    className='w-5 h-5 text-emerald-400'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth='2'
+                      d='M5 13l4 4L19 7'
+                    ></path>
+                  </svg>
+                  <span>{skill}</span>
+                </div>
+              );
+            })}
           </div>
           <div
             className='flex mb-8 mt-20 max-w-3xl items-center justify-center '

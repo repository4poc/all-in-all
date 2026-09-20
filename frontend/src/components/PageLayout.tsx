@@ -100,8 +100,8 @@ export const PageLayout = (props: PageLayoutProps) => {
                 </li>
 
                 <li className="nav-item">
-                  <a className="nav-link" href="#">
-                    Features
+                  <a className="nav-link" href="/UserChallenge">
+                    User Challenge
                   </a>
                 </li>
 

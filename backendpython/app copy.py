@@ -134,31 +134,8 @@ def PII_Text_Redaction(input_text: str) -> str:
 # OpanAI Agent API endpoint
 @app.route('/api/agent/ask', methods=['POST'])
 def foundry_openAI_Agent():
-
-    azure_ai_search_tool = AzureAISearchTool(
-        azure_ai_search=AzureAISearchToolResource(
-            indexes=[
-                AISearchIndexResource(
-                    project_connection_id=connection_id,
-                    index_name=ai_search_index_name,
-                    query_type=AzureAISearchQueryType.VECTOR_SEMANTIC_HYBRID,
-                    top_k=3,
-                )
-            ]
-        )
-    )
-
-    agent =  project_client.agents.create_version(
-        agent_name = "web-search-agent",
-        definition = PromptAgentDefinition(
-            model = MODEL_DEPLOYMENT_NAME,
-            instructions = "You are a Also a travel assistant. Help users plan their trips, find flights, hotels, and provide travel advice.",
-            tools = [azure_ai_search_tool]
-        )
-    )
-
-    print(f"Created agent with ID: {agent.id} and name: {agent.name} and tools: {[tool['type'] for tool in agent.definition.tools]}")
-    
+    print()
+   
     data = request.get_json(silent=True) or {}
 
     user_message = data.get('message')
@@ -242,5 +219,4 @@ def foundry_anthropic_chat():
 
 # Run the Flask app
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000)
     app.run(host="0.0.0.0", port=5000)

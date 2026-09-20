@@ -15,11 +15,11 @@ Raw        Clean      Business-ready
 
 ![alt text](images/{BB51BCC0-9818-4C74-B7F9-2421C90788A9}.png)
 
-![alt text]({A7EFF92C-F98F-4582-B04F-F4440FB7A776}.png)
+![alt text](images/{A7EFF92C-F98F-4582-B04F-F4440FB7A776}.png)
 
 ## Introduction to Azure DataBricks
 
-DataBricks is Spark based unfied data analytics platform, provide by all major cloud platform.
+DataBricks is Apache Spark based unfied data analytics platform, provide by all major cloud platform.
 
 - Azure hosts databricks as First party service, so you get unified support from MS for Azure and Databricks
 

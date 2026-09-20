@@ -1,21 +1,24 @@
-targetScope = 'resourceGroup'
-
-param location string = resourceGroup().location
+param location string
 param environment string
 param projectName string
+param namePrefix string
 
-var namePrefix = '${projectName}-${environment}'
-
-module databricksWorkspace './modules/databricks-workspace.bicep' = {
-  name: 'deploy-databricks-workspace'
-  params: {
-    location: location
+resource databricksWorkspace 'Microsoft.Databricks/workspaces@2024-05-01' = {
+  name: 'dbx-${namePrefix}'
+  location: location
+  sku: {
+    name: 'trial'
+  }
+  properties: {
+    managedResourceGroupId: '${subscription().id}/resourceGroups/rg-managed-dbx-${namePrefix}'
+  }
+  tags: {
     environment: environment
-    projectName: projectName
-    namePrefix: namePrefix
+    project: projectName
+    managedBy: 'bicep'
   }
 }
 
-output workspaceName string = databricksWorkspace.outputs.workspaceName
-output workspaceResourceId string = databricksWorkspace.outputs.workspaceResourceId
-output workspaceUrl string = databricksWorkspace.outputs.workspaceUrl
+output workspaceName string = databricksWorkspace.name
+output workspaceResourceId string = databricksWorkspace.id
+output workspaceUrl string = databricksWorkspace.properties.workspaceUrl

@@ -7,7 +7,7 @@ resource databricksWorkspace 'Microsoft.Databricks/workspaces@2024-05-01' = {
   name: 'dbx-${namePrefix}'
   location: location
   sku: {
-    name: 'premium'
+    name: 'standard'
   }
   properties: {
     managedResourceGroupId: '${subscription().id}/resourceGroups/rg-managed-dbx-${namePrefix}'

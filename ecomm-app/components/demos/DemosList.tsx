@@ -35,7 +35,6 @@ export default function DemosList({ demos }: DemosListProps) {
               <p className='text-gray-600 text-sm text-left'>
                 {demo.description}
               </p>
-              <Separator className='mt-4' />
               <>
                 <p className='w-full pl-1 mt-4 text-black text-sm font-bold text-left'>
                   Technology Stack
