@@ -20,4 +20,4 @@
 - Autoscaling
 - Right Size
 - Data Retension
--
+- Delete Unnecessary Resources

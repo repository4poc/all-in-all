@@ -88,8 +88,10 @@ Stripe / similar payment provider
 ## Create NextJS project
 
 ```
-npx create-next-app full-stack-app
+npx create-next-app@latest <app-name>
 ```
+
+Prefer to go with default settings.
 
 ```
 npm run dev
@@ -408,3 +410,27 @@ OR
 ![alt text](images/{F1143774-C680-488F-9247-C67AD2B12D3F}.png)
 
 ![alt text](images/{309BE72C-3C92-42F0-B4C3-CE856083F080}.png)
+
+## Supabase and Prisma
+
+- Supabase = PostgreSQL database + backend services
+  1. create an organizaiton
+  2. create a project within the organization
+  3. choose DB Password
+- Prisma = ORM that your application uses to talk to that PostgreSQL database.
+
+```
+Your app
+   │
+   ├── Prisma ORM
+   │       │
+   │       ▼
+   │   Supabase PostgreSQL
+   │
+   └── Supabase Auth / Storage / Realtime
+```
+
+```
+npm install prisma@6 --save-dev
+npm install @prisma/client
+```
