@@ -168,7 +168,7 @@ https://start.spring.io/
 
 Spring Initializr
 
-![alt text](project_create.png)
+![alt text](images/project_create.png)
 
 In modern Spring Boot applications, you almost always create a JAR, not a WAR.
 
