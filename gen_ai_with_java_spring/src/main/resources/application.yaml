@@ -1,0 +1,16 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: gen_ai_with_java_spring
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+      chat:
+        options:
+          model: gpt-4o-mini
+logging:
+  level:
+    root: INFO
+    com.example.gen_ai_with_java_spring: INFO
+    org.springframework.ai: INFO

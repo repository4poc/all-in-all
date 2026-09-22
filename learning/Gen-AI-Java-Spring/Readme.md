@@ -249,6 +249,39 @@ java -jar target/myapp-0.0.1-SNAPSHOT.jar
 You are a helpful assistant that summarize any given content. Ensure the summary is concise, informative, and captures the key points.Use a friendly and approachable tone while maintaining professionalism.Do not answer anything other than the summarization. If the question is not about summarization respond with 'I can only help with summarization tasks
 ```
 
+## Streaming response
+
+![alt text](images/{F436F0EB-95D8-4AC4-85B9-F9134D7C0B5C}.png)
+
+![alt text](images/{7D5BEAF2-A7F0-4289-9BF6-EC406CB3B33A}.png)
+
+## Spring AI Response Types
+
+1. ChatClientResponse
+   - Return the context[] - Tools context
+
+     ![alt text](images/{7D1D84FD-1B19-463F-952F-87A12EE42139}.png)
+
+   ![alt text](images/{229E0878-201F-4C91-9CC6-18107A05C0A4}.png)
+
+2. Content
+
+   ![alt text](images/{0419DAA5-67EF-4255-9585-411F1B6EB12B}.png)
+
+## Structured Output
+
+![alt text](images/{BDF91932-5605-42DE-BA02-749DA371B43F}.png)
+
+![alt text](images/{0ECEC1B4-8D55-45BB-A03F-8E0377180990}.png)
+
+![alt text](images/{61B54ECA-3712-4213-99EF-7269BF7C66B9}.png)
+
+![alt text](images/{70736748-215B-41EA-8BD7-7CAFB16AFF2C}.png)
+
+![alt text](images/{CFC67261-46F4-4685-874C-3AB92397FF6D}.png)
+
+![alt text](images/{E344EFD3-605C-4000-83B4-E83C0B5CF68E}.png)
+
 ## Prompt Engineering
 
 - The process of designing prompts (inputs) to get the best possible response from an LLM
@@ -265,7 +298,7 @@ You are a helpful assistant that summarize any given content. Ensure the summary
 4. Examples: Demonstrate expected output
 5. Iterative Refinement: Experiement with different prompts for better results.
 
-**Prompt Engineering - Techniques**
+**Prompt Engineering - Techniques **
 
 1. Zero-shot prompting: Asking the model to perform a task without prior examples
 2. One/Few-shot prompting: providing examples to guide the model
@@ -273,14 +306,51 @@ You are a helpful assistant that summarize any given content. Ensure the summary
    ![alt text](images/{72658787-8F08-4E8D-A402-31D82D91CDE1}.png)
 4. Choose correct LLM model: As each model is trainsed on different datasets and for different inputs.
 5. System Message : Set the role or context for the AI
-   - Also used as a guardrail
+
+   ![alt text](images/{EC3FA992-6877-4370-ACDF-E932050468C4}.png)
+
 6. Prompt Templates :
    - Create a tempalte and parameterize it.
-7. Temperature & Top-p Tuning:
+   - Templating and parameterising the prompts for more seure and better maintainable prompts
+   - Can Reusable templates with diff. versions
+
+     ![alt text](images/{A3145178-285D-4C0C-8AF7-8001F1271475}.png)
+
+     ![alt text](images/{905AEC9D-D254-4697-9AE3-E0B42A8FF11C}.png)
+
+     ![alt text](images/{B00E5721-776A-4D97-8D96-44D51EB0A177}.png)
+
+7. Temperature & Top-p & Top-k Tuning:
    - Adjusting creativity and randomness in responses
-8. Returning multiple results
-9. Limit Token usage
-   - For input and output
-   - For better performance, less latency
-   - For cost control.
+
+     ![alt text](images/{9B325D62-C89D-4609-BAEE-74B95A95447E}.png)
+
+     ![alt text](images/{BC2ABA41-3551-4796-81BB-33811B503CF1}.png)
+
+8. Returning multiple results :
+   - Instructing LLM to return multiple results to choose amoung them.
+     ![alt text](images/{41B8EDC8-08FE-41FE-AC60-A5083BC89091}.png)
+     ![alt text](images/{CE016FE8-1E7D-499E-BBC8-F6BCD8AAA633}.png)
+
+9. Token Limit
+   - For cost control
+   - limit network bandwidth - less latency in responses considering the context windows size of the model because we cant exceed the size of context window will get an token limit errors
+
      ![alt text](images/{CABE42F3-7055-424F-BE49-5719DCFEDED7}.png)
+
+     ![alt text](images/{7C8F555D-1B9B-4191-8A63-C9A8F4DB8FB7}.png)
+
+**Prompt Engineering - Best practices**
+
+1. Use `System Message`
+2. Use `Multiple Responses`
+3. Use `Prompt Template`
+4. Use `One/Few Shot Prompting`
+5. Use `Size Limit` to Limit the Output Token
+6. Use `Temperature` to adjust the `creativity` in responses
+
+## Quiz
+
+![alt text]({BB4DA721-796E-4D40-9716-070B9D864661}.png)
+
+![alt text](images/{A763F326-52B8-4FED-8CA0-CBBB06F1368C}.png)

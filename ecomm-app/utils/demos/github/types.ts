@@ -35,6 +35,7 @@ export type User = {
     totalCount: number;
   };
 };
+
 export type UserData = {
   user: User;
 };
