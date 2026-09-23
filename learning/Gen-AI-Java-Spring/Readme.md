@@ -282,6 +282,223 @@ You are a helpful assistant that summarize any given content. Ensure the summary
 
 ![alt text](images/{E344EFD3-605C-4000-83B4-E83C0B5CF68E}.png)
 
+## Chat Options
+
+1. **Default Chat Client Option in application.yml**
+
+   ![alt text](images/{BEEE0563-D320-44AC-975C-02A0525BE8C6}.png)
+
+2. **Chat Client Options applicable to all endpoints in AIProviderConfig.Java**
+
+   ![alt text](images/{B055C30E-82A3-4B7F-B734-72180C4DE042}.png)
+
+3. **Chat Client Options applicable to specific endpoints**
+
+   ![alt text]({CEEA03A3-A3C6-4E3F-BF86-92576625E738}.png)
+
+Some Chat Options are generic
+
+- Temperature
+- Model Name
+- Max Token
+
+Some are specific to LLM Providers and the models
+
+![alt text](images/{FCB391B5-BD54-47DF-94E2-EDCA248235BA}.png)
+
+**OpenAI Token Calculator**
+
+![alt text](images/{EFCBA053-9978-48F2-AE13-7F5EA54CAA74}.png)
+
+![alt text](images/{755B728F-0DB8-4A97-9BEF-1B5F90FCA2EE}.png)
+
+![alt text](images/{06A9550A-8506-436D-846A-925B00FE49FE}.png)
+
+**Temperature**
+
+It controls the Randomness/Non-deterministic level.
+
+![alt text](images/{78582F26-E159-4CF0-AC8E-305D7BF98A1D}.png)
+
+![alt text](images/{C66C91A1-91A4-4923-9A6F-00919B939A4A}.png)
+
+![alt text](images/{9482BF36-7249-4382-AE97-586C284D7F9D}.png)
+
+With Temperature = 0 : Randomness is disable, we consider highest probability values, so get the same response everytime.
+
+With Temperature = 2 : Randomness is maximum, we consider lowest probability values, so get different and creative response everytime.
+
+We can control the temperature Or Randomness via User Prompt as well
+
+![alt text](images/{8DABF6CF-7E3F-477A-9381-80EAFF8DD6A9}.png)
+
+![alt text](images/{9EB4A446-0572-4EC1-94AF-BE1CF05B501F}.png)
+
+**Top-p and Top-k**
+
+![alt text](images/{907B20B8-C06A-4030-9318-8295728A348D}.png)
+
+![alt text](images/{8D166019-3A29-4ED1-9566-EFC4D4AEF04A}.png)
+
+![alt text](images/{1DFAC8A8-5F95-40E1-AF22-B08A5C9879DD}.png)
+
+![alt text](images/{B1DD6CC9-CC37-4927-AF5D-27D66F825F05}.png)
+
+Temperature (0-2)
+Top-P (0-1)
+
+Temperature(2) = Top-p(1)
+
+Temperature(2) + Top-p(0.1) = Temperature(0.1) - Min. Randomness/Deterministic
+
+Temperature(2) + Top-p(0.9) = Temperature(0.9) - More randomness/Non-Deterministic
+
+**Almost same result every time**
+
+![alt text](images/{F2897055-5956-4349-9EEB-788B8E16155D}.png)
+
+**Top-K**
+
+![alt text](images/{4157CB9E-E1CE-42CF-B1F2-3207715152A9}.png)
+
+There is no topK() method in OpenAI, in Ollama, Google Geminin
+
+![alt text](images/{17065A82-2425-4B9D-BB76-412504D8A0B7}.png)
+
+![alt text](images/{306A1BEE-B975-4FB0-B94F-CC1DEC9452F5}.png)
+
+**Frequency Panelty and Presence Panelty** - Specific to OpenAI
+
+![alt text](images/{CCEF4B58-8C3A-4983-909B-85F6BFC5E201}.png)
+
+![alt text](images/{FD167F0C-9BA1-43BC-9688-E56007ECA0A2}.png)
+
+![alt text](images/{2152BAE6-E832-4C21-9A32-19A0F904A135}.png)
+
+![alt text](images/{5489DEB6-32F8-467B-B76F-6D5EE65D5EDE}.png)
+
+![alt text](images/{2C001DE0-6354-4662-84D8-5DDCEE22975C}.png)
+
+## Spring AI Advisors
+
+![alt text](images/{8DE922E8-A300-4496-8D54-DE8D56970E11}.png)
+
+Advisor can intercept the req/req for
+
+- Logging
+- Enforce Validation and Security
+- Similart to middleware or Filters
+- Executed in a chain in the order they are added, before the actual LLM model is invoked
+- The last Advisor in the chain is always
+  - ChatModelCallAdvisor OR
+  - ChatModelStreamAdvisor
+    Depending on the call type
+
+![alt text](images/{510A35D2-2494-4882-AFEC-C3BEFD33B8CF}.png)
+
+![alt text](images/{7F79A3E7-73D4-4814-89DE-C71DBC6A30D9}.png)
+
+So with Advisor, you can handle cross-cutting concerns - Authentication, Logging, Exception Handling, Tracing, Guardrails, Caching, Retries, Prompt Transformation
+
+### Around Advisor Architecture
+
+![alt text](images/{C3F82510-50C0-47FE-B51E-C70EE4BAF109}.png)
+
+![alt text](images/{73E623CD-9CD3-4416-B5BB-5FFDEAB0E5F2}.png)
+
+The first Advisor in the chain is
+
+- last to process the request
+- First to process the response
+
+### LoggerAdvisor
+
+![alt text](images/{4803D29C-34E9-456E-B400-8F6D4377E20B}.png)
+
+![alt text](images/{A2EB2FED-7523-4D2C-B369-653209111C85}.png)
+
+![alt text](images/{4F346D20-FB0E-4BE4-A7BC-DE4DA3AC907A}.png)
+
+![alt text](images/{B573B3C3-9ECE-4E94-B507-389A9CA3A802}.png)
+
+![alt text](images/{AC2D8714-C372-4C13-9FC8-69B6C261EF7C}.png)
+
+![alt text](images/{C68314EF-7331-481A-928D-60DA2D2BC425}.png)
+
+If we set the Log Level to INFO, it will not list the DEBUG Logs
+
+![alt text](images/{4D0E651A-6EB3-4EB8-A69D-7F7F04B0FCB8}.png)
+
+In production set the Advisor log Level to Off
+
+![alt text](images/{3F3ACC02-F8DA-4548-A6F5-E993F5CC22C3}.png)
+
+### SaftGuardAdvisor - SpringAI Build-In Advisor
+
+Detect sensitive content in the prompt, and Return with failure message if found
+
+1. Add Bean in the AIProviderConfig.Java
+
+   ![alt text](images/{DFA52216-F069-4B6C-926C-D6F03F03B8E1}.png)
+
+2. Return Failure message
+
+   ![alt text](images/{BAD6D3E9-D7E5-4B72-A1E6-7F797C69E663}.png)
+
+3. Add the SafeGuard Advisor during ChatClient instantiation.
+
+   ![alt text]({A6F1CAA1-0CCE-4C6D-9C7A-9E386CE99F45}.png)
+
+   The Advisor executes from Right to left in the list, so loggerAdvisor --> SaftGuardAdvisor, If we put it in reverse order the loggerAdvisor will never be able to log the sensitive words in the log.
+
+   SafeGuard Advisor has Order=0, so it will be executed based on the place we place the advisor. `Loser the order, higher the priority`
+
+   Always have alls in try..catch
+
+   ![alt text](images/{FEF4328E-A223-44B6-8020-ABA97EA3457F}.png)
+
+   In reality all the exceptions should be send to Queue.
+
+   `Problem Statement` If any exception happes, the is no Exception Handling Advisor, so we should place ErrorHandlingAdvior at the very first place before loggingAdvisor.
+
+### Custom ErrorWrapperAdsvisor
+
+`Step 1`: Create a class with interfaces `CallAdvisor` and `StreamAdvisor`
+
+![alt text](images/{286993CF-4650-4876-901D-231ECC6A1CC5}.png)
+
+`SLF4J` (Simple Logging Facade for Java) is used to provide a common logging API that works with different logging frameworks (such as Logback, Log4j 2, java.util.logging, etc.) without tying your application to any specific one.
+
+Decouples your code from a logging implementation
+
+![alt text](images/{1B0C8CF9-4ABF-46DF-870C-443848ED1646}.png)
+
+![alt text](images/{1162B43E-CB09-4CAC-A57C-92E8039CF4E8}.png)
+
+![alt text](images/{2FDBE434-B4FD-49A8-9814-23C303B9EE34}.png)
+
+`Before`
+
+![alt text](images/{6D2186B4-E341-48B0-A0D8-602D4F29989A}.png)
+
+`After`
+
+![alt text](images/{00918DBF-1285-4873-9A91-92FC4CCD0EC0}.png)
+
+To set an advisor call first, irrespective of the position
+
+![alt text](images/{4B5F5AB7-90BC-43FC-953B-E0C57B0192B8}.png)
+
+To set an advisor call last, irrespective of the position
+
+![alt text](images/{8F05FC7D-C63B-411F-AC2C-CA6BC4A8DC4C}.png)
+
+In case the Advisor does not call the Next Advisor
+![alt text](images/{B1313278-255A-4011-995E-4A3CFBEBD156}.png)
+![alt text](images/{61AA6005-927E-40BC-BDBA-20E1E5D8E121}.png)
+
+![alt text](images/{C52E94D0-FCDC-426C-BA17-77B5D1B730B0}.png)
+
 ## Prompt Engineering
 
 - The process of designing prompts (inputs) to get the best possible response from an LLM
