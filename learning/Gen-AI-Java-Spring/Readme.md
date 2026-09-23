@@ -294,7 +294,7 @@ You are a helpful assistant that summarize any given content. Ensure the summary
 
 3. **Chat Client Options applicable to specific endpoints**
 
-   ![alt text]({CEEA03A3-A3C6-4E3F-BF86-92576625E738}.png)
+   ![alt text](images/{CEEA03A3-A3C6-4E3F-BF86-92576625E738}.png)
 
 Some Chat Options are generic
 
@@ -493,7 +493,14 @@ To set an advisor call last, irrespective of the position
 
 ![alt text](images/{8F05FC7D-C63B-411F-AC2C-CA6BC4A8DC4C}.png)
 
-In case the Advisor does not call the Next Advisor
+In case the Advisor does not call the Next Advisor like
+
+`LoggerAdvisor`
+
+![alt text](images/{B573B3C3-9ECE-4E94-B507-389A9CA3A802}.png)
+
+`ErrorHandlerAdvisor`
+
 ![alt text](images/{B1313278-255A-4011-995E-4A3CFBEBD156}.png)
 ![alt text](images/{61AA6005-927E-40BC-BDBA-20E1E5D8E121}.png)
 
