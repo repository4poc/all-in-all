@@ -502,9 +502,62 @@ In case the Advisor does not call the Next Advisor like
 `ErrorHandlerAdvisor`
 
 ![alt text](images/{B1313278-255A-4011-995E-4A3CFBEBD156}.png)
+
 ![alt text](images/{61AA6005-927E-40BC-BDBA-20E1E5D8E121}.png)
 
-![alt text](images/{C52E94D0-FCDC-426C-BA17-77B5D1B730B0}.png)
+So this Advisor has Lowest precedence, and not calling the next advisor, so if you develop a custom advisor how to ensure your custom advisor is called, for that, you need to set the Order of you custom Advisor as below, so it is called after the `ErrorHandlerAdvisor`
+
+![alt text](images/{C52E94D0-FCDC-426C-BA17-77B5D1B730B0}.png), so your this advisor be the last one among the custom Advisors.
+
+### System Prompt Advisor
+
+It is always a best practice to have a global SYSTEM MESSAGE using an Advisor, add restrictions to system prompt advisor.
+
+![alt text](images/{9A71BD9F-00FD-4777-A076-B7B00713B79B}.png)
+
+Instead use like this, and put restriction in the SYSTEM PROMPT Advisor.
+
+![alt text](images/{CF206F26-7900-4D0E-8930-107F0C33807E}.png)
+
+![alt text](images/{B3AD14A7-4A5A-4E1C-BBB3-A9480DE83408}.png)
+
+![alt text](images/{F9F6A506-62BD-42A8-A094-8B3F954C4309}.png)
+
+![alt text](images/{6157B3EE-B518-4A03-8FB1-819B5F8A73A9}.png)
+
+![alt text](images/{393AFA52-C826-4F17-8532-E69711CE2F4C}.png)
+
+### Custom Validation Advisor
+
+![alt text](images/{489FDD4E-10E3-4ADF-A859-459940496A9A}.png)
+
+![alt text](images/{296FDBEF-365C-47C4-B617-C04B5CEE2DD0}.png)
+
+![alt text](images/{45192731-7EFC-4819-8C4C-FCBCB687B656}.png)
+
+## Global Exception Handler Advisor
+
+Comments the explicit try-catch block
+
+![alt text](images/{26C40FD0-DEDE-4192-BE5D-9164EF38C719}.png)
+
+![alt text](images/{63108854-551E-49C1-9D2E-7FC2F6C83F80}.png)
+
+![alt text](images/{CFF1E8DC-7DF1-4F3C-A8A3-63B811F305BB}.png)
+
+![alt text](images/{FB72A9E0-DECD-4E7F-8F47-E9CAB5A2C33C}.png)
+
+`Before`
+
+![alt text](images/{A1743762-CF2A-4FBE-8D80-615AE2C9A899}.png)
+
+`After`
+
+![alt text](images/{AF523339-408B-4821-B00C-8F4C5F5AB463}.png)
+
+### Quiz
+
+![alt text](images/{33ECFB15-6886-45D1-83DB-5E7C918D58C7}.png)
 
 ## Prompt Engineering
 
