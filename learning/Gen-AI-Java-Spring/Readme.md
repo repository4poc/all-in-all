@@ -834,3 +834,62 @@ LLM limitations can cause risk of
 ![alt text](images/{143D7E2A-198C-450A-B3D2-E63569B5A113}.png)
 
 ![alt text](images/{59F66BBF-414A-4736-9C30-D1969983D400}.png)
+
+## Tool/Function Calling
+
+- Execute deterministic tools with typed parameters on behelf of LLM in an AI Agent.
+
+### Two reasons of Tool/Function Calling
+
+1. Information Retrieval
+   - Helpful in RAG Scenarios to get some additional information from an external Knowledge
+
+2. Taking Actions:
+   - To Automate Tasks that would otherwise require Human interaction
+
+### Best Practices when Tool/Function calling
+
+- Strict Schemas
+- Enums/Regex
+- Bean Validations
+- Idempotency keys
+- Timeouts/Retries
+- Circut Breakers
+- Sandboxing
+- AllowLists
+- Audit Logs
+
+You should also have Failure Modes
+
+- Tool errors
+  - You need to handle Tool errors correctly
+- latency
+  - Check Latency while calling Tools calling
+- Have Mitigations via Retries/Backoff and Fallbacks
+- Having a dry-run before calling the Tool calling actually.
+
+If you state the available tools with name, description and input schema of the input parameters to the LLM, then it will be able to use it in your application.
+
+### Tool Calling Architecture
+
+- In Tool Calling, the implementation is done in the Client/Orchestrator Application, in the Application Layer. Not in the Model itself.
+
+- Model knows the available Tools, and indicate which Tool to call with required arguments, But client/Orchestrator application is the real called to the tool and passed the result to the Model, So Model never has access to the Tool directly, whcih is strict security consideration. So Model never has direct access to Tools or Credentaials. It only proposes Tool Name and Arguments.
+
+![alt text](images/{CAFCFEF8-BE50-4023-BC46-9C8AE268E2B5}.png)
+
+![alt text](images/{42D5BF66-B6C7-4D0A-9FA6-F9644303FDE8}.png)
+
+![alt text](images/{14071693-FC8A-45A7-A4A8-B373A99E8AA9}.png)
+
+![alt text](images/{1EC71F1B-412B-44EE-846C-79208544B6A5}.png)
+
+### AI Agent Systems & Patterns
+
+![alt text](images/{2881E1A4-F665-463A-A0C2-24FCF9C75F2C}.png)
+
+![alt text](images/{C4EB9758-8CC2-4AF4-8660-7A90D3BDA6F9}.png)
+
+![alt text](images/{316C2182-4252-4FCA-825B-04362E4F2461}.png)
+
+![alt text](images/{C20E21CA-60E8-48B0-837A-DF3DCC18AB3C}.png)
