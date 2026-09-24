@@ -893,3 +893,118 @@ If you state the available tools with name, description and input schema of the 
 ![alt text](images/{316C2182-4252-4FCA-825B-04362E4F2461}.png)
 
 ![alt text](images/{C20E21CA-60E8-48B0-837A-DF3DCC18AB3C}.png)
+
+![alt text](images/SpringAIChatArchitecture.png)
+
+## Prompt Hacking
+
+![alt text](images/{8B2925D9-2D80-40A9-A96D-8DB8F869AF34}.png)
+
+![alt text](images/{4BEB122E-6A16-4BBD-B234-3CB159991DD4}.png)
+
+Old LLMs are more vulnerable to Prompt Injection Attacks.
+
+![alt text](images/{E5DE7836-C49B-4B1B-8367-B144E8A4E7D3}.png)
+
+![alt text](images/{6CE0DAA4-9826-4B26-A8DD-7B02B78C65ED}.png)
+
+![alt text](images/{4443625D-B3A2-4F32-A447-E0BE9D635143}.png)
+
+![alt text](images/{8D0F052A-E033-4889-8C17-F6222ADF5768}.png)
+
+![alt text](images/Toolcalling.png)
+
+![alt text](images/{43B5C881-E255-4201-AED5-AC5F3210A032}.png)
+
+![alt text](images/{5AD676CB-3A0F-40A2-8251-BB82F9871641}.png)
+
+So we need to restrict the tool usage, at validations, Authentication and Authorization To preevent this kind of attacks
+
+![alt text](images/{5A2EB33C-92E2-4141-9780-6DF9B7D73B0A}.png)
+
+![alt text](images/{FF64E7B8-1D67-48FB-92E2-A9AFC47126D1}.png)
+
+![alt text](images/{2B412574-A615-494F-9B51-FAC9A7AC0743}.png)
+
+![alt text](images/{528569E7-175C-4B3A-B870-11AE3252A64F}.png)
+
+![alt text](images/{6D8EAB97-8EE7-4547-99F7-88B187D8215A}.png)
+
+![alt text](images/{C7DA83A9-E25F-4B29-99C7-4CF0777297EF}.png)
+
+![alt text](images/{CB511AF2-C4A2-4D02-810F-65D5F23C748D}.png)
+
+## Prevention and Mitigation Steps for Prompt Hacking Attacks
+
+- Prompt Injection Attack
+  - Jail Breaking
+  - Prompt Leaking
+- Context Switching
+- Dictionary Attack
+
+![alt text](images/{231CA2D2-69FB-4552-B85E-9E43A3D9A196}.png)
+
+1. Input Validation and sanitization (Pre-LLM Check):
+   - Use Validation Adaptors Architecture, to senatize and validate the Input, You can multiple Validator Adaptors that execute in chain. So you can use SafeGuard Advisor and pass it sensitive keywords and use it while calling LLM. This advisor can prevent any kind of input that has any kind of injection attacks.
+
+![alt text](images/{846F86C0-9E8E-492B-A3FA-61C7310E9370}.png)
+
+![alt text](images/{19105B03-0499-4FE3-80B9-7CD6BF8AE16D}.png)
+
+2. Output Filtering (Post-LLM checks)
+   - Around Advisor Architecture enable checking input/output at a single place.
+
+     ![alt text](images/{7BEA610C-2C41-4786-924D-D6EA5DCB10C6}.png)
+
+     ![alt text](images/{BBF75849-DBC5-4338-A75E-F79DDA4301AD}.png)
+
+     OpanAI provides Moderation
+
+     ![alt text](images/{57E37B6D-D58F-4AE3-A417-0C9C184E5B9B}.png)
+
+3. Least Priviledges: AI models should not have access to any tool that could be used to compromize information. So Jail Breaking can be prevented, if tools are properly designed per AI model definition and restricting the access to antoher account by the user. Which is a general authorization issue.
+
+4. Human-in-the-loop: Results can be devastrating if that result include harmful or compromised results.So instead of returning response to the LLM to the client directly, we can intercept that with human in the loop step and return to the client asynchronously after checking and possibly adjusting the response.
+
+![alt text](images/{23529E04-B632-42C1-89F8-CF0A2EA49179}.png)
+
+Prompt Guarding can prevent many prompt hacking attacks.
+
+5. Prompt Guarding: Using System prompt
+   - Post prompting: Placing instructions after user input, not before. This way we can prevent 'Ignore Previous' Kind of attacks
+   - Sandwich defence: Including the instrction before and after the user input to remind the context.
+
+     ![alt text](images/{BEA01EA8-60E3-4023-A2FB-B3FDE8C35561}.png)
+
+     ![alt text](images/{4C30BDB2-7FC9-4EAC-982E-CE8ED151921F}.png)
+
+     ![alt text](images/{D86343B9-25AB-400B-9842-3B08CC49F1EB}.png)
+
+     ![alt text](images/{87B76986-7193-4351-8410-9C16D5051CD2}.png)
+
+   - Instructing LLM to prevent attacks including:
+     - Treating user provided inputs as data, not instructions
+
+       ![alt text](images/{BE6647D4-E2B3-45BD-A982-45BEF14224FA}.png)
+
+     - Preventing Dictionary Attacks - By System prompt and Output Validation
+
+       ![alt text](images/{0AF428AD-F803-4E82-AC40-0C00338C6DC5}.png)
+
+       ![alt text](images/{CC4267B5-0167-4E32-AC0F-73D32246887F}.png)
+
+     - Preventing Prompt Leaking : By instructing the model not to return any system or developer instructions to prevent this leakage.
+
+       ![alt text](images/{5735B996-A441-4B72-A48B-B35885EC7C88}.png)
+
+       ![alt text](images/{01C0ADB8-D162-4DF1-B594-65C4C8CABFF3}.png)
+
+       ![alt text](images/{81FABA60-94DB-49C7-B5B9-0CB6302A41BA}.png)
+
+   - Restricting the context that LLM should respond: By System Message
+
+     ![alt text](images/{91482CCD-7D51-40F9-9799-E0B9436565FA}.png)
+
+     ![alt text](images/{1C96EA5E-1754-4098-87DE-62547C2C45DF}.png)
+
+     ![alt text](images/{BFDCC9B7-FF29-486D-9D3C-F48FE0F0EAA7}.png)
