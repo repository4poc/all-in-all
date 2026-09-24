@@ -631,3 +631,206 @@ Comments the explicit try-catch block
 ![alt text]({BB4DA721-796E-4D40-9716-070B9D864661}.png)
 
 ![alt text](images/{A763F326-52B8-4FED-8CA0-CBBB06F1368C}.png)
+
+## MultiModality
+
+![alt text](images/{332612C0-1126-473E-8CBC-0BB2490EA256}.png)
+
+![alt text](images/{F3008FEB-DF92-476E-8AD6-8BB1305006BD}.png)
+
+## UseCase : Visual Compliance Checker - Image to Text
+
+![alt text](images/{F26248F8-6CF0-4A78-AEF0-78F10FA175E5}.png)
+
+![alt text](images/{9A1A407C-D532-4FA8-B020-628EBC81314E}.png)
+
+![alt text](images/{83D8FBB6-5020-4647-ABEE-C8313B6A1D28}.png)
+
+![alt text](images/{6D385CC6-E39C-4A8B-83BB-83939280E400}.png)
+![alt text](images/{5175CD93-3082-4507-AC2B-E1C630C33F3A}.png)
+
+![alt text](images/{A13FBE08-E520-48DC-9309-3B79FEE79804}.png)
+
+To avoid size limit error.
+
+![alt text](images/{0E21014A-B722-4A8C-91C3-1D194212FD43}.png)
+
+![alt text](images/{2416A664-E3FD-426E-89AB-52ED4C0CB465}.png)
+
+![alt text](images/{D724CB24-756B-4577-8F37-C82AA8EE483E}.png)
+
+![alt text](images/{BA5219B1-712D-44C1-9F23-52FC7EBFC8B6}.png)
+
+## UseCase : Marketing Asset Generator - Text to Image
+
+![alt text](images/{298B44B8-2753-4D90-8328-2AAA600ED842}.png)
+
+![alt text](images/{11832A4A-91A2-44BF-8B68-AA028A5E9E01}.png)
+
+![alt text](images/{6F42EAF4-68D9-42D4-9DCC-5B80AAE4E35E}.png)
+
+![alt text](images/{E0DBD507-38C5-4804-B5A0-470A4CAFB4DA}.png)
+
+![alt text](images/{506F61D9-F129-446D-A375-47E3CA7B0F62}.png)
+
+OR
+
+![alt text](images/{F5E47780-E2DB-414C-8038-B28A25A4257E}.png)
+
+![alt text](images/{65BA8003-4882-48CC-B703-8F117F16950D}.png)
+
+To save the image to local
+
+![alt text](images/{841EA716-447F-4041-9627-B26060919263}.png)
+
+![alt text](images/{E0DC8B9F-2D86-42A9-A735-8BEBAD723ED8}.png)
+
+## UseCase : Smart Meeting Assistant - Speech to Text
+
+![alt text](images/{11421588-6DF9-4767-B580-9953ED8EF7A8}.png)
+
+## LLM Limitations and Mitigations
+
+### LLM Limitation
+
+1. Context Limit : LLMs has a finite window, causes earlier turns get dropped and can miss important facts
+
+2. Halluciation and Fabrication : The LLM can be confident, but can be based on wrong assuptions and missing important facts in the prompt.
+
+3. Stale Knowledge : Model can not see new facts without feeding them at runtime, which can cause incorrect results and hallucination
+
+4. Domain gap : Can result in poor performance domain specific codebase or organization specific docs.
+
+5. Non-deterministic: Same Prompt != Same Answer -> Difficult to test.
+
+6. Weak reasoning and Calculation Errors: Difficult to reason about multi-step logic and complex maths
+
+7. Low explanation & Verficiation: It is hard to audit why an answer is "right"
+
+8. Bias and safety risks: Can result policy violation or toxic outputs.
+
+9. Privacy & data leakage: Can cause PII/Secrets exfiltration across boundries, especially in sectors like payment and banking.
+
+10. Cost & Latency: Long Context and big models can result slow response and extra cost.
+
+11. Promp Hacking risks: Untrusted content can hijack tools and result in injection, jail breaking or prompt leaking.
+
+12. Tool reliability: Tools can fail or cause side-effects. So choosing the correct tool, giving it proper authorization, and exception management are important steps for reliable response.
+
+13. Model/Version drift: Quality and behaviour changes across model updates without proper regression testing.
+
+14. IP / Licensing Concerns: Have to check copyrights, uncertainty of the training-data and generated code licenses
+
+### Mitigations for LLM Limitations
+
+LLM limitations can cause risk of
+
+- wrong answer
+- Loss trust
+- extra cost
+
+1. Structured Output & Validations
+
+   ![alt text](images/{A967C316-BD93-4D5C-9E9F-0164231AD6FE}.png)
+
+   ![alt text](images/{639E5579-5E69-4579-BE29-6F10B1A1FBC2}.png)
+
+   ![alt text](images/{7119CA3D-C2FA-45B0-953A-CF6A89B1DE4E}.png)
+
+   So you can use
+   - JSON Schemas
+   - Strict function parameters
+   - Enumerations
+   - Regex validations
+   - Programetic cards that lead to hallucinations
+
+   So in Spring AI you can use
+   - JSON schema binding, validation with Bean Validation using Jakarta Validation in addition to writing your custom validations using Advisors.
+
+2. Prompt Guarding:
+   - Encode rules that constraints model behaviour (tone, honesty,refusal policy)
+
+   Using System Message you can senatise the prompt and prevent some inputs such as ignore specific instructions like we did in
+   - Safeguard Advisor: You see some keywords that can be rejected.
+
+     ![alt text](images/{B982F54B-57F2-468C-A838-E1784571D588}.png)
+
+   - System Prompt Advisor: We created a dedicated summarization systems and prevent any other responses, enforce the LLM to be a dedicated assistant.
+
+     ![alt text](images/{AF7D10C2-E0F4-4A8A-BA02-6DF64FAD3BAB}.png)
+
+3. Security Hardening against Prompt Hacking
+   - Input isolation
+   - Tool allowlist in tool router
+   - Confirmation prompts for dangerous prompts
+   - Sandboxing
+     - You can create network file system sandbox
+   - regex checks
+   - output validations
+   - Timeouts
+   - Rate Limits
+
+4. Determinism
+   - Can be adjusted by temperature, top-p and top-k parameters
+
+5. Versioning:
+   - Prompt and tool versioning
+   - Model versioning
+   - Vector Index snapshots
+
+   - In spring you can use configuration driven models to apply the versoning
+   - You can keep your Prompts and Templates in the Source Control
+   - You can capture performance in logs.
+
+6. Memory Architecture:
+   - Short-term memory (Summaries)
+   - Long-term knowledge (RAG)
+     - use vector store with time-to-leave property
+
+7. RAG : Gives AI a search engine for your knowledge
+   - Freshness
+   - Domain Grounding
+   - Cost Control
+   - Reuction in hallucinations
+
+   - Spring AI use pgVector with Postgres, with chunking strategies, rerankers, scheduled reindexing.
+
+8. Tool/Function calling: Invoke code or APIs for realtime data/calculations, business logic
+   - Transactional Operations
+
+9. MCP: Package the tools as reusable versioned endpoints so that every client can share.
+   - You can control the scope
+   - Audit for every invocation of MCP
+
+10. Cost & Latency Engineering:
+    - Caching embeddings and responses
+    - Early Exit whenever possible
+    - Streaming
+    - Concurrent tool execution
+    - Better chunking and reranking to reduce cost.
+
+    - In SpringAI, you use spring cache for embedding and answers
+    - SSE (Server Side Events) for streaming
+
+11. Privacy, Compliance & Data Governance: PII detection, field-level encryption, data retention, access controls
+    - In Spring, you use interceptors and Filters for reduction
+    - Spring Security for Authorization
+
+12. Model Strategy: Task-based routing, fallback, fine tuning, domain gap adapters.
+
+13. IP & Licensing Guardrails:
+    - Policy prompts like donot reproduce copy righted texts, code license scanners, citation requirements.
+
+### Limitation-Mitigation Map
+
+![alt text](images/{0AF557EE-34A4-4AB1-BA59-7C8BD9C14F95}.png)
+
+![alt text](images/{5F8EAA3E-34DD-4704-AA2C-A2EA0739A00D}.png)
+
+![alt text](images/{0551BC94-F9B3-434D-8568-7ABDC3F2CAC5}.png)
+
+![alt text](images/{FDC03E4A-18F3-419B-9AE2-F8D9B5E6A394}.png)
+
+![alt text](images/{143D7E2A-198C-450A-B3D2-E63569B5A113}.png)
+
+![alt text](images/{59F66BBF-414A-4736-9C30-D1969983D400}.png)
