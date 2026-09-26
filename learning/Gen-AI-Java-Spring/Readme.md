@@ -1008,3 +1008,55 @@ Prompt Guarding can prevent many prompt hacking attacks.
      ![alt text](images/{1C96EA5E-1754-4098-87DE-62547C2C45DF}.png)
 
      ![alt text](images/{BFDCC9B7-FF29-486D-9D3C-F48FE0F0EAA7}.png)
+
+![alt text](images/{858849E2-39E5-4FEC-B77C-74C1C7058D50}.png)
+
+## In-Prompt Context
+
+![alt text](images/{ED9A1B8C-96EB-402A-85A9-8CA917766DC1}.png)
+
+![alt text](images/{1BB4C4C5-85C4-4B3B-8E27-2CF54FE0CCE8}.png)
+
+For Dynamic and Long Context, this approach is not suitable.
+
+Better to use RAG.
+
+## RAG
+
+![alt text](images/{57067F33-2226-42CC-B8A2-78D3E620EC69}.png)
+
+![alt text](images/{DB0F5D9A-AFA7-4588-83F1-0EAFA01997C2}.png)
+
+.
+
+.
+
+...
+
+## MCP - Model Context Protocol
+
+### MCP introduction
+
+![alt text](images/mcp.png)
+
+### Create an MCP Service and Testing with MCP Inspector
+
+1. Add Dependency
+
+   ![alt text](images/{1D636C63-923D-4CD9-86AC-239C3EE66FDD}.png)
+
+   ![alt text](images/{38F6FB94-2686-4444-BD9B-BC22466D8108}.png)
+
+   ![alt text](images/{AF881647-8510-42BF-A2AD-71022E96C8F4}.png)
+
+2. Add the configuration
+
+   ![alt text](images/{7B4C4A92-5723-4EE2-B633-BDC7EA9B6FC9}.png)
+
+3. Define Posture Service with Tool
+
+   ![alt text](images/{5A736BEA-AC9C-46AB-8A3E-8DF998A0FB0B}.png)
+
+4. Define MCP Service Configuration
+
+   ![alt text](images/{BA881F50-5890-46B1-B2B1-E018084C0D88}.png)
