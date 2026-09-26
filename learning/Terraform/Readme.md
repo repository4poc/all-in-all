@@ -139,6 +139,8 @@ terraform init = "Prepare this Terraform project so Terraform can work with it."
 
 ## terraform validate
 
+To validate your configuration files:
+
 Terraform validate checks things such as:
 
 1. Terraform syntax is valid
@@ -444,3 +446,394 @@ It ask for your confirmation, you need to type 'Yes'
 ```
 
 ## depends_on Clause
+
+## Create a VM
+
+A Virtual Machine is deployed within an subnet,
+
+- It gets
+  - A vNIC (Virtual Network Interface)
+    - IP address (public/private) is associated to the Subnet
+  - A OS Disk
+    - Host OS
+  - A NSG (Network Security Group)
+    - Filter incoming and outgoing connections onto the VM
+    - It can be attached to either vNIC or Subnet
+
+![alt text](images/{E5A97B4C-2488-4CBC-9083-81D6760D7313}.png)
+
+`Virtual Machine`
+
+![alt text]({9EA8B821-0290-42D4-A201-9F3657DB1CD8}.png)
+
+`Network Interface Id`
+
+![alt text]({A261854A-4E14-45EA-8789-242A52A3C6D4}.png)
+
+```
+resource "azurerm_network_interface" "example" {
+  .
+  .
+
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                     = azurerm_subnet.example.id
+    private_ip_address_allocation = "Dynamic"
+  }
+}
+```
+
+`Subnet`
+
+![alt text](images/{8C39FBF1-3260-465C-8C49-A35CFC56D622}.png)
+
+`Virtual Network`
+
+![alt text](images/{FAC0EA99-D722-45CC-B8BE-215A48E2CF50}.png)
+
+```
+resource "azurerm_virtual_network" "example" {
+  name                = "vnet-network"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  address_space       = ["10.0.0.0/16"]
+  dns_servers         = ["10.0.0.4", "10.0.0.5"]
+
+  subnet {
+    name             = "subnet1"
+    address_prefixes = ["10.0.1.0/24"]
+  }
+
+  subnet {
+    name             = "subnet2"
+    address_prefixes = ["10.0.2.0/24"]
+    security_group   = azurerm_network_security_group.example.id
+  }
+
+  tags = {
+    environment = "Production"
+  }
+}
+```
+
+```
+resource "azurerm_network_security_group" "example" {
+  name                = "acceptanceTestSecurityGroup1"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+
+  security_rule {
+    name                       = "test123"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  tags = {
+    environment = "Production"
+  }
+}
+
+In Azure, a Network Interface (NIC) is a separate resource that sits between the VM and the virtual network. That's why the NIC is configured with a subnet, while the VM is configured with a NIC.
+
+resource "azurerm_network_interface" "example" {
+  name                = "example-nic"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                     = azurerm_subnet.example.id
+    private_ip_address_allocation = "Dynamic"
+  }
+}
+```
+
+### All we are creating is Managed Resources using Managed Services of Azure.
+
+## How to calculate IP Address range
+
+10.0.0.0/16
+
+IPv4 has 32 bits.
+
+/16 means:
+
+- 16 bits = network portion
+- 16 bits = host portion (2^16 = 65536 IP Addresses)
+
+So the subnet mask is:
+
+```
+255.255.0.0
+```
+
+10.0.0.0/16 = 65,536 total IP addresses
+
+Range: 10.0.0.0 - 10.0.255.255
+
+For 10.0.0.0/16:
+
+- Network address: 10.0.0.0 → identifies the subnet itself
+- Broadcast address: 10.0.255.255 → sends traffic to all hosts in that subnet
+- Usable host addresses: 10.0.0.2 through 10.0.255.253
+
+| Type               | Address                   |
+| ------------------ | ------------------------- |
+| Network address    | `10.0.0.0`                |
+| AWS/Azure reserved | `10.0.0.1`                |
+| AWS/Azure reserved | `10.0.0.2`                |
+| AWS/Azure reserved | `10.0.0.3`                |
+| Usable host range  | `10.0.0.4` – `10.0.0.254` |
+| Broadcast/reserved | `10.0.0.255`              |
+
+### Subnet
+
+10.0.1.0/24 = 2^32-24=2^8 = 256 Total IP addresses
+
+`Range`
+
+```
+VNet: 10.0.0.0/16
+│
+├── Subnet A: 10.0.0.0/24
+│   └── 5 reserved
+│
+├── Subnet B: 10.0.1.0/24
+│   └── 5 reserved
+│
+├── Subnet C: 10.0.2.0/24
+│   └── 5 reserved
+│
+├── Subnet D: 10.0.3.0/24
+│   └── 5 reserved
+│
+└── Subnet E: 10.0.4.0/24
+    └── 5 reserved
+```
+
+`There is no resource as subnet, it exists within the virtual network resource`
+
+- VM Resource (Associated in vNIC)
+- Public IP Resource (Attached to vNIC)
+
+- vNIC Resource (Associated on Subnet )
+
+- Subnets (No Resource) (Associated to on vNet )
+
+- NSG Resource (Associated to vNIC or Subnet)
+
+## How to upgrade terraform provider version
+
+```
+terraform init -upgrade
+```
+
+terraform init -upgrade primarily updates/initializes:
+
+- Terraform providers
+- Terraform modules
+- Backend configuration/initialization
+- Dependency lock information (.terraform.lock.hcl)
+
+Your state file is not removed
+
+## Using Local Variables
+
+```
+locals {
+    version ="1.0.0"
+}
+
+
+local.version
+```
+
+value can be
+
+- string
+- number
+- bool
+- null
+- map
+- Array
+- Expression
+
+## Splitting Terraform Configuration files
+
+main.tf can be split into
+
+- terraform.tf (Provider Configuration)
+- locals.tf (Local configuration)
+
+So it does not matter how many configuration files you have, it will consider all the .tf files at the project root level.
+
+## Types and Values - List
+
+`local.tf`
+
+```
+locals {
+  vnet_address_range = "10.0.0.0/16"
+  subnet_values      = ["10.0.1.0/24", "10.0.2.0/24"]
+}
+```
+
+`main.tf`
+
+```
+  subnet {
+    name             = "backend"
+    address_prefixes = [local.subnet_values[1]]
+    security_group   = azurerm_network_security_group.nsg.id
+  }
+```
+
+## Types and Values - Map
+
+`local.tf`
+
+```
+locals {
+
+  virtual_machine1  = {
+    vnet_address_range = "10.0.0.0/16"
+    subnet_values      = ["10.0.1.0/24", "10.0.2.0/24"]
+    dns_servers        = ["10.0.0.4", "10.0.0.5"]
+  }
+
+
+  virtual_machine2  = {
+    vnet_address_range = "10.1.0.0/16"
+    subnet_values      = ["10.1.1.0/24", "10.1.2.0/24"]
+    dns_servers        = ["10.1.1.4", "10.1.1.5"]
+  }
+
+}
+```
+
+`main.tf`
+
+```
+  subnet {
+    name             = "backend"
+    address_prefixes = [local.virtual_machine1.subnet_values[1]]
+    security_group   = azurerm_network_security_group.nsg.id
+  }
+```
+
+## Output
+
+![alt text](images/{201824D1-61F7-4479-9F9D-80954A43E29B}.png)
+
+## Create Public IP Address
+
+![alt text](images/{258D00BE-25DA-4DC4-A2D0-2FD43484F0E9}.png)
+
+![alt text](images/{FFE1BB8E-4707-48EC-83EE-9A07BDDEA1BA}.png)
+
+```
+resource "azurerm_public_ip" "example" {
+  name                = "acceptanceTestPublicIp1"
+  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.example.location
+  allocation_method   = "Static"
+
+  tags = {
+    environment = "Production"
+  }
+}
+```
+
+## How to associate NSG to Subnet
+
+```
+resource "azurerm_subnet_network_security_group_association" "example" {
+  subnet_id                 = azurerm_subnet.example.id
+  network_security_group_id = azurerm_network_security_group.example.id
+}
+```
+
+## Create a VM
+
+![alt text](images/{8AB30215-91AC-4599-A888-BA7BAA30CF7E}.png)
+
+![alt text](images/{808D10C0-E78F-49DB-80C4-DE3659E0FF4E}.png)
+
+![alt text](images/{51C13E17-CC2A-45CA-B30C-D6CF3297DEC7}.png)
+
+## Look at your state file
+
+`terraform.tfstate`
+
+## Using input variables
+
+`variables.tf` at the project root
+
+![alt text](images/{9B5F6379-62F3-4056-B449-324506F19CB2}.png)
+
+```
+terraform plan -out main.tfplan -var-file="vars/dev.tfvars"
+
+terraform apply "main.tfplan"
+
+terraform destroy -var-file="vars/dev.tfvars"
+```
+
+![alt text](images/{54E136AB-48C1-4D4A-9617-3B410B193348}.png)
+
+## Passing secret Values
+
+```
+variable "admin_password" {
+  type        = string
+  description = "This is admin password for the virtual machine"
+  sensitive   = true
+}
+
+```
+
+```
+ admin_password = var.admin_password
+```
+
+## Add data disk to VM
+
+1. `azurerm_managed_disk`
+
+   ![alt text](images/{49796F14-4479-41AE-A1BD-F199FB38BBB5}.png)
+
+   ![alt text](images/{41D2E605-3E84-4EE2-8985-D4E821F79E91}.png)
+
+   ```
+    resource "azurerm_managed_disk" "datadisk" {
+    name                 = "datadisk-${var.appname}-${var.tenant_code}-${var.environment}"
+    location             = azurerm_resource_group.rg.location
+    resource_group_name  = azurerm_resource_group.rg.name
+    storage_account_type = "Standard_LRS"
+    create_option        = "Empty"
+    disk_size_gb         = "20"
+
+    tags = merge(var.tags, {
+        Application = var.appname
+        Environment = var.environment
+        Tenant      = var.tenant_code
+    })
+    }
+   ```
+
+2. `azurerm_virtual_machine_data_disk_attachment`
+
+   ```
+   resource "azurerm_virtual_machine_data_disk_attachment" "vm_datadisk" {
+   managed_disk_id    = azurerm_managed_disk.datadisk.id
+   virtual_machine_id = azurerm_virtual_machine.vm.id
+   lun                = "10"
+   caching            = "ReadWrite"
+   }
+   ```

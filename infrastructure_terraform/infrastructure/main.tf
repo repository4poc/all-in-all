@@ -57,13 +57,38 @@ resource "azurerm_network_security_group" "nsg" {
   resource_group_name = azurerm_resource_group.rg.name
 
   security_rule {
-    name                       = "AllowTCP"
+    name                       = "AllowHTTPInbound"
     priority                   = 100
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
     source_port_range          = "*"
-    destination_port_range     = "*"
+    destination_port_range     = "80"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "AllowHTTPSInbound"
+    priority                   = 110
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "443"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+
+  security_rule {
+    name                       = "AllowSSH"
+    priority                   = 120
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
     source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
@@ -89,15 +114,15 @@ resource "azurerm_virtual_network" "vnet" {
   })
 }
 
-resource "azurerm_subnet" "app_subnet" {
-  name                 = "app"
+resource "azurerm_subnet" "web_subnet" {
+  name                 = "web_subnet"
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = [local.subnet_values[0]] //["10.0.1.0/24"]
 }
 
 resource "azurerm_subnet" "backend_subnet" {
-  name                 = "backend"
+  name                 = "backend_subnet"
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = [local.subnet_values[1]] // ["10.0.2.0/24"]
@@ -110,8 +135,9 @@ resource "azurerm_network_interface" "vnic" {
 
   ip_configuration {
     name                          = "internal"
-    subnet_id                     = azurerm_subnet.app_subnet.id
+    subnet_id                     = azurerm_subnet.web_subnet.id
     private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.publicip.id
   }
 
   tags = merge(var.tags, {
@@ -123,4 +149,87 @@ resource "azurerm_network_interface" "vnic" {
 
 output "vmid" {
   value = azurerm_network_interface.vnic.id
+}
+
+
+resource "azurerm_public_ip" "publicip" {
+  name                = "publicip-${var.appname}-${var.tenant_code}-${var.environment}"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  allocation_method   = "Static"
+
+  tags = merge(var.tags, {
+    Application = var.appname
+    Environment = var.environment
+    Tenant      = var.tenant_code
+  })
+}
+
+resource "azurerm_subnet_network_security_group_association" "subnet_nsg_association" {
+  subnet_id                 = azurerm_subnet.web_subnet.id
+  network_security_group_id = azurerm_network_security_group.nsg.id
+}
+
+resource "azurerm_virtual_machine" "vm" {
+  name                  = "vm-${var.appname}-${var.tenant_code}-${var.environment}"
+  location              = azurerm_resource_group.rg.location
+  resource_group_name   = azurerm_resource_group.rg.name
+  network_interface_ids = [azurerm_network_interface.vnic.id]
+  vm_size               = "Standard_DS1_v2"
+
+  # Comment this line to not delete the OS disk automatically when deleting the VM
+  delete_os_disk_on_termination = true
+
+  # comment this line to not delete the data disks automatically when deleting the VM
+  delete_data_disks_on_termination = true
+
+  storage_image_reference {
+    publisher = "Canonical"
+    offer     = "0001-com-ubuntu-server-jammy"
+    sku       = "22_04-lts"
+    version   = "latest"
+  }
+  storage_os_disk {
+    name              = "osdisk-${var.appname}-${var.tenant_code}-${var.environment}"
+    caching           = "ReadWrite"
+    create_option     = "FromImage"
+    managed_disk_type = "Standard_LRS"
+  }
+  os_profile {
+    computer_name  = "hostname"
+    admin_username = "testadmin"
+    admin_password = var.admin_password
+  }
+  os_profile_linux_config {
+    disable_password_authentication = false
+  }
+  tags = merge(var.tags, {
+    Application = var.appname
+    Environment = var.environment
+    Tenant      = var.tenant_code
+  })
+}
+
+
+resource "azurerm_managed_disk" "datadisk" {
+  name                 = "datadisk-${var.appname}-${var.tenant_code}-${var.environment}"
+  location             = azurerm_resource_group.rg.location
+  resource_group_name  = azurerm_resource_group.rg.name
+  storage_account_type = "Standard_LRS"
+  create_option        = "Empty"
+  disk_size_gb         = "20"
+
+  tags = merge(var.tags, {
+    Application = var.appname
+    Environment = var.environment
+    Tenant      = var.tenant_code
+  })
+}
+
+
+resource "azurerm_virtual_machine_data_disk_attachment" "vm_datadisk" {
+  managed_disk_id    = azurerm_managed_disk.datadisk.id
+  virtual_machine_id = azurerm_virtual_machine.vm.id
+  lun                = "10"
+  caching            = "ReadWrite"
 }
