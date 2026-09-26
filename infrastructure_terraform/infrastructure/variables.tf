@@ -1,6 +1,11 @@
 variable "appname" {
   type = string
 }
+
+variable "tenant_code" {
+  type = string
+}
+
 variable "environment" {
   type = string
 }

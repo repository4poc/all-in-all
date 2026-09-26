@@ -1,4 +1,5 @@
 appname = "allinall"
+tenant_code = "pbn"
 environment = "dev"
 region = "swedencentral"
 

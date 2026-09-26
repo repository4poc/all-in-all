@@ -4,7 +4,7 @@ terraform {
   required_providers {
     azuread = {
       source  = "hashicorp/azuread"
-      version = "~> 3.0"
+      version = "=5.0.0"
     }
 
     azurerm = {
@@ -48,8 +48,8 @@ provider "helm" {
 
 # Create a resource group
 resource "azurerm_resource_group" "rg" {
-  name     = var.environment
-  location = "swedencentral"
+  name     = "${var.appname}-${var.environment}"
+  location = var.region
   tags     = var.tags
 }
 
