@@ -23,8 +23,7 @@ kube_version_upgrade = "rapid"
 enable_monitoring = false
 
 tags = {
-    "appname" : "allinall",
-    "env": "dev"
+    "version" : "1.0.0"
 }
 
 tenant_id = "be6f99f0-eabe-46e9-8b0a-6a270e401649"
