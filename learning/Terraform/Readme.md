@@ -731,11 +731,28 @@ locals {
 
 ![alt text](images/{201824D1-61F7-4479-9F9D-80954A43E29B}.png)
 
+![alt text](images/{FC63351E-1098-4BAD-9E1B-C3EC015706CB}.png)
+
+- local.virtual_network.name
+- local.virtual_network.address_prefixes[0]
+- local.subnet_address_prefix[0]
+- local.subnet_address_prefix[1]
+- local.subnets[0].name
+- local.subnets[0].address_prefixes[0]
+- local.subnets[0].name
+- local.subnets[1].address_prefixes[1]
+
+![alt text](images/{488ECF85-3E69-40FD-B21D-96F2A2D322E9}.png)
+
+![alt text](images/{420A1AAE-B8D2-4606-A857-AD448171FFF6}.png)
+
 ## Create Public IP Address
 
 ![alt text](images/{258D00BE-25DA-4DC4-A2D0-2FD43484F0E9}.png)
 
 ![alt text](images/{FFE1BB8E-4707-48EC-83EE-9A07BDDEA1BA}.png)
+
+![alt text](images/{CC5A4769-52C6-4676-B55C-27E2F0F8FEB7}.png)
 
 ```
 resource "azurerm_public_ip" "example" {
@@ -837,3 +854,383 @@ variable "admin_password" {
    caching            = "ReadWrite"
    }
    ```
+
+## Count - meta argument
+
+It is used to create multiple similar infrastructure
+
+- count=3
+- count.index (0,1,2)
+
+![alt text](images/{12EB8D1D-20F2-4B88-AD66-88FAADE316FB}.png)
+
+![alt text](images/{330ED79D-BB75-4694-88F8-66F2D440F066}.png)
+
+![alt text](images/{9676D726-6B14-4247-9A23-A3B85BC616EE}.png)
+
+## For each - meta argument
+
+It is used to create multiple distinct/different infrastructure using
+
+```
+foreach = toset(["value1","value2"])
+
+each.key
+```
+
+```
+foreach = tomap({"key"="value","key","value})
+
+- each.key
+- each.value
+```
+
+`toset(["value1","value2"])`
+
+![alt text](images/{D33593C7-C559-4187-BBC6-CEC5DB5AD138}.png)
+
+OR
+
+`tomap({"key"="value","key","value})`
+
+![alt text](images/{88F5B7CB-EAEA-4487-A198-6D2FE9E3BAC7}.png)
+
+## for each and variable
+
+`variables.tf`
+
+![alt text](images/{74B36844-C330-4C22-922A-9B4F8BC2985B}.png)
+
+`dev.tfvar`
+
+![alt text](images/{72EA4765-AD81-420F-86F0-9CFEEEF09FCE}.png)
+
+`main.tf`
+
+![alt text](images/{5D22983B-216B-43C4-BE54-55D6DBFDFC88}.png)
+
+![alt text](images/{345186D3-E009-4D92-8228-5327AE783098}.png)
+
+![alt text](images/{68865898-4C09-4110-A893-70BEAB8CFF5F}.png)
+
+`Correction`
+
+![alt text](images/{F4D78F98-434F-4478-9D4D-C61AD4B653AB}.png)
+
+## High Availability Approaches (For VM)
+
+![alt text](images/{6FC8F5CF-BB12-4DE3-9251-A856C60C21C8}.png)
+
+### Problem Statement
+
+![alt text](images/{7A439CD3-9FA8-4245-8EBA-E61601D9C360}.png)
+
+### Solution
+
+- Availability Set
+- Availability Zone
+
+`Availability Set (Resource)`
+
+- All VMs resides in the same data center.
+
+- Fault Domain (Group of VM share same poweer source and network)
+  - 3 (Max)
+- Update Domain (Group of VM can be rebooted at same time) - 20 (Max)
+  ![alt text](images/{981E2382-8FED-49DC-B706-4F6B0FDCC0BD}.png)
+
+  ![alt text](images/{44EF1A88-45DA-4DAF-B755-3E10AC65B2E5}.png)
+
+  ![alt text](images/{763440D8-2C40-41E8-903F-AC9234784EF6}.png)
+
+  ![alt text](images/{E59C6CE4-3E12-4538-904E-9247CBD8D090}.png)
+
+  ![alt text](images/{B22AC490-6BB6-48E0-AB7F-CA1CE22FE116}.png)
+
+  ![alt text](images/{AFE4F800-C8C9-4E6B-A62B-EF24840B0B08}.png)
+
+  ![alt text](images/{95BA1B3F-261F-44BD-AF40-B4AA93BAE7D4}.png)
+
+  ![alt text](images/{96FA9FD7-2B32-4B07-A90B-F17D4C83DA4A}.png)
+
+`Availability Zone`
+
+- An availability zone is Group of data centers.
+
+  ![alt text](images/{D562210F-511F-4B5F-ACCE-E7B887DD4F13}.png)
+
+  ![alt text](images/{0350337C-60A8-48E6-B605-054ACBF43518}.png)
+
+  `zone` : 1,2,3
+
+  ![alt text](images/{7C3CB465-830B-447C-B6EC-FB1B7DDD69E9}.png)
+
+## Azure Key Vault
+
+- Stores
+  - Secrets
+  - Encryption Keys
+  - Certificates
+
+![alt text](images/{51B9935D-9947-4AE9-A457-C09BB5C8115C}.png)
+
+### Soft Delete vs Purge Protection
+
+Example
+
+Suppose you delete a cryptographic key from a vault:
+
+With soft delete enabled
+
+1. You delete the key
+2. The key moves to a "deleted" state.
+3. You can recover it within the retention period (for example, 90 days).
+4. An authorized user may still be able to purge (permanently remove) it before the retention period ends.
+
+With soft delete + purge protection enabled
+
+1. You delete the key.
+2. The key moves to the deleted state.
+3. You can recover it during the retention period.
+4. Nobody can permanently purge it until the retention period expires.
+5. After the retention period, the service removes it automatically.
+
+| Feature                                    | Soft Delete                                         | Purge Protection                                                        |
+| ------------------------------------------ | --------------------------------------------------- | ----------------------------------------------------------------------- |
+| Purpose                                    | Allows recovery of deleted items                    | Prevents permanent deletion during retention period                     |
+| What happens when deleted?                 | Item is marked as deleted and retained for a period | Item remains in the soft-deleted state and cannot be permanently erased |
+| Can it be restored?                        | Yes, during the retention period                    | Yes, during the retention period                                        |
+| Can it be permanently deleted immediately? | Usually yes, if purge is allowed                    | No, purge is blocked until retention period expires                     |
+| Main protection against                    | Accidental deletion                                 | Malicious or accidental permanent deletion                              |
+
+![alt text](images/{17D80E38-9751-4524-B128-2C1EC90ED74A}.png)
+
+`Permission Model`
+
+In Azure we use RBAC permission model
+
+´´´
+resource "azurerm_key_vault" "example" {
+name = "examplekeyvault"
+location = azurerm_resource_group.example.location
+resource_group_name = azurerm_resource_group.example.name
+rbac_authorization_enabled = false
+enabled_for_disk_encryption = true
+tenant_id = data.azurerm_client_config.current.tenant_id
+soft_delete_retention_days = 7
+purge_protection_enabled = false
+
+sku_name = "standard"
+
+access_policy {
+tenant_id = data.azurerm_client_config.current.tenant_id
+object_id = data.azurerm_client_config.current.object_id
+
+    key_permissions = [
+      "Get",
+    ]
+
+    secret_permissions = [
+      "Get",
+    ]
+
+    storage_permissions = [
+      "Get",
+    ]
+
+}
+}
+´´´
+
+![alt text](images/{0DA08445-9076-419A-9561-68451B251CD8}.png)
+
+![alt text](images/{27FB892E-118A-4AD3-8D2A-AF306576FCC2}.png)
+
+![alt text](images/{7BE3BC58-1BA1-40FE-BEDD-13B991A0A322}.png)
+
+The are two ways of Authorization in key vault
+
+- RBAC
+- Access Policy
+
+| Feature                | Access Policies                                  | Azure RBAC                             |
+| ---------------------- | ------------------------------------------------ | -------------------------------------- |
+| Authorization scope    | Key Vault only                                   | Azure-wide authorization model         |
+| Permission assignment  | Individual permissions (Get, List, Delete, etc.) | Roles (e.g., Key Vault Secrets User)   |
+| Management             | Configured inside Key Vault                      | Managed through Azure IAM              |
+| Granularity            | Fine-grained per operation                       | Role-based, can be scoped              |
+| Integration            | Legacy model                                     | Recommended modern model               |
+| Separation of duties   | Limited                                          | Better support                         |
+| Consistency with Azure | Separate experience                              | Same model used across Azure resources |
+
+![alt text](images/{474B4A0F-8EEC-42C5-ABF4-F10183491682}.png)
+
+In case you need to create secrets in the key vault using terraform Application Object, you need to assign the `Secret Officer` Role to the Application Object on the Key Vault Resource
+
+![alt text](images/{D5F583E4-C507-4E4C-9C86-BC8F08949058}.png)
+
+## Using Variables as Object
+
+`variables.tf`
+
+![alt text](images/{D65E00F8-059F-4F7A-AC01-894ACE20CC65}.png)
+
+`dev.tfvars`
+
+![alt text](images/{BF419236-C5AF-4582-8FE8-E5BB1A03011D}.png)
+
+`main.tf`
+
+![alt text](images/{CA3D4760-1A10-4842-975B-16FE05D07D15}.png)
+
+## Using Data Sources
+
+In case we need to refer in terraform menifest file a pre-existing resource like key-vault, that is not terraform managed resource.
+
+`Usee Data Block`
+
+![alt text](images/{D4BCE4F6-C7D1-405E-BB7D-0439FBDC12FE}.png)
+
+![alt text](images/{E40F671F-A105-4CF5-881A-FA3101365E8E}.png)
+
+![alt text](images/{5BD0125B-B999-4B84-A952-D8DAD0315E27}.png)
+
+## Create Azure Key Vault Secret
+
+```
+resource "azurerm_key_vault_secret" "example" {
+    name = "secret-sauce"
+    value = "szechuan"
+    key_vault_id = azurerm_key_vault.example.id
+}
+```
+
+![alt text](images/{72F895E0-2E00-4BCB-AB4A-CA11669E806C}.png)
+
+`Refer secret from Key Vault in VM`
+
+![alt text](images/{D61CBE51-C8A0-4955-8FDD-83E203FB32AA}.png)
+
+In an enterprise Terraform setup, the usual pattern is:
+
+- Generate or provide the password once.
+- Store it in Azure Key Vault.
+- Read it from Key Vault whenever infrastructure needs it.
+- Never prompt for it during normal pipeline runs.
+- Prevent Terraform from recreating it unless explicitly intended.
+
+### Option 1: Terraform generates the password once (common)
+
+```
+resource "random_password" "vm_admin" {
+  length  = 24
+  special = true
+}
+
+resource "azurerm_key_vault_secret" "vm_admin_password" {
+    name         = "vm-admin-password"
+    value        = random_password.vm_admin.result
+    key_vault_id = azurerm_key_vault.main.id
+}
+```
+
+Use it in the VM:
+
+```
+resource "azurerm_windows_virtual_machine" "vm" {
+    name                = "vm01"
+    admin_username      = "adminuser"
+    admin_password      = azurerm_key_vault_secret.vm_admin_password.value
+}
+```
+
+Why it doesn't regenerate every run
+
+The random_password value is stored in Terraform state
+On subsequent runs:
+
+```
+terraform plan
+```
+
+Terraform sees the resource already exists in state and keeps the same password.
+
+This is why the Terraform state backend must be durable (Azure Storage Account with remote state).
+
+### Option 2: Security team manually creates the secret (very common in enterprises)
+
+```
+data "azurerm_key_vault_secret" "vm_admin_password" {
+  name         = "vm-admin-password"
+  key_vault_id = azurerm_key_vault.main.id
+}
+```
+
+Use it:
+
+```
+resource "azurerm_windows_virtual_machine" "vm" {
+  admin_username = "adminuser"
+  admin_password = data.azurerm_key_vault_secret.vm_admin_password.value
+}
+```
+
+Advantages:
+
+- Password lifecycle owned by security team.
+- Terraform never knows how the password was generated.
+- Password rotation can happen outside Terraform.
+
+Many regulated enterprises prefer this model.
+
+So in each subscription-dev/test/prod, we have separate resource group, shared-resources having (Pre-Existing)
+
+- storage account to store the terraform state
+- key vault with secret
+
+## Terraform vs Ansible
+
+- Terraform : Infrastructure management
+- Ansible : Configuration management
+
+## Custom Script Extension (CSE) in Virtual Machine
+
+CSE : Allow you to run scripts when the VM is first created or `bootstrap` your new machine with application like webserver.
+
+- Set up webserver with default home page
+
+## Build VM with webserve using Terraform
+
+1. Create Bootstrap script
+
+   `Powershell.ps1`
+
+   ![alt text](images/{6929F153-1672-4342-A166-A6B2043B3FC4}.png)
+
+   ![alt text](images/{220D9717-2AF3-45BE-8707-6BD55A24577B}.png)
+
+2. Store the `Bootstrap` powershell script into the Storage Account
+
+   ![alt text](images/{A3545FFC-F349-4513-967B-9F95F95660E2}.png)
+
+3. Install the CSE in VM with Script
+
+   ![alt text](images/{FAA7E7A9-5AFF-4D9C-AF60-B57A3DC3B5F1}.png)
+
+   ![alt text](images/{9133E85F-0523-45A6-A8BA-98637C2FC3D5}.png)
+
+## Dynamic Block
+
+`Problem Statement`
+
+Long Security Rules list
+
+![alt text](images/{C5EA3DAE-8812-4611-A688-F7476E2C50FD}.png)
+
+`Solution`
+
+Dynamic Block
+
+![alt text](images/{97D99B25-5D68-4A9C-B641-1DB22819A49B}.png)
+
+![alt text](images/{18940941-49F9-4B46-8D3A-453B7A3AA689}.png)

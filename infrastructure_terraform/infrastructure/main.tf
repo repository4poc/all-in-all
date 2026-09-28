@@ -233,3 +233,34 @@ resource "azurerm_virtual_machine_data_disk_attachment" "vm_datadisk" {
   lun                = "10"
   caching            = "ReadWrite"
 }
+
+
+resource "azurerm_key_vault" "keyvault" {
+  name                        = "keyvault-${var.appname}-${var.tenant_code}-${var.environment}"
+  location                    = azurerm_resource_group.rg.location
+  resource_group_name         = azurerm_resource_group.rg.name
+  rbac_authorization_enabled  = true
+  enabled_for_disk_encryption = true
+  tenant_id                   = data.azurerm_client_config.current.tenant_id
+  soft_delete_retention_days  = 0     // 30 for dev/test , 90 for production
+  purge_protection_enabled    = false // Enable for Production
+
+  sku_name = "standard"
+
+  access_policy {
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id = data.azurerm_client_config.current.object_id
+
+    key_permissions = [
+      "Get",
+    ]
+
+    secret_permissions = [
+      "Get",
+    ]
+
+    storage_permissions = [
+      "Get",
+    ]
+  }
+}
