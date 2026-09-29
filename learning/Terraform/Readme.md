@@ -1234,3 +1234,465 @@ Dynamic Block
 ![alt text](images/{97D99B25-5D68-4A9C-B641-1DB22819A49B}.png)
 
 ![alt text](images/{18940941-49F9-4B46-8D3A-453B7A3AA689}.png)
+
+## Reading a local file
+
+![alt text](images/{8AFBA49E-AB0E-4A52-980C-CC136601CB91}.png)
+
+## Build a linux machine with Nginx Web Server
+
+Similar to IIS web Service on Windows.
+
+We can install different package on Linux VM, one of the package is NGiNX
+
+### Enterprise-standard approaches
+
+`Linux`
+
+1. Store the script in a separate file
+
+```
+terraform/
+├── main.tf
+├── variables.tf
+├── linux/
+│   └── bootstrap.sh.tpl (bootstrap.sh)
+└── windows/
+    └── bootstrap.ps1.tpl
+```
+
+```
+# bootstrap.sh.tpl
+#!/bin/bash
+
+apt-get update
+apt-get install -y nginx
+```
+
+```
+custom_data = base64encode(
+  templatefile("${path.module}/linux/scripts/bootstrap.sh.tpl", {
+    environment = var.environment
+  })
+)
+```
+
+This works because Linux VMs can execute shell scripts (often via cloud-init).
+
+So the rule of thumb is:
+
+```
+No Terraform variables needed
+        ↓
+bootstrap.sh
+        ↓
+file()
+
+Terraform variables needed
+        ↓
+bootstrap.sh.tpl
+        ↓
+templatefile()
+```
+
+## Linux based machine
+
+![alt text](images/{DDEAF71A-DAA3-48B6-A541-F06A94AD7488}.png)
+
+![alt text](images/{7AC342AB-A074-4382-8A3E-E7A1626BE1E3}.png)
+
+`Make sure to disable the password authentication`
+
+## Provisioners
+
+Used to execute actions on local or remote machine
+
+`To have default.html page`
+
+![alt text](images/{B971C7EE-489B-4176-B266-AE2C3AE384A6}.png)
+
+![alt text](images/{E0DF7BD8-A058-4858-B536-056050587EDE}.png)
+
+## Azure Bastion
+
+![alt text](images/{8FCE5584-B85B-4AAA-8F57-5D7DA1EE3DE9}.png)
+
+![alt text](images/{99F61005-DE6F-4266-8632-47FA093E99D7}.png)
+
+1. AzureBastionSubnet
+
+   ![alt text](images/{24CAD03C-8315-4328-9D3E-9FE84D83568D}.png)
+
+2. PublicIPAddress
+
+   ![alt text](images/{57739AC1-5BBC-4A51-A670-2B963CDEECF0}.png)
+
+3. Bastion
+
+   ![alt text](images/{1D24D9CC-5041-4391-8A7B-7D90552BC210}.png)
+
+4. Connect to the VM using Bastion
+
+   ![alt text]({92798775-1D05-40BF-90FB-52DFC317A38A}.png)
+
+## Azure Load Balancer
+
+![alt text](images/{38C3A621-B392-41BD-9DDA-33BFBBAF8A21}.png)
+
+![alt text](images/{EFDD82F7-9FFB-4F3B-8B2F-FF9062D4F9B6}.png)
+
+![alt text](images/{12580CF2-47AD-4BCF-A017-94A45E289FC2}.png)
+
+![alt text](images/{2EB59ED8-4DE5-462E-A106-138A00767EC3}.png)
+
+- Frontend IP
+  - Public IP 1
+  - Public IP 2
+- Backend Pool
+  - Virual Machine A
+  - Virual Machine B
+  - Virual Machine C
+- Health Probe
+  - endpoint : /
+  - Port :
+- Loadbalancing Rules
+  - Frontend IP
+  - Frontend Port
+  - Backend Pool
+  - Backend Port
+  - Health Probe
+  - Session Persistence
+
+## Terraform Modules
+
+Module : Reusable Code.
+
+![alt text](images/{8A722E98-A537-46B4-9BBA-4EC7968DFCCE}.png)
+
+![alt text](images/{B41263E1-A52A-49E4-B534-0E02D4E57AF5}.png)
+
+![alt text](images/{921AD244-EB7E-44FD-A3B8-4982E13F47EA}.png)
+
+Each module folder has
+
+- main.tf
+- variables.tf
+- outputs.tf
+
+`main.tf`
+
+```
+
+module "acr" {
+  source              = "./modules/containers/acr"
+  resource_group_name = azurerm_resource_group.rg.name
+  region              = var.region
+  tags                = var.tags
+}
+
+```
+
+The main module can not access the data in the child modules
+
+## How information is passed ffrom one module to another
+
+Using output
+
+1. From sending module make sure you output that information into a variable.
+
+   ![alt text](images/{F8E59E02-377D-4FDA-8588-28C90BAA50C5}.png)
+
+2. In the receiving module, declare the variable and pass the information as variable
+
+   ![alt text](images/{BFD4C6C1-513C-4273-97EE-B2293929F134}.png)
+
+   ![alt text](images/{BE15B63C-CB5E-4573-A354-F07E3DD0779C}.png)
+
+3. Use it in the reciving resource
+
+   ![alt text](images/{C125EAC5-CEE3-4EBC-8DE9-478400EB1ECC}.png)
+
+![alt text](images/{FA82F754-12C2-4DB3-8395-4ACECAF424F0}.png)
+
+### Azure Loadbalancer connect to the private ip address of virtual machine.
+
+## VM Scaleset
+
+![alt text](images/{A606043A-88A0-423E-9F1D-9D8D1345C527}.png)
+
+- You define scaling conditions
+
+![alt text](images/{98DF17D3-6A27-40F5-A973-2D0CBF1A445F}.png)
+
+Load Balancer
+
+- Backend Pool
+  - VMs
+  - Scaleset
+
+## Azure Traffic Manager
+
+DNS based Global Load Balancer
+
+![alt text](images/{2F1380E4-D388-4CD1-9FF6-4DDA6E26189F}.png)
+
+![alt text](images/{9FEE3D99-54AE-4D9D-B0B1-3E38E306B786}.png)
+
+- Create Traffic Manager Profile
+  - Configure
+    - Request Type : Priority/Weighted
+    - Protocol: HTTP/HTTPS(choose)/TCP
+    - Port : 80/443(select)/<custom>
+    - PATH : /
+  - Endpoints
+    - Endpoint Type
+      - Azure Endpoint
+      - External Endpoint
+      - Target Resource Type
+        - Cloud Service
+        - App Service
+        - App Service Slot
+        - IP Address
+      - Target Resource
+      - Custom Header
+        - host:<App Service Endpoint>.azurewebsite.net
+
+      https://<name>.trafficmanager.net
+
+`variables.tf`
+
+![alt text](images/{FFE54EC9-AF7F-4F54-93EB-D213D6A496E3}.png)
+
+![alt text](images/{24005566-9933-4824-A363-5AB825485039}.png)
+
+`modules/web/main.tf`
+
+![alt text](images/{CB38F5D9-3B95-4E73-BB99-9395779E43D5}.png)
+
+`main.tf`
+
+![alt text]({B1A35390-AD4F-4115-A733-12DBAB5D8949}.png)
+
+| Feature                 | Azure Load Balancer    | Application Gateway | Traffic Manager | Azure Front Door        |
+| ----------------------- | ---------------------- | ------------------- | --------------- | ----------------------- |
+| Layer                   | L4 (TCP/UDP)           | L7 (HTTP/HTTPS)     | DNS             | L7 (HTTP/HTTPS)         |
+| Scope                   | Regional               | Regional            | Global          | Global                  |
+| Traffic Path            | In path                | In path             | DNS only        | In path                 |
+| WAF                     | No                     | Yes                 | No              | Yes                     |
+| SSL Termination         | No                     | Yes                 | No              | Yes                     |
+| URL Routing             | No                     | Yes                 | No              | Yes                     |
+| Global Failover         | No                     | Limited             | Yes             | Yes                     |
+| CDN/Edge Acceleration   | No                     | No                  | No              | Yes                     |
+| Private Backend Support | Limited                | Yes                 | N/A             | Yes (Premium)           |
+| Best For                | Network load balancing | Regional web apps   | DNS routing     | Global web applications |
+
+I would choose Traffic Manager when I need DNS-based global routing or failover and don't need a reverse proxy. I would choose Front Door for global HTTP/HTTPS applications where I need the traffic to pass through an Azure edge service for features such as Layer-7 routing, WAF, TLS termination, caching, and acceleration.
+
+| Your requirement                            | Usually consider    |
+| ------------------------------------------- | ------------------- |
+| Global web application                      | **Front Door**      |
+| Global HTTP/HTTPS + WAF                     | **Front Door**      |
+| Global HTTP/HTTPS + edge acceleration       | **Front Door**      |
+| Simple DNS failover                         | **Traffic Manager** |
+| DNS-based geographic routing                | **Traffic Manager** |
+| DNS-based priority routing                  | **Traffic Manager** |
+| Need actual HTTP request inspection/routing | **Front Door**      |
+
+Traffic Manager = DNS traffic director
+Front Door = global web traffic proxy
+
+```
+
+                         Traffic Manager
+                         /              \
+                        /                \
+                       ↓                  ↓
+                Front Door A        Front Door B
+                Primary platform   DR platform
+                       |                  |
+                +------+-----+      +-----+------+
+                |            |      |            |
+              Region 1    Region 2 Region 3   Region 4
+```
+
+## Application Gateway
+
+![alt text](images/{4E941357-A3D4-4770-9843-7A25243B4E84}.png)
+
+So Application Gateway based on the URL, direct the request to desired backend Pool
+
+Application Gateways uses its dedicated subnet to provision resources that perform the routing
+
+![alt text](images/{61581608-5378-442C-9F14-03414229A491}.png)
+
+```
+                         Internet
+                            |
+                            v
+                     Azure Front Door
+                      GLOBAL L7
+                            |
+              +-------------+-------------+
+              |                           |
+              v                           v
+       West Europe                   East US
+       REGIONAL                     REGIONAL
+              |                           |
+      Application Gateway          Application Gateway
+          (optional)                  (optional)
+              |                           |
+       Azure Load Balancer         Azure Load Balancer
+              |                           |
+          VM1  VM2 VM3               VM4 VM5 VM6
+```
+
+If you need URL routing/WAF at the regional level, you need to have Application Gateway (Mandatory) before Azure Load Balancer
+
+```
+                         GLOBAL
+                           │
+                           ▼
+                  ┌─────────────────┐
+                  │  Azure Front    │
+                  │     Door        │
+                  │ Global L7/WAF   │
+                  └────────┬────────┘
+                           │
+              ┌────────────┴────────────┐
+              │                         │
+              ▼                         ▼
+       WEST EUROPE                  EAST US
+        REGIONAL                    REGIONAL
+              │                         │
+       ┌──────▼──────┐           ┌──────▼──────┐
+       │Load Balancer│           │Load Balancer│
+       └──────┬──────┘           └──────┬──────┘
+              │                         │
+        ┌─────┼─────┐             ┌─────┼─────┐
+        ▼     ▼     ▼             ▼     ▼     ▼
+       VM1   VM2   VM3           VM4   VM5   VM6
+        │     │     │             │     │     │
+      AZ1   AZ2   AZ3           AZ1   AZ2   AZ3
+```
+
+```
+                         USERS
+                           │
+                           ▼
+                    Azure Front Door
+                   Global HTTP/HTTPS
+                    WAF / Routing
+                           │
+             ┌─────────────┴─────────────┐
+             │                           │
+             ▼                           ▼
+       WEST EUROPE                    EAST US
+       App Service                   App Service
+       Web App                       Web App
+             │                           │
+       Multiple instances          Multiple instances
+```
+
+So we dont not need Application Gateway in front of WebApp
+
+```
+❌ Front Door
+      ↓
+  Application Gateway
+      ↓
+  App Service
+```
+
+- Front Door → global traffic
+- App Service → regional web hosting/scaling
+- Application Gateway → optional; use when you have a specific regional gateway requirement
+- Traffic Manager → generally unnecessary if Front Door is already your global web entry point.-
+
+```
+                    Traffic Manager
+                          |
+              +-----------+-----------+
+              |                       |
+              v                       v
+       App Gateway East         App Gateway West
+              |                       |
+        +-----+-----+             +---+-----+
+        |           |             |         |
+      /api        /web          /api       /web
+        |           |             |         |
+      VMSS        VMSS          VMSS      VMSS
+```
+
+```
+                    Internet
+                       |
+                       v
+                Traffic Manager
+                 (DNS routing)
+                       |
+              +--------+--------+
+              |                 |
+              v                 v
+       App Gateway A      App Gateway B
+              |                 |
+       +------+------+    +-----+------+
+       |      |      |    |     |      |
+      VM1    VM2    VM3  VM4   VM5    VM6
+```
+
+![alt text](images/{C4529E10-0655-40A7-81BF-70C156A3FA21}.png)
+
+## What is a Landing Zone?
+
+A Landing Zone is a pre-configured cloud environment that provides the
+
+- Foundational infrastructure
+- Governance
+- Security controls
+- Networking
+- Operational capabilities
+
+Required for an organization to
+
+- safely and
+- consistently
+
+deploy workloads in the cloud.
+
+## Landing Zone Components
+
+1. Identity and access management
+2. Network architecture (hub-spoke, shared services, connectivity)
+3. Security controls and policies
+4. Logging and monitoring
+5. Compliance and governance standards
+6. Account/subscription/project structure
+7. Shared platform services
+
+## What is an Application Landing Zone?
+
+An Application Landing Zone (ALZ) is a cloud environment specifically designed and provisioned for a particular application. It inherits the organization’s standards and controls from the Landing Zone.
+
+## Application Landing Zone Components
+
+1. Application-specific networking
+2. Compute resources (VMs, containers, serverless services)
+3. Databases and storage
+4. Secrets and key management
+5. Application monitoring and alerting
+6. CI/CD integrations
+7. Application-specific security configurations
+
+The goal is to provide a ready-to-use environment where a specific application can be deployed and managed while remaining compliant with organizational standards.
+
+| Aspect     | Landing Zone                                                                                             | Application Landing Zone                                                                        |
+| ---------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Definition | Enterprise cloud foundation that establishes standards, governance, and shared services.                 | Environment tailored for a specific application or workload.                                    |
+| Purpose    | Enable secure and scalable cloud adoption across the organization.                                       | Enable deployment and operation of an individual application.                                   |
+| Scope      | Organization-wide.                                                                                       | Application-specific.                                                                           |
+| Ownership  | Cloud platform/central infrastructure team.                                                              | Application or product team.                                                                    |
+| Includes   | Identity, networking, security, governance, monitoring, shared services, account/subscription structure. | Compute, databases, storage, application networking, monitoring, secrets, deployment pipelines. |
+| Reuse      | Shared by multiple applications.                                                                         | Usually created per application or workload.                                                    |
+| Dependency | Independent foundational layer.                                                                          | Built on top of the Landing Zone.                                                               |
+
+![alt text](images/{8B2664F3-DCC9-4647-A381-C19474AD0542}.png)

@@ -36,6 +36,7 @@ variable "admin_password" {
 }
 
 
+
 variable "system_node_count" {}
 variable "aks_sys_nodepool_vm_size" {}
 
