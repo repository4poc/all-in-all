@@ -17,12 +17,12 @@ export const demos = [
   },
   {
     id: 2,
-    title: 'Search GitHub User',
+    title: 'Azure Landing Zone - Hub-Spoke Architecture (Multi-Region)',
     description:
-      ' Map your ESG topics to SDGs and international frameworks for transparent impact.',
-    href: '/demos/github',
+      'A production-ready Azure Landing Zone built with Terraform and a multi-region hub-and-spoke network architecture. It provides a governed foundation for deploying and managing cloud workloads across Azure regions..',
     techstack:
-      'GraphQL, Apollo Client, Next.js, React, TypeScript, Tailwind CSS',
+      'Microsoft Azure, Terraform, Azure Virtual Networks, Hub-and-Spoke Networking, VNet Peering, Azure Firewall, Azure Bastion, VPN Gateway / ExpressRoute, Network Security Groups, Azure Policy, Azure Resource Groups',
+    href: '/demos/landingzone',
   },
   {
     id: 3,
@@ -31,14 +31,5 @@ export const demos = [
       'The project is based on Apache Spark and Build Custom Machine Learning, Deep Learning, GenAI models and RAG Chatbots.',
     techstack: 'PySpark, Medallion Architecture, ',
     href: '/demos/databricks',
-  },
-  {
-    id: 4,
-    title: 'Azure Landing Zone - Hub-Spoke Architecture (Multi-Region)',
-    description:
-      'A production-ready Azure Landing Zone built with Terraform and a multi-region hub-and-spoke network architecture. It provides a governed foundation for deploying and managing cloud workloads across Azure regions..',
-    techstack:
-      'Microsoft Azure, Terraform, Azure Virtual Networks, Hub-and-Spoke Networking, VNet Peering, Azure Firewall, Azure Bastion, VPN Gateway / ExpressRoute, Network Security Groups, Azure Policy, Azure Resource Groups',
-    href: '/demos/landingzone',
   },
 ];
