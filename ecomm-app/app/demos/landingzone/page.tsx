@@ -10,12 +10,29 @@ export default function page() {
             Azure Landing Zone
           </h2>
           <p className='leading-relaxed text-slate-700'>
-            This demo showcases a production-ready Azure Landing Zone built with
+            This showcases a production-ready Azure Landing Zone built with
             Terraform and a multi-region hub-and-spoke network architecture. It
             provides a governed foundation for deploying and managing cloud
             workloads across Azure regions.
           </p>
         </section>
+        <div className='flex flex-wrap gap-4'>
+          <a
+            href='/request-demo'
+            className='inline-flex items-center rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700'
+          >
+            Request a Demo
+          </a>
+
+          <a
+            href='https://github.com/repository4poc/all-in-all/tree/main/azure_landing_zone'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='inline-flex items-center rounded-lg border border-gray-300 bg-white px-6 py-3 text-sm font-semibold text-gray-900 transition hover:bg-gray-50'
+          >
+            View on GitHub
+          </a>
+        </div>
         <Image src={LandingZone} alt='Landing Zone'></Image>
 
         <section className='rounded-lg border border-amber-200 bg-amber-50 p-4'>
