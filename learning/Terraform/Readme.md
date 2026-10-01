@@ -1696,3 +1696,138 @@ The goal is to provide a ready-to-use environment where a specific application c
 | Dependency | Independent foundational layer.                                                                          | Built on top of the Landing Zone.                                                               |
 
 ![alt text](images/{8B2664F3-DCC9-4647-A381-C19474AD0542}.png)
+
+```
+                    Git main
+                       │
+                       ▼
+                 Terraform Code
+                       │
+          ┌────────────┼────────────┐
+          ▼            ▼            ▼
+        DEV           TEST         PROD
+          │            │            │
+      dev.tfvars   test.tfvars   prod.tfvars
+          │            │            │
+          ▼            ▼            ▼
+     Dev Sub       Test Sub      Prod Sub
+```
+
+## Conditional Module execution per environment
+
+module "application" {
+source = "./modules/application"
+}
+
+module "database" {
+source = "./modules/database"
+}
+
+module "developer_tools" {
+source = "./modules/developer-tools"
+
+count = var.environment == "dev" ? 1 : 0
+}
+
+module "performance_testing" {
+source = "./modules/performance-testing"
+
+count = contains(["dev", "test"], var.environment) ? 1 : 0
+}
+
+## State file storage
+
+| Environment | State storage             | Recommended isolation |
+| ----------- | ------------------------- | --------------------- |
+| Dev         | Dedicated storage account | Separate              |
+| Test/QA     | Dedicated storage account | Separate              |
+| Prod        | Dedicated storage account | **Strongly separate** |
+
+```
+Azure Subscription / Account
+│
+├── Dev
+│   └── Storage Account
+│       └── tfstate
+│
+├── Test
+│   └── Storage Account
+│       └── tfstate
+│
+└── Prod
+    └── Storage Account
+        └── tfstate
+```
+
+Terraform state can contain sensitive information and is critical infrastructure metadata. Separating environments reduces:
+
+- Blast radius — a Dev mistake can't easily affect Prod state.
+- Access-control risk — developers can have access to Dev/Test without getting Prod state access.
+- Accidental deletion/corruption — separate accounts make mistakes less likely to cross environments.
+- Security/compliance concerns — Prod can have stricter RBAC, networking, logging, retention, and backup policies.
+- Operational coupling — maintenance or configuration changes to non-prod storage don't affect Prod
+
+## For Terraform infrastructure, a common enterprise approach is:
+
+```
+PR
+ │
+ ├─ terraform fmt
+ ├─ terraform validate
+ ├─ security checks
+ └─ terraform plan
+       │
+    Approval
+       │
+       ▼
+Merge to main
+       │
+  Create Release
+       │
+       ▼
+      Dev
+
+    Release
+       │
+       ▼
+      Test
+       │
+       ▼
+    Approval
+       │
+       ▼
+ terraform apply
+
+    Release
+       │
+       ▼
+      Prod
+       │
+       ▼
+    Approval
+       │
+ terraform apply
+
+```
+
+### A Management Group is a global governance hierarchy, above subscriptions. It isn't regional.
+
+For a multi-region application, you might have:
+
+```
+Tenant Root Group
+└─(Management Group)
+    │
+    │
+    ├── Dev Subscription
+    │   ├── Resources in West Europe
+    │   └── Resources in North Europe
+    │
+    └── Test Subscription
+    │    ├── Resources in West Europe
+    │    └── Resources in North Europe
+    │
+    ├── Prod Subscription
+    │   ├── Resources in West Europe
+    │   └── Resources in North Europe
+```

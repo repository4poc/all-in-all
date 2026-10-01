@@ -1,5 +1,18 @@
 ## Azure Virtual Machine
 
+A Virtual Machine is deployed within an subnet,
+
+- It gets
+  - A vNIC (Virtual Network Interface)
+    - IP address (public/private) is associated to the vNIC
+  - A OS Disk
+    - Host OS
+  - A NSG (Network Security Group)
+    - Filter incoming and outgoing connections onto the VM
+    - It can be attached to either vNIC or Subnet
+
+![alt text](images/{E5A97B4C-2488-4CBC-9083-81D6760D7313}.png)
+
 ## Azure Availability Set
 
 - Availability Zone Scoped

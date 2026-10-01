@@ -1,3 +1,9 @@
+## Azure Virtual Network
+
+An isolated virtual network on the Azure Cloud
+
+- A Virtual network need to have subnet, used to logically sagrigate the resources with the virtual network itself.
+
 ## Virtual Network Peering
 
 - Virtual networks are isolated from each other
