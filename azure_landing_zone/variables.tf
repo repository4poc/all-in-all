@@ -40,3 +40,17 @@ variable "virtual_networks" {
   }))
 }
 
+variable "features" {
+  description = "Enable or disable resource types"
+  type = object({
+    storage_account         = bool
+    aks                     = bool
+    acr                     = bool
+    key_vault               = bool
+    log_analytics_workspace = bool
+    virtual_network         = bool
+    firewall                = bool
+    bastion                 = bool
+    policy                  = bool
+  })
+}

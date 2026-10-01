@@ -138,3 +138,15 @@ virtual_networks = {
     }
   }
 }
+
+features = {
+  storage_account = false
+  aks             = true
+  acr             = true
+  key_vault       = false
+  log_analytics_workspace = false
+  virtual_network = true
+  firewall        = false
+  bastion         = false
+  policy          = true
+}

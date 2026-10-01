@@ -248,7 +248,8 @@ resource "azurerm_subnet_network_security_group_association" "subnet" {
 
 
 resource "azurerm_log_analytics_workspace" "log_analytics_workspace" {
-  for_each            = toset(var.regions)
+  for_each = var.features.log_analytics_workspace ? toset(var.regions) : toset([])
+
   name                = "law-${var.environment}-${each.value}"
   location            = each.value
   resource_group_name = "rg-monitoring-${each.value}"
@@ -272,8 +273,7 @@ resource "random_string" "kv_suffix" {
 }
 
 resource "azurerm_key_vault" "key_vault" {
-  for_each = toset(var.regions)
-
+  for_each                    = var.features.key_vault ? toset(var.regions) : toset([])
   name                        = "kv${var.environment}${substr(each.value, 0, 3)}${random_string.kv_suffix.result}"
   location                    = each.value
   resource_group_name         = "rg-app-${each.value}"
@@ -305,8 +305,7 @@ resource "azurerm_key_vault" "key_vault" {
 
 
 resource "azurerm_storage_account" "storage_account" {
-  for_each = toset(var.regions)
-
+  for_each                 = var.features.storage_account ? toset(var.regions) : toset([])
   name                     = "sa${var.environment}${substr(each.value, 0, 3)}${random_string.kv_suffix.result}"
   resource_group_name      = "rg-data-${each.value}"
   location                 = each.value
@@ -316,4 +315,55 @@ resource "azurerm_storage_account" "storage_account" {
   tags = {
     Environment = var.environment
   }
+}
+
+
+resource "azurerm_container_registry" "container_registry" {
+  for_each = var.features.acr ? toset(var.regions) : toset([])
+
+  name                = "acr${var.environment}${substr(each.value, 0, 3)}${random_string.kv_suffix.result}"
+  resource_group_name = "rg-app-${each.value}"
+  location            = each.value
+  sku                 = var.environment == "dev" ? "Basic" : "Standard"
+  admin_enabled       = false
+
+  tags = {
+    Environment = var.environment
+  }
+}
+
+resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
+  for_each = var.features.aks ? toset(var.regions) : toset([])
+
+  name                = "aks${var.environment}${substr(each.value, 0, 3)}${random_string.kv_suffix.result}"
+  location            = each.value
+  resource_group_name = "rg-app-${each.value}"
+  dns_prefix          = "exampleaks1"
+
+  node_provisioning_profile {
+    mode = "Auto"
+  }
+
+  default_node_pool {
+    name       = "default"
+    node_count = var.environment == "prod" ? 3 : 1
+    vm_size    = var.environment == "prod" ? "Standard_D4s_v5" : "Standard_B2s"
+  }
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  tags = {
+    Environment = var.environment
+  }
+}
+
+resource "azurerm_role_assignment" "role_assignment" {
+  for_each = var.features.aks ? toset(var.regions) : toset([])
+
+  principal_id                     = azurerm_kubernetes_cluster.kubernetes_cluster[each.value].kubelet_identity[0].object_id
+  role_definition_name             = "AcrPull"
+  scope                            = azurerm_container_registry.container_registry[each.value].id
+  skip_service_principal_aad_check = true
 }
