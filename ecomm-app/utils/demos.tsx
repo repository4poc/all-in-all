@@ -34,9 +34,8 @@ export const demos = [
   },
   {
     id: 4,
-    title: 'Impactful Dashboards',
-    description:
-      'Real-time ESG and carbon intelligence dashboards for strategic decisions.',
-    href: '/demos/ecommerce',
+    title: 'Azure Landing Zone - Hub-Spoke Architecture (Multi-Region)',
+    description: 'Azure Landing Zone - Hub-Spoke Architecture (Multi-Region).',
+    href: '/demos/landingzone',
   },
 ];
