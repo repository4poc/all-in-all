@@ -21,7 +21,7 @@ export const calculateMostForkedRepos = (
       };
     })
     .sort((a, b) => b.count - a.count)
-    .slice(0, 5);
+    .slice(0, 10);
   return forkedRepos;
 };
 
@@ -43,7 +43,7 @@ export const calculateMostStarredRepos = (
       return { repo: repo.name, stars: repo.stargazerCount };
     })
     .sort((a, b) => b.stars - a.stars)
-    .slice(0, 5);
+    .slice(0, 10);
   return starredRepos;
 };
 
@@ -77,6 +77,6 @@ export const calculatePopularLanguages = (
   }
   return Object.entries(languageMap)
     .sort(([, a], [, b]) => b - a)
-    .slice(0, 5)
+    .slice(0, 10)
     .map(([language, count]) => ({ language, count }));
 };

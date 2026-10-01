@@ -28,7 +28,7 @@ const ForkedRepos = ({ repositories }: { repositories: Repository[] }) => {
             tickLine={true}
             tickMargin={10}
             axisLine={false}
-            tickFormatter={(value) => value.slice(0, 10)}
+            tickFormatter={(value) => value.slice(0, 15)}
           />
           <YAxis dataKey='count' />
           <ChartTooltip content={<ChartTooltipContent />} />

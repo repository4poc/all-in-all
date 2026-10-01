@@ -21,16 +21,30 @@ const UsedLanguages = ({ repositories }: { repositories: Repository[] }) => {
   return (
     <div>
       <h2 className='text-xl font-semibold text-center mb-4'>Used Languages</h2>
-      <ChartContainer config={chartConfig} className='h-80 w-100'>
+
+      <ChartContainer config={chartConfig} className='h-80 w-full'>
         <BarChart accessibilityLayer data={popularLanguages}>
           <CartesianGrid vertical={false} />
-          <XAxis dataKey='language' tickLine={false} tickMargin={10} />
-          <YAxis dataKey='count' />
+
+          <XAxis
+            dataKey='language'
+            tickLine={false}
+            tickMargin={10}
+            angle={-45}
+            textAnchor='end'
+            interval={0}
+            height={80}
+          />
+
+          <YAxis />
+
           <ChartTooltip content={<ChartTooltipContent />} />
+
           <Bar dataKey='count' fill='var(--color-language)' radius={4} />
         </BarChart>
       </ChartContainer>
     </div>
   );
 };
+
 export default UsedLanguages;
