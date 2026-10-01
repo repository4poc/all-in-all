@@ -14,6 +14,8 @@ const AboutPage = () => {
       <h2 className='mt-6 text-lg tracking-wide leading-8 max-w-3xl mx-auto text-muted-foreground text-center mb-2'>
         Full Stack Developer | DevOps/Platform Engineer | AI Engineer
       </h2>
+
+      <h3 className='mb-2 text-lg font-heading'>GitHub Organization</h3>
       <UserProfile userName={userName} />
       <section className='rounded-lg border border-amber-200 bg-amber-50 p-4 mt-2'>
         <p className='leading-relaxed text-slate-700'>
