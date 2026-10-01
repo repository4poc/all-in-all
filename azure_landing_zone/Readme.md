@@ -23,35 +23,18 @@ Management Group
 ## Governance Layer
 
 ```
-Management Group (MG)
-│
-├── Azure Policies
-│   ├── Allowed Locations
-│   │   ├── westeurope
-│   │   └── northeurope
-│   │
-│   ├── Allowed Resource Types
-│   │   ├── Microsoft.Compute/virtualMachines
-│   │   ├── Microsoft.Storage/storageAccounts
-│   │   └── Microsoft.KeyVault/vaults
-│   │
-│   └── Required Tags
-│       ├── Environment
-│       ├── Application
-│       ├── Owner
-│       └── CostCenter
-│
-└── Subscriptions
-```
-
-```
 Tenant Root Group
 │
 └── Landing Zone Management Group
     │
     ├── Azure Policy
     │   ├── Allowed Locations                                       → Built-in
+    │   │   ├── westeurope
+    │   │   └── northeurope
     │   ├── Allowed Resource Types                                  → Built-in
+    │   │   ├── Microsoft.Compute/virtualMachines
+    │   │   ├── Microsoft.Storage/storageAccounts
+    │   │   └── Microsoft.KeyVault/vaults
     │   ├── Require Tags                                            → Built-in
     │       ├── Environment
     │       ├── Application
