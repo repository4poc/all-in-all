@@ -35,8 +35,10 @@ export const demos = [
   {
     id: 4,
     title: 'Azure Landing Zone - Hub-Spoke Architecture (Multi-Region)',
-    description: 'Azure Landing Zone - Hub-Spoke Architecture (Multi-Region).',
-    techstack: 'Azure, Terraform, Hub-Spoke Architecture',
+    description:
+      'A production-ready Azure Landing Zone built with Terraform and a multi-region hub-and-spoke network architecture. It provides a governed foundation for deploying and managing cloud workloads across Azure regions..',
+    techstack:
+      'Microsoft Azure, Terraform, Azure Virtual Networks, Hub-and-Spoke Networking, VNet Peering, Azure Firewall, Azure Bastion, VPN Gateway / ExpressRoute, Network Security Groups, Azure Policy, Azure Resource Groups',
     href: '/demos/landingzone',
   },
 ];
