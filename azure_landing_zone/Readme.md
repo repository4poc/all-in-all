@@ -15,4 +15,4 @@ Tenant Root Group
     │   └── CIS Microsoft Azure Foundations Benchmark v2.0.0        → Built-in
 ```
 
-![alt text](images/{88CDAC8F-EC80-4C9C-ADD7-9C608989381F}.png)
+![alt text](images/CustomLandingZone.png)
