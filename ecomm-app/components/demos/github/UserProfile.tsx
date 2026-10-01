@@ -18,7 +18,10 @@ export default function UserProfile({ userName }: UserProfileProps) {
   });
 
   if (error) return <h2 className='text-xl'>{error.message}</h2>;
-  if (!data) return <h2 className='text-xl'>User Not Found.</h2>;
+  if (!data)
+    return (
+      <h2 className='text-xl'>Loading user information from Github....</h2>
+    );
 
   const {
     avatarUrl,
