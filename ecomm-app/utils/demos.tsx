@@ -36,6 +36,7 @@ export const demos = [
     id: 4,
     title: 'Azure Landing Zone - Hub-Spoke Architecture (Multi-Region)',
     description: 'Azure Landing Zone - Hub-Spoke Architecture (Multi-Region).',
+    techstack: 'Azure, Terraform, Hub-Spoke Architecture',
     href: '/demos/landingzone',
   },
 ];
