@@ -26,6 +26,14 @@ export const demos = [
   },
   {
     id: 3,
+    title: 'Customer Support AI Agent',
+    description:
+      'The project is based on Apache Spark and Build Custom Machine Learning, Deep Learning, GenAI models and RAG Chatbots.',
+    techstack: '',
+    href: '/demos/customersupportagent',
+  },
+  {
+    id: 4,
     title: 'DataBricks and GenAI',
     description:
       'The project is based on Apache Spark and Build Custom Machine Learning, Deep Learning, GenAI models and RAG Chatbots.',

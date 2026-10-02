@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import LandingZone from '@/public/images/CustomLandingZone.png';
+import Deployment from '@/public/images/{884F2C97-6A07-4FBE-967E-B97CDFB436C0}.png';
 
 export default function page() {
   return (
@@ -34,7 +35,8 @@ export default function page() {
           </a>
         </div>
         <Image src={LandingZone} alt='Landing Zone'></Image>
-
+        <h3>Azure DevOps Pipeline</h3>
+        <Image src={Deployment} alt='Azure DevOps Pipeline'></Image>
         <section className='rounded-lg border border-amber-200 bg-amber-50 p-4'>
           <h3 className='mb-2 text-lg font-semibold text-amber-800'>
             Centralized governance and networking
@@ -46,7 +48,6 @@ export default function page() {
             Bastion.
           </p>
         </section>
-
         <section className='rounded-lg border border-amber-200 bg-amber-50 p-4'>
           <h3 className='mb-2 text-lg font-semibold text-amber-800'>
             Segmented application workloads
@@ -57,7 +58,6 @@ export default function page() {
             traffic flows.
           </p>
         </section>
-
         <section className='rounded-lg border border-amber-200 bg-amber-50 p-4'>
           <h3 className='mb-2 text-lg font-semibold text-amber-800'>
             Secure, multi-region connectivity
@@ -68,7 +68,6 @@ export default function page() {
             boundaries.
           </p>
         </section>
-
         <section className='rounded-lg border border-amber-200 bg-amber-50 p-4'>
           <h3 className='mb-2 text-lg font-semibold text-amber-800'>
             Policy-driven compliance
@@ -78,7 +77,6 @@ export default function page() {
             resource types, and mandatory tagging standards.
           </p>
         </section>
-
         <section className='rounded-lg border border-amber-200 bg-amber-50 p-4'>
           <h3 className='mb-2 text-lg font-semibold text-amber-800'>
             Built for enterprise scale
