@@ -9,7 +9,6 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@ag-ui/client": "^1.0.1",
     "@apollo/client": "^4.3.1",
     "@azure/msal-react": "^5.7.1",
     "@base-ui/react": "^1.8.0",
