@@ -1,5 +1,9 @@
 ![alt text](images/CustomLandingZone.png)
 
+## Azure DevOps Deployment Pipeline
+
+![alt text](images/{884F2C97-6A07-4FBE-967E-B97CDFB436C0}.png)
+
 ## Target Architecture
 
 ```

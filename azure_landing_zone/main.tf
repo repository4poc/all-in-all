@@ -19,7 +19,7 @@ data "azurerm_policy_definition" "require-diagnostic-settings-eks-to-law" {
 data "azurerm_subscription" "current" {}
 
 data "azurerm_management_group" "current" {
-  name = "Landing_Zone_Management_Group"
+  name = "alz"
 }
 
 
@@ -33,7 +33,7 @@ resource "azurerm_management_group_policy_assignment" "allowed_locations" {
     listOfAllowedLocations = {
       value = [
         "westeurope",
-        "northeurope"
+        "swedencentral"
       ]
     }
   })
@@ -50,7 +50,14 @@ resource "azurerm_management_group_policy_assignment" "allowed_resource_types" {
       value = [
         "Microsoft.Compute/virtualMachines",
         "Microsoft.Storage/storageAccounts",
-        "Microsoft.OperationalInsights/workspaces"
+        "Microsoft.OperationalInsights/workspaces",
+        "Microsoft.Network/networkSecurityGroups",
+        "Microsoft.Network/routeTables",
+        "Microsoft.Network/publicIPAddresses",
+        "Microsoft.Network/virtualNetworks",
+        "Microsoft.Network/virtualNetworks/subnets",
+        "Microsoft.Network/virtualHubs",
+        "Microsoft.Network/virtualWans"
       ]
     }
   })
@@ -112,7 +119,8 @@ output "policy_identity_principal_id" {
 }*/
 
 resource "azurerm_resource_group" "resource_groups" {
-  for_each = {
+
+  for_each = var.features.resource_group ? {
     for item in flatten([
       for region in var.regions : [
         for rg in var.resource_groups : {
@@ -122,7 +130,7 @@ resource "azurerm_resource_group" "resource_groups" {
         }
       ]
     ]) : item.key => item
-  }
+  } : {}
 
   name     = each.value.name
   location = each.value.region
@@ -158,7 +166,7 @@ resource "azurerm_virtual_network" "virtual_network" {
     Environment = var.environment
   }
 
-  depends_on = [azurerm_resource_group.resource_groups]
+  depends_on = [azurerm_resource_group.resource_groups, azurerm_management_group_policy_assignment.allowed_locations]
 }
 
 resource "azurerm_subnet" "subnet" {
@@ -260,6 +268,8 @@ resource "azurerm_log_analytics_workspace" "log_analytics_workspace" {
     Environment = var.environment
   }
 
+  depends_on = [azurerm_resource_group.resource_groups]
+
 }
 
 
@@ -301,6 +311,9 @@ resource "azurerm_key_vault" "key_vault" {
       "Get",
     ]
   }
+
+  depends_on = [azurerm_resource_group.resource_groups]
+
 }
 
 
@@ -315,6 +328,9 @@ resource "azurerm_storage_account" "storage_account" {
   tags = {
     Environment = var.environment
   }
+
+  depends_on = [azurerm_resource_group.resource_groups]
+
 }
 
 
@@ -330,6 +346,9 @@ resource "azurerm_container_registry" "container_registry" {
   tags = {
     Environment = var.environment
   }
+
+  depends_on = [azurerm_resource_group.resource_groups]
+
 }
 
 resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
@@ -338,7 +357,7 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
   name                = "aks${var.environment}${substr(each.value, 0, 3)}${random_string.kv_suffix.result}"
   location            = each.value
   resource_group_name = "rg-app-${each.value}"
-  dns_prefix          = "exampleaks1"
+  dns_prefix          = "appcluster"
 
   node_provisioning_profile {
     mode = "Auto"
@@ -346,8 +365,8 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
 
   default_node_pool {
     name       = "default"
-    node_count = var.environment == "prod" ? 3 : 1
-    vm_size    = var.environment == "prod" ? "Standard_D4s_v5" : "Standard_B2s"
+    node_count = var.environment == "dev" ? 1 : 3
+    vm_size    = var.environment == "dev" ? "Standard_B2s" : "Standard_D4s_v5"
   }
 
   identity {
@@ -357,6 +376,8 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
   tags = {
     Environment = var.environment
   }
+
+  depends_on = [azurerm_resource_group.resource_groups]
 }
 
 resource "azurerm_role_assignment" "role_assignment" {
@@ -366,4 +387,7 @@ resource "azurerm_role_assignment" "role_assignment" {
   role_definition_name             = "AcrPull"
   scope                            = azurerm_container_registry.container_registry[each.value].id
   skip_service_principal_aad_check = true
+
+  depends_on = [azurerm_kubernetes_cluster.kubernetes_cluster, azurerm_container_registry.container_registry]
+
 }

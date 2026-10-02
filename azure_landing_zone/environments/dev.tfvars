@@ -2,8 +2,7 @@ policy_configuration = {
   policy_scope = "MG" # Possible Value : MG/SUB
   
   allowed_locations = [
-    "westeurope",
-    "northeurope"
+     "westeurope","swedencentral"
   ]
 
   allowed_resource_types = [
@@ -141,12 +140,13 @@ virtual_networks = {
 
 features = {
   storage_account = false
-  aks             = true
-  acr             = true
+  aks             = false
+  acr             = false
   key_vault       = false
   log_analytics_workspace = false
-  virtual_network = true
+  virtual_network = false
   firewall        = false
   bastion         = false
-  policy          = true
+  policy          = false
+  resource_group = true
 }

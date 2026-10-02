@@ -1,0 +1,65 @@
+trigger: none
+
+pr: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+
+# ==========================
+# DEV DESTROY
+# ==========================
+- stage: DestroyDev
+  displayName: Destroy Dev Environment
+
+  jobs:
+
+  - deployment: DestroyDev
+    displayName: Terraform Destroy Dev
+
+    environment: Dev-Destroy
+
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+
+          - checkout: self
+
+          - task: TerraformInstaller@1
+            displayName: Install Terraform
+            inputs:
+              terraformVersion: latest
+
+          - task: AzureCLI@2
+            displayName: Terraform Init
+            inputs:
+              azureSubscription: 'AzDevOps-Azure-Connection'
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                terraform init
+
+          - task: AzureCLI@2
+            displayName: Terraform Destroy Plan
+            inputs:
+              azureSubscription: 'AzDevOps-Azure-Connection'
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                terraform plan \
+                  -destroy \
+                  -var-file="environments/dev.tfvars" \
+                  -out=dev-destroy.tfplan
+
+          - task: AzureCLI@2
+            displayName: Terraform Destroy
+            inputs:
+              azureSubscription: 'AzDevOps-Azure-Connection'
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                terraform apply \
+                  -auto-approve \
+                  dev-destroy.tfplan

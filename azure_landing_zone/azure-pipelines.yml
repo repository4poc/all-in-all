@@ -1,0 +1,180 @@
+trigger:
+  branches:
+    include:
+      - master
+
+parameters:
+  - name: environment
+    displayName: 'Environment'
+    type: string
+    default: dev
+    values:
+      - dev
+      - test
+      - prod
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+  # ==========================
+  # DEV
+  # ==========================
+  - stage: Dev
+    displayName: Deploy Dev
+    condition: |
+      and(
+        succeeded(),
+        eq('${{ parameters.environment }}', 'dev')
+      )
+
+    jobs:
+      - job: DevPlanApply
+
+        steps:
+          - task: TerraformInstaller@1
+            displayName: Install Terraform
+            inputs:
+              terraformVersion: latest
+
+          - task: AzureCLI@2
+            displayName: Terraform Init
+            inputs:
+              azureSubscription: 'AzDevOps-Azure-Connection'
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                terraform init -backend-config=backend/dev.hcl
+
+          - task: AzureCLI@2
+            displayName: Terraform validate
+            inputs:
+              azureSubscription: 'AzDevOps-Azure-Connection'
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                terraform validate
+
+          - task: AzureCLI@2
+            displayName: Terraform Plan Dev
+            inputs:
+              azureSubscription: 'AzDevOps-Azure-Connection'
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                terraform plan \
+                  -var-file="environments/dev.tfvars" \
+                  -out=dev.tfplan
+
+          - task: AzureCLI@2
+            displayName: Terraform Apply Dev
+            inputs:
+              azureSubscription: 'AzDevOps-Azure-Connection'
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                terraform apply -auto-approve dev.tfplan
+
+  # ==========================
+  # TEST
+  # ==========================
+  - stage: Test
+    displayName: Deploy Test
+    condition: |
+      and(
+        succeeded(),
+        eq('${{ parameters.environment }}', 'test')
+      )
+
+    jobs:
+      - job: TestPlanApply
+
+        steps:
+          - task: TerraformInstaller@1
+            displayName: Install Terraform
+            inputs:
+              terraformVersion: latest
+
+          - task: AzureCLI@2
+            displayName: Terraform Init
+            inputs:
+              azureSubscription: 'AzDevOps-Azure-Connection'
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                terraform init
+
+          - task: AzureCLI@2
+            displayName: Terraform Plan Test
+            inputs:
+              azureSubscription: 'AzDevOps-Azure-Connection'
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                terraform plan \
+                  -var-file="environments/test.tfvars" \
+                  -out=test.tfplan
+
+          - task: AzureCLI@2
+            displayName: Terraform Apply Test
+            inputs:
+              azureSubscription: 'AzDevOps-Azure-Connection'
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                terraform apply -auto-approve test.tfplan
+
+  # ==========================
+  # PROD
+  # ==========================
+  - stage: Prod
+    displayName: Deploy Prod
+    condition: |
+      and(
+        succeeded(),
+        eq('${{ parameters.environment }}', 'prod')
+      )
+
+    jobs:
+      - deployment: ProdDeployment
+        displayName: Production Deployment
+
+        environment: Production
+
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: TerraformInstaller@1
+                  displayName: Install Terraform
+                  inputs:
+                    terraformVersion: latest
+
+                - task: AzureCLI@2
+                  displayName: Terraform Init
+                  inputs:
+                    azureSubscription: 'AzDevOps-Azure-Connection'
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      terraform init
+
+                - task: AzureCLI@2
+                  displayName: Terraform Plan Prod
+                  inputs:
+                    azureSubscription: 'AzDevOps-Azure-Connection'
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      terraform plan \
+                        -var-file="environments/prod.tfvars" \
+                        -out=prod.tfplan
+
+                - task: AzureCLI@2
+                  displayName: Terraform Apply Prod
+                  inputs:
+                    azureSubscription: 'AzDevOps-Azure-Connection'
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      terraform apply -auto-approve prod.tfplan

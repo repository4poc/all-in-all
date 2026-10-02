@@ -52,5 +52,6 @@ variable "features" {
     firewall                = bool
     bastion                 = bool
     policy                  = bool
+    resource_group          = bool
   })
 }
