@@ -1,8 +1,17 @@
 ## What is DevOps
 
-DevOps is a set of practices, cultural principles, and tools that help software development (Dev) and IT operations (Ops) work together more effectively.
+`What`
 
-The goal is to deliver software faster, more reliably, and with higher quality by improving collaboration and automating repetitive tasks.
+DevOps is a set of (PPT) = practices, principles, and tools
+
+`Goal`
+
+To deliver software faster, more reliably, and with higher quality
+
+`How`
+
+- By improving collaboration across the Dev and Ops Teams
+- Automating repetitive tasks.
 
 ![alt text](images/{4EE21357-EEEF-4F11-803E-CC1324C6A2C1}.png)
 
