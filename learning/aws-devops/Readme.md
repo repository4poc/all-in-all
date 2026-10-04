@@ -2,7 +2,7 @@
 
 `What`
 
-DevOps is a set of (PPT) = practices, principles, and tools
+DevOps is a set of (PPT) = principles, practices and tools.
 
 `Goal`
 
@@ -415,3 +415,324 @@ NAT Gateway need to be in the public Subnet
 | CloudWatch       | Azure Monitor                                                                                     |
 | CloudFormation   | ARM/Bicep                                                                                         |
 | ECS/EKS          | Azure Container Apps / AKS                                                                        |
+
+## Create IAM User
+
+User Types
+
+- Root User
+- IAM User
+  - Name : AdminUser
+  - Policy : `Administrator Access` (Root Access - (Account & Billing) related access)
+
+| AWS                                 | Azure                                                                     |
+| ----------------------------------- | ------------------------------------------------------------------------- |
+| Organization                        | Management Group                                                          |
+| Organizational Unit (OU)            | Management Group (or nested Management Groups)                            |
+| AWS Account                         | Azure Subscription                                                        |
+| VPC                                 | Virtual Network (VNet)                                                    |
+| Subnet                              | Subnet                                                                    |
+| Route Table                         | Route Table (UDR - User Defined Route)                                    |
+| Internet Gateway                    | No direct 1:1 equivalent (Internet access is built into Azure networking) |
+| NAT Gateway                         | NAT Gateway                                                               |
+| Security Group                      | Network Security Group (NSG)                                              |
+| NACL                                | No direct equivalent                                                      |
+| EC2                                 | Virtual Machine (VM)                                                      |
+| AMI                                 | VM Image                                                                  |
+| Auto Scaling Group                  | Virtual Machine Scale Set (VMSS)                                          |
+| Elastic Load Balancer (ELB/ALB/NLB) | Azure Load Balancer / Application Gateway                                 |
+| EBS                                 | Managed Disk                                                              |
+| S3                                  | Blob Storage                                                              |
+| EFS                                 | Azure Files                                                               |
+| RDS                                 | Azure SQL Database / Azure Database Services                              |
+| DynamoDB                            | Cosmos DB                                                                 |
+| Lambda                              | Azure Functions                                                           |
+| IAM User/Role                       | Microsoft Entra ID User/Group/Service Principal                           |
+| CloudWatch                          | Azure Monitor                                                             |
+| CloudTrail                          | Azure Activity Log                                                        |
+| Systems Manager (SSM)               | Azure Automation / Azure Arc                                              |
+| CloudFormation                      | ARM Templates / Bicep                                                     |
+| ECS / EKS                           | AKS (Azure Kubernetes Service)                                            |
+| Secrets Manager                     | Azure Key Vault                                                           |
+| AWS Account                         | Azure Subscription                                                        |
+| Resource Groups (AWS service)       | Resource Group                                                            |
+
+#### Note
+
+- AWS Create a default VPC in all the regions
+
+## When Choose a Region, consider
+
+1. Target Audience
+2. AWS Service Availability
+3. Pricing
+4. Legal Requirement - GDPR (Data reside inside Europe only)
+
+### AWS and Azure Subnet Difference
+
+| Feature                                         | AWS                                     | Azure                             |
+| ----------------------------------------------- | --------------------------------------- | --------------------------------- |
+| VPC/VNet spans multiple AZs?                    | ✅ Yes                                  | ✅ Yes                            |
+| Subnet tied to a specific AZ?                   | ✅ Yes                                  | ❌ No                             |
+| VM deployed into an AZ?                         | Through a subnet that exists in that AZ | Directly by specifying Zone 1/2/3 |
+| Same subnet can contain VMs from different AZs? | ❌ No                                   | ✅ Yes                            |
+
+### AWS
+
+A subnet belongs to exactly one Availability Zone.
+
+```
+VPC
+│
+├── Subnet-A (AZ-a)
+│     └── EC2
+│
+├── Subnet-B (AZ-b)
+│     └── EC2
+│
+└── Subnet-C (AZ-c)
+      └── EC2
+```
+
+When creating a subnet, you must choose an AZ.
+
+![alt text](images/{21EDA342-E297-4A16-8790-DAEC061ECB16}.png)
+
+```
+10.0.1.0/24 → eu-west-1a
+10.0.2.0/24 → eu-west-1b
+10.0.3.0/24 → eu-west-1c
+```
+
+### Azure
+
+A subnet belongs to a VNet, not to a specific Availability Zone.
+
+Example:
+
+```
+VNet
+│
+└── Subnet-1 (10.0.1.0/24)
+      │
+      ├── VM1 (Availability Zone 1)
+      ├── VM2 (Availability Zone 2)
+      └── VM3 (Availability Zone 3)
+```
+
+The subnet is regional and can host resources deployed into different zones.
+
+### Why?
+
+AWS networking was originally designed around AZ-specific subnets.
+
+Azure networking is region-scoped, and zone placement is generally specified on the resource itself (VM, managed disk, etc.), not on the subnet.
+
+## Availability Zone
+
+A phycially separated data center withinn AWS region that is designed for High Availability..
+
+### AWS
+
+```
+AWS Region
+│
+└── VPC
+    │
+    ├── Availability Zone A
+    │   ├── Subnet A
+    │   │   ├── EC2
+    │   │   └── RDS
+    │   │
+    │   └── Subnet B
+    │       └── Resources
+    │
+    └── Availability Zone B
+        └── Subnet C
+            └── Resources
+```
+
+### Azure
+
+```
+Azure Region
+│
+└── VNet
+    │
+    └── Subnet
+        │
+        ├── VM → Availability Zone 1
+        ├── VM → Availability Zone 2
+        └── VM → Availability Zone 3
+```
+
+## Main Route Table
+
+When we create a VPC, a `main route table` is create
+
+![alt text](images/{BD2188B1-B398-4283-A90C-6AC2D4EFE454}.png)
+
+![alt text](images/{1EF10D35-B305-4F93-AFC0-3C06A5AF01BD}.png)
+
+So By default, route table only has routing rule allow within VPC communication only
+
+So by default, subnet is a not a public subnet, they are private subnet.
+
+## How to create a public subnet
+
+Here are the steps:
+
+1. Create an `Internet Gateway` and attacht it to VPC
+2. Update the `main route table` and add the `Routing rule` for `Internet Gateway`
+
+   ![alt text](images/routetable.png)
+
+   Better Approach
+
+   Create a new `Route table` and add `Routing rule` for `Internet Gateway`
+
+   ![alt text](images/routetable.png)
+
+3. Attach the `Routing table` to `Subnet` to make it a `Public Subnet`
+4. Enable `Auto Assign Public IP` to resources
+
+### AWS
+
+```
+VPC
+ │
+ ├── Internet Gateway
+ │
+ ├── Main Route Table
+ │     └── 10.0.0.0/16 → local
+ │
+ ├── Private Subnet
+ │     └── uses Main route table
+ │
+ └── Public Subnet
+       └── New Route Table
+             ├── 10.0.0.0/16 → local
+             └── 0.0.0.0/0 → Internet Gateway
+```
+
+A subnet becomes public when its associated route table has a route to an Internet Gateway
+
+### Azure
+
+Azure does not have an AWS-style Internet Gateway that you create and attach to the VNet.
+
+```
+Azure Region
+    │
+    └── VNet
+          │
+          ├── Subnet-A
+          │     └── VM
+          │
+          └── Subnet-B
+                └── VM
+```
+
+```
+VNet: 10.0.0.0/16
+
+Subnet:
+10.0.1.0/24
+```
+
+Azure automatically has system routes, including the VNet's own address space and Internet-related system routing.
+
+### No (Internet Gateway) concept in Azure.
+
+### For VM with public Internet access
+
+```
+Internet
+   │
+   ▼
+Public IP
+   │
+   ▼
+Azure VM
+   │
+   └── Subnet
+         │
+         └── VNet
+```
+
+A VM can have a Public IP associated with its network interface/IP configuration.
+
+You don't create an Internet Gateway.
+
+### For Private VM with outbound Internet access
+
+### Azure
+
+```
+Private VM
+   │
+   ▼
+Subnet
+   │
+   ▼
+NAT Gateway
+   │
+   ▼
+Public IP
+   │
+   ▼
+Internet
+```
+
+### AWS
+
+This is very similar to:
+
+```
+AWS:
+
+Private EC2
+    ↓
+Private Subnet
+    ↓
+NAT Gateway
+    ↓
+Internet Gateway
+    ↓
+Internet
+```
+
+### What about Azure Route Tables?
+
+Azure does have route tables.
+
+They are commonly called Route Tables / UDRs (User Defined Routes).
+
+You can create one and associate it with a subnet:
+
+```
+Route Table
+     │
+     └── Associate with Subnet
+                 │
+                 ├── VM1
+                 └── VM2
+```
+
+But you don't normally add:
+
+```
+0.0.0.0/0 → Internet Gateway
+```
+
+Instead, Azure route tables are mainly used when you want to control or override routing, for example:
+
+```
+0.0.0.0/0 → Azure Firewall
+```
+
+OR
+
+```
+10.20.0.0/16 → Virtual Appliance
+```
