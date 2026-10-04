@@ -594,7 +594,8 @@ Here are the steps:
    ![alt text](images/routetable.png)
 
 3. Attach the `Routing table` to `Subnet` to make it a `Public Subnet`
-4. Enable `Auto Assign Public IP` to resources
+4. Update the `Public Subnet`
+   - Enable `Auto Assign Public IP` to resources
 
 ### AWS
 
