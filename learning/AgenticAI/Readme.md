@@ -19,7 +19,7 @@ A software application that understand your instructions and provide useful resp
 
 ## AI Assistant vs AI Agent
 
-AI Assistant don't decide what to do next, on its own.
+AI Assistant don't take decide or action on its own
 
 ## AI Agent
 
@@ -231,3 +231,143 @@ while (True) :
 AI Model has no memory of your previous messages.
 
 ![alt text](images/{73F93207-63A9-4877-A323-EFB710E3E8F3}.png)
+
+## Prompt
+
+A Simple instruction we give to the AI Model
+
+## Conversation loop
+
+Instead of asking one hardcorded question, our assistant repeatedly
+
+- wait for user input
+- send it to the AI Model
+- Dispaly the response
+- Wait for the next question
+
+Leads to an interactive conversation.
+
+## AI Assistant with memory
+
+`Problem Statement`
+
+AI Assistant donot remember the previous conversation
+
+`Solution`
+
+Pass entire conversation to LLM everytime
+
+- Question 1
+- Answer 1
+- Question 2
+- Answer 2
+- ..
+- ..
+
+If we pass entire `conversation history`, our AI Assistant becomes smarter because it understand the `context`.
+
+## How conversation memory works
+
+Using List
+
+#### index start from 0
+
+```
+messages = [
+    {
+        "role"="user",
+        "content"=question
+    },
+    {
+        "role"="assistant",
+        "content"=Answer
+    }
+]
+```
+
+So everytime someone speaks we add another message into the list. The will give the Assistant `memory`, and it understand the context.
+
+## Store conversation history using python list
+
+1. Create empty list
+
+   ```
+   messages = List[]
+   ```
+
+2. `Append` User Message and Assistant Message `Object` into the List
+   - Message `Object` has
+     - (`role`) who is speaking
+       - user
+       - assistant
+       - system
+     - (`content`) What did he say
+
+   So `conversation memory` is just a growing `list of messages`
+
+   ```
+   while (True) :
+       question = input("Enter Question : ")
+
+       if (question.lower() == "quit") :
+           print("Good Bye..")
+           break
+
+       messages.append({
+               "role":"user",
+               "content":question
+           })
+
+       response = client.chat.completions.create(
+           model=os.getenv("MODEL"),
+           messages=messages
+       )
+
+       print(response.choices[0].message.content)
+
+       messages.append({
+               "role":"assistant",
+               "content":response.choices[0].message.content
+           })
+   ```
+
+   So everytime instead of question we are sending `conversation history (List of messages)` to AI Model
+
+## Debugging coversation history
+
+```
+    print("====Conversation History====")
+
+    for message in messages :
+        print(message["role"].title())
+        print(message["content"])
+
+    print("===========================")
+```
+
+## Python comments
+
+```
+## Comments
+
+```
+
+## Coversation History Limiting
+
+`Problem Statement`
+
+Sending entire conversation history become expensive and make the application slow.
+
+`Fix`
+
+Use Techniques like
+
+- Conversation Summarization
+- Sliding windows
+- Vector memory
+- Long-term memory
+- Knowledge retrieval
+
+`Memory enabled Assistant` : Assistant with memory
+
+## Prompt Engineering
