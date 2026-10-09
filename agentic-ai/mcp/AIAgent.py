@@ -1,7 +1,7 @@
 
 import asyncio
 from mcp_client import connect, discover_tools,execute_tool
-from MCPPlaner import planner
+from Planner import planner
 from openai import OpenAI
 from dotenv import load_dotenv
 import os
