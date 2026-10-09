@@ -1,0 +1,5 @@
+Project Name: Smart Library System
+Project Duration: January 2026 to June 2026
+Progamming Language: Python
+Database: SQLite
+Team mambers: Rahul, Aryan, Kanta
