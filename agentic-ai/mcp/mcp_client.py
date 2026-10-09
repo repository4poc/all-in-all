@@ -4,12 +4,10 @@ from pathlib import Path
 from fastmcp import Client
 from fastmcp.client.transports import StdioTransport
 
-
 async def connect():
     server_path = (
         Path(__file__).resolve().parent
-        / "date_mcp_server"
-        / "server.py"
+        / "mcp_server.py"
     )
 
     if not server_path.is_file():
@@ -31,3 +29,6 @@ async def discover_tools(client):
 
 async def execute_tool(client, tool_name, arguments=None):
     return await client.call_tool(tool_name, arguments or {})
+
+async def disconnect(client):
+    await client.__exist__(None,None,None)

@@ -8,6 +8,7 @@ def choose_tool(question):
     planner_prompt= f"""
                     You are an AI planner.
                     You return the tool to use based on the question.
+
                     Available tools
                     1. get_current_time
                         Use when the user ask for the current date and time
