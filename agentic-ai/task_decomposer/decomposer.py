@@ -7,7 +7,8 @@ load_dotenv()
 def decompose_task(user_request):
     prompt = f"""
             You are an AI task Planner.
-            Break the user's request into smaller tasks
+            It break the user request into smaller tasks
+
             Instructions:
             1. Create only the task necessary to complete the request.
             2. Put the task in the correct execution order.
@@ -15,7 +16,8 @@ def decompose_task(user_request):
             4. Return only task per line
             5. Do not number the tasks
             6. Do not explain anything.
-            User Request
+
+            User Request:
             {user_request}
             """
 

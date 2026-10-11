@@ -5,8 +5,6 @@ import os
 
 def format_answer(state):
 
-    load_dotenv()
-
     prompt = f"""
             The user asked:
             {state["user_request"]}
@@ -32,9 +30,6 @@ def format_answer(state):
             - Tools
             - internal reasoning
             """
-
-    print(prompt)
-
 
     load_dotenv()
 

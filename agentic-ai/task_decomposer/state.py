@@ -1,7 +1,6 @@
 def create_state(user_request,max_steps=5):
     return{
         "user_request": user_request,
-
         "tasks": [],
         "current_task": None,
         "results": [],
@@ -56,15 +55,15 @@ def add_result(state,result):
     state["results"].append(result)
 
 def get_pending_tasks(state):
+    pending = []
 
-    return [
-    item["task"]
-    for item in state["tasks"]
-    if item["state"] == "pending"
-    ]
+    for item in state["tasks"]:
+        if item["state"] == "pending":
+            pending.append(item["task"])
+    return pending
 
 def all_tasks_completed(state):
-    return all(
-        task["state"] == "completed"
-        for task in state["tasks"]
-    )
+    for task in state["tasks"]:
+        if task["state"] != "completed":
+            return False
+    return True

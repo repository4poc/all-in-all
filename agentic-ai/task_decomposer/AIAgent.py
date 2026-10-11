@@ -4,7 +4,7 @@ from mcp_client import connect, discover_tools
 from planner import planner
 from openai import OpenAI
 from dotenv import load_dotenv
-from mcp_executor import execute_action
+from executor import execute_action
 from loop import run_agent_loop
 from formatter import format_answer
 
@@ -26,7 +26,6 @@ async def main():
             print(tool.name, tool.description)
         print("------------------------")
 
-            
         #3. User Input
         user_request = input("Enter Question : ")
 

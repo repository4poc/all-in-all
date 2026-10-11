@@ -16,12 +16,6 @@ def build_tool_description(tools):
 
 def planner(state,tools):
 
-    print("-"*20)
-    for tool in tools:
-        print(tool.name, tool.description)
-    print("-"*20)
-
-
     tools_description = build_tool_description(tools)
 
     prompt= f"""

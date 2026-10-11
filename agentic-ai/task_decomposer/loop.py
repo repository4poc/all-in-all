@@ -31,7 +31,6 @@ def parse_decision(decision):
 async def run_agent_loop(
         user_request, planner, execute_action, format_answer,tools, client
 ):
-    print("------------------------run_agent_loop-------------------------------")
     #1. Create agent state
     state = create_state(user_request)
     print("Initial State",state)
@@ -43,47 +42,44 @@ async def run_agent_loop(
 
     #3. Store the tasks in state
     for task in planned_tasks:
-        add_task(state,task)  
+        add_task(state,task)          
 
     print("Update State With Tasks ",state)
 
-    #4. Start the agent loop
+    #4. Start the loop
     while state["current_step"] < state["max_steps"]:
 
+        print("Step:", state["current_step"] + 1)
+
         if all_tasks_completed(state):
-
-            print(
-                "\n--- Step "
-                f"{state['current_step'] + 1} ---"
-            )
-
-            answer = format_answer(
-                state
-            )
-
-            finish(
-                state,
-                answer
-            )
-
+            answer = format_answer(state)
+            finish(state,answer)
+            print("Update State - After finish", state)
             break        
 
-        print(
-            f"--Step {state['current_step']+1}--"
-        )
-
         # Ask the planner for the next action
+        # We are not storing all the tools in the state, rather planner will decide which tools to
+        # use based on the user_request.
         decision = planner(state,tools)
+        # decsion = {TASK: "***", TOOL:"***"}
         print("Planner selected: ", decision)
 
         # Check whether the goal is completed
         if decision.strip().upper() == "FINISH":
             answer = format_answer(state)
             finish(state,answer)
+            print("Update State - After finish", state)
             break
 
         # Extract task and tool
         task, tool = parse_decision(decision)
+
+        if tool == 'none':
+            answer = format_answer(state)
+            complete_task(state,task)
+            print("Update State - After finish", state)
+            next_step(state)
+            continue            
 
         print("Task: ",task, "Tool: ",tool)
 
