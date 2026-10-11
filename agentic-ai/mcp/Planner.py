@@ -25,8 +25,6 @@ def planner(question,tools):
 
     tools_description = build_tool_description(tools)
 
-    print("tools_description",tools_description)
-
     planner_prompt= f"""
                     You are an AI planner.
                     You return the tool to use based on the {question}.
