@@ -21,7 +21,7 @@ def format_answer(state):
             Intermediate Results:
             {state["results"]}            
 
-            Give the user a natural and conside answer.
+            Give the user a natural and consistant answer.
 
             Do not mention
             - internal planning.

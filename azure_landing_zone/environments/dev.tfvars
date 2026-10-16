@@ -18,10 +18,15 @@ policy_configuration = {
     "CostCenter"
   ]
 }
-
+/*
 regions=[
   "westeurope","swedencentral"
+]*/
+
+regions=[
+  "swedencentral"
 ]
+
 environment = "dev"
 
 resource_groups = [
@@ -139,14 +144,16 @@ virtual_networks = {
 }
 
 features = {
-  storage_account = false
+  resource_group = true
+
+  acr             = false  
   aks             = false
-  acr             = false
+
+  storage_account = false
   key_vault       = false
   log_analytics_workspace = false
   virtual_network = false
   firewall        = false
   bastion         = false
   policy          = false
-  resource_group = true
 }

@@ -1471,7 +1471,7 @@ DNS based Global Load Balancer
 
 `main.tf`
 
-![alt text]({B1A35390-AD4F-4115-A733-12DBAB5D8949}.png)
+![alt text](images/{B1A35390-AD4F-4115-A733-12DBAB5D8949}.png)
 
 | Feature                 | Azure Load Balancer    | Application Gateway | Traffic Manager | Azure Front Door        |
 | ----------------------- | ---------------------- | ------------------- | --------------- | ----------------------- |
@@ -1831,3 +1831,5 @@ Tenant Root Group
     │   ├── Resources in West Europe
     │   └── Resources in North Europe
 ```
+
+## Application Gateway

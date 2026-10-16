@@ -39,6 +39,7 @@ resource "azurerm_management_group_policy_assignment" "allowed_locations" {
   })
 }
 
+/*
 resource "azurerm_management_group_policy_assignment" "allowed_resource_types" {
   name                 = "allowed-resource-types"
   display_name         = "Allowed Resource Types"
@@ -57,12 +58,14 @@ resource "azurerm_management_group_policy_assignment" "allowed_resource_types" {
         "Microsoft.Network/virtualNetworks",
         "Microsoft.Network/virtualNetworks/subnets",
         "Microsoft.Network/virtualHubs",
-        "Microsoft.Network/virtualWans"
+        "Microsoft.Network/virtualWans",
+                "Microsoft.ContainerRegistry/registries",
+        "Microsoft.ContainerService/managedClusters"
       ]
     }
   })
 }
-
+*/
 
 resource "azurerm_management_group_policy_assignment" "required-tag" {
   name                 = "required-tag"

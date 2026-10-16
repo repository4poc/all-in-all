@@ -56,7 +56,6 @@ def add_result(state,result):
 
 def get_pending_tasks(state):
     pending = []
-
     for item in state["tasks"]:
         if item["state"] == "pending":
             pending.append(item["task"])
