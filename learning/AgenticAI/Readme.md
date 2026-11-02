@@ -38,12 +38,15 @@ AI Agent is an AI Assistant with additional abilities:
 4. AI Model understand your question/instruction and generate the response
 5. The response is send to your progam (client application)
 
-## AI Model / LLM
+## AI Model
 
 - It is the brain of an AI assistant
 - It has already learnt from enormous amount of books, articles, blogs, websites and publically available information
 - When you ask a question, the model `predicts` the most appropriate answer based on this knowledge.
 - Here we will use AI model, and do not train AI model
+- Types of AI Model
+  - Language Models
+  - Embedding Models
 
 ## Where does the AI Model runs
 
@@ -73,7 +76,12 @@ AI Agent is an AI Assistant with additional abilities:
 ## Install Ollama
 
 Ollama is a platform, that downloads and manage AI models for you.
-There are many Opensource AI Model available. We will use
+
+There are many Opensource AI Model available.
+
+https://ollama.com/library
+
+We will use
 
 - Qwen3:4b
 
@@ -189,7 +197,7 @@ So it is generating the answer on every run.
 
 You application becomes a bridge between the User and the AI Model
 
-AI-Powered Application : Application with AI
+AI-Powered/Enabled Application : Application with AI
 
 ## Build your first assistant
 
@@ -388,6 +396,14 @@ Similarly you assistant must behave differently like different expert.
 
 System Prompt
 
+`Example`
+
+The Actor remains the same, only the role changes.
+Here
+
+- Action : AI Model
+- Role: System Prompt (AI Job Description)
+
 ## System Prompt
 
 The AI Model Provide the Intelligence, But the behaviour we decide using `System Prompt`
@@ -399,8 +415,8 @@ It comprises of :
 - who are you `Set the personality`
 - What you do `Set the behaviour`
 - What tone should you use `Set the Tone`
-- What should you avoid `Set the restrictions`
 - Who is your audience `Set the Audience`
+- What should you avoid `Set the restrictions`
 - Other criterias
 
 eg
@@ -409,9 +425,10 @@ eg
 You are an experienced python trainer
 Who explains programming concept in simple language
 Your tone should be professional
-Keep answer under 200 words
 Your audience is IT students
 Always include one python example
+Keep answer under 200 words
+
 
 ```
 
@@ -445,7 +462,13 @@ An AI Model works in exactly the same way.
 
 The system message always comes first. Because the AI should know its role before it reads the user's questions.
 
-### Chatgpt , Gemini, Claude are general purpose AI Asssistant.
+### General purpose AI Asssistant.
+
+- Chatgpt
+- Gemini
+- Claude
+
+are general purpose AI Asssistant.
 
 ## Dynamically choosing Assitant
 
@@ -469,7 +492,7 @@ That's why AI Models are so powerful, you can set the behaviour and it will resp
 ## Tools
 
 - AI Model (Intelligence/Reasoning)
-- Tools (To perform action/task)
+- Tools (For taking action and performing tasks)
 
 ## AI Assistant with Memory and Tools
 
@@ -514,7 +537,7 @@ A piece of software that performs a specific task.
 
 So AI Agent should be smart enough to understand what can not be done by AI Model and should specific tool instead.
 
-AI `Reasons`or `Decide` what tool should be used, and the tool Perform the actual task`
+AI `Reasons` and `Decide` what tool should be used, and the tool Perform the actual task`
 
 `So the answer are not generated using AI Models instead computed using tools, that are much more reliable`
 
@@ -552,7 +575,9 @@ Your AI Model does not read a file, its your AI Assistant who reads the file and
 
 ## Reading your first text file with Python
 
-Professional software should fail gracefully, users appreciate clear error messages much more than long technical error traces.
+`Professional software should fail gracefully`, users appreciate clear error messages much more than long technical error traces.
+
+So we use `Exception Handling`
 
 ```
 def read_text_file(filename):
@@ -589,10 +614,10 @@ question = "Summarize the content. "
 
 In AI Engineering, the process is same for all kind of files.
 
-1. Read the data
+1. Read the data (`Retrieval`)
 2. Prepare a good prompt
-3. Send data + prompt to AI Model
-4. Let the AI reason/think over the data
+3. Send data + prompt to AI Model (`Agumented`)
+4. Let the AI reason/think over the data (`Generation`)
 5. Presend the result
 
 `Problem Statement`
@@ -629,9 +654,9 @@ messages = [{
         })
 ```
 
-To ensure reliability of AI Assistant, ensure you explicitly mention if it does not find the answer, don't guess. Just say "I dont know.."
+Don't `hallucinate`
 
-Again
+To ensure reliability of AI Assistant, ensure you explicitly mention if it does not find the answer, don't guess. Just say "I dont know.."
 
 In AI Engineering, the process is same for all kind of files.
 
@@ -647,8 +672,8 @@ So createing the prompt is the main thing.
 
 If you have a document size 750 pages to answer from. We can not send the entire file to AI Model
 
-- AI Model has Context Limit (Token Limit they can accept), so the Prompt become too large to fit in a single request.
-- It become expensive and slowdown the process.
+- `AI Model has Context Limit` (Token Limit they can accept), so the Prompt become too large to fit in a single request.
+- `It become expensive and slowdown` the process.
 - In case we have multiple files and we want to answer from those files and don't know which file, page and paragraph has the answer.
 
 `Solution`
@@ -657,20 +682,22 @@ RAG (Retrieval Argumented Generation)
 
 It is one of the most foundational techniques in modern AI application.
 
-Here instead of sending the entire document to the AI Model, we retrieve only the most relevant pieces of information before asking the model to answer.
+Here instead of sending the entire document to the AI Model, we retrieve only the most ` relevant pieces of information` before asking the model to answer.
 
 ## Why do we need RAG
 
-1. User sends `Question` (Prompt)
-2. Retrieval (Send the relavant Information)
-3. Argumented (Send `Questtion` + `Relevant information` to AI Model)
-4. Generation (AI Model Generate the response and send to User)
+1. `Prompting` : User sends Question
+2. `Retrieval` : Get the relavant pieces of Information
+3. `Argumented` : Send Questtion + Relevant pieces of information to AI Model
+4. `Generation` : AI Model Generate the response and send back.
 
 Terms like
 
+For `Retrieval`, we use
+
 - `Embeddings`
 - `Vector Database`
-- `Similarity Search` are just way to make step 2. `Retrieval`
+- `Similarity Search`
 
 ## Building a Knowledge base with multiple documents.
 
@@ -683,7 +710,13 @@ Terms like
 
 - Knowledge Base (Set of documents)
 
-## Simple Key based Retrieval
+## Search Types
+
+- Key Based Search - Exact word matching
+- Context/Meaning Based Search - Meaning matching
+- Hybrid Search
+
+## Simple Key-based Retriever
 
 So the keywords in the File content and if it is there the documents content is returned.
 
@@ -692,26 +725,27 @@ So the keywords in the File content and if it is there the documents content is 
 - Keyword `Programming Languate` =/= `Coding Lanaguage`
 - If there are 2 documents having `database` keyword, which one to return, just return the first match, without considering which is better
 
-In professional systems, we use better approaches for `Retrieval`. Instead of searching for exact words, rather searching for meaning.
+In professional systems, we use better approaches for `Retrieval`. Instead of searching for exact words, rather searching for Context/Meaning.
 
 ## Embedding and Sementic Search
 
-`What is Programming Language`
-`Explain Coding lanaguage`
+- `What is Programming Language`
+- `Explain Coding lanaguage`
 
-These both has same meaning.
+These both has same context/meaning.
 
-Professional RAG systems compare `meaning`, not exact words
+Professional RAG systems compare `meaning`, not `keywords` exact words
 
 `Problem Statement`
 How they compare meaning
 
 `Solution`
-They convert the text into numerical representation called `Embeddings`
+
+Using `Embeddings` : Converting the text into numerical representation
 
 `Embedding` = `Text` ---> `Numeric representations`
 
-These `embeddings` allow the computer to measure `sementic(meaning) similarity` rather than exact word matching.
+These `embeddings` allow the computer to measure `sementic similarity` rather than keyword matching.
 
 So `Embedding` solves the limitation of `Keyword Search`
 
@@ -729,7 +763,7 @@ So words and sentences with different meaning end up far apart.
 
 ## How Embedding represent Meaning
 
-`Embedding`
+`Embedding` : Process of Converting Text into Numeric Representation (A list of floating Point numbers) called `Vector`
 
 Simple list of numbers that represent some text.
 
@@ -739,7 +773,7 @@ Python
 Programming Language
 [0.23,-0.53,0.85,....]
 
-If two words are `sementically similar`, the vectors are also similar
+If two words are `sementically similar`, their vectors are also similar
 
 `Vector`
 
@@ -756,9 +790,9 @@ Once text becomes number, we can answer questions like
 - What all documents have these two sentences?
 - What document is closest to the user's question
 
-`Keyword Search` - Compare words
+`Keyword Search` - Compare Keywords
 
-`Embedding Search` - Compare meaning
+`Embedding Search` - Compare vectors
 
 ### Do we create embeddings ourselves
 
@@ -830,7 +864,7 @@ print(response.choices[0].message.content)
 
 Compare these Vectors for `Sementic Similarity`, closest match
 
-So Keyword matching is replaced with Vector Comparison
+So `Keyword matching is replaced with Vector Comparison`
 
 ## Finding the most similar document with Cosine Similarity.
 
@@ -848,7 +882,7 @@ Weather.txt     0.44
 
 Higher the Similarity Score, More similar the meaning.
 
-The technique most commonlty used to compare two embeddings is called `Cosine Similarity`, which compare two vectors
+The technique most commonlty used is called `Cosine Similarity`, which compare two vectors
 
 Cosine Similarity Score : 0-1
 
@@ -861,6 +895,8 @@ Cosine Similarity Score : 0-1
 ```
 
 You dont need to calculate this score yourself, python libraries `pip install Numpy` can do it for you.
+
+## Cosine Similarity Implemantation using Numpy
 
 ```
 def cosine_similarity(vector1, vector2):
@@ -893,7 +929,7 @@ So there are diff. search types
 - Keyword search
 - Sementic search (comparing the embeddings)
 
-In production environement, you might use
+In production environement, you might use Vector Databases like:
 
 - FAISS
 - ChromaDB
@@ -967,8 +1003,8 @@ It's first job is not to answer the user
 
 It's first job is
 
-- Decide which tools should it use `Planning`
-- Execute the tools to generat the result. `Execution`
+- `Planning` : Decide which tools should it use
+- `Execution` : Execute the tools to generat the result.
 
 So the separation between `planning` and `Execution` is one of the defining chracteristics of modern AI agents
 
@@ -995,22 +1031,22 @@ Respond
 
 A toolbox does not become useful because you have many tools, it becomes useful when you know
 
-- which tool to use
-- when to use and
-- in which order.
+- `which tool to use`
+- `when to use and`
+- `in which order.`
 
 The same is true for AI Agent.
 
 Agentic AI is fundamentally about
 
-- Decision Making, and
-- Workflow Orchestration
+- `Decision Making,`
+- `Workflow Orchestration`
 
   Not just adding more tools and powerful language models
 
 ## Building the Agent Brain
 
-The Agent brain job is `planning` (how to solver the problem)
+The Agent brain job is `planning` - how to solve the problem
 
 The brain does not solve the problem, it decide how to solver the problem
 
@@ -1021,7 +1057,7 @@ The brain does not solve the problem, it decide how to solver the problem
 User Question
 |
 V
-Planner (Deciding which tool to be used)
+Planner (How to solve the problem, shoule I call specific tool/MCP, should i send it to LLM, In which Order I should perform actions)
 |
 V
 Tool Name
@@ -1059,6 +1095,17 @@ So you go to LLM twice, first for asking the tool and second to give answer in a
 This demonstrate one of the strengths of LLM, the LLM Model can perform multiple roles depending on the instructions it receives.
 
 ## Building our first Planning Agent
+
+In Agentic AI, the Planner is the component responsible for deciding how to solve a problem, what steps to follow, and which tools to use.
+
+Main job of the Planner
+
+The Planner has two important responsibilities:
+
+1. `Planning`: Break a complex problem into smaller, manageable steps `Task Decomposition`
+2. `Tool selection`: Decide which tools, APIs, or other agents are needed to complete each step.
+
+Think of the Planner as the brain of an AI agent. It does not necessarily execute every task itself. Instead, it creates a strategy and guides other components to complete the task.
 
 AIPlanner.py
 
@@ -1135,9 +1182,7 @@ returns
 02-08-2026 H:4522 AM
 ```
 
-We could simply print it
-
-But that feels robotic
+We could simply print it, But that feels robotic
 
 Instead, lets ask the assistant to presend it naturally
 
@@ -1162,14 +1207,14 @@ Multi-Step Planner
 
 ## MCP (Model Context Protocol)
 
-To use `external capabilities` in our AI Agent.
+To use `external Tools` in our AI Agent.
 
 - Email Tool
 - Calander Tool
 - Stock Market Tool
 - Weather Tool
 
-Think of MCP (Model Context Protocol) as a `Open standard` that allow our AI Agent or Applicatoin to discover and use `external capabilities` in a consistent way.
+Think of MCP (Model Context Protocol) a Protocol - `Open standard` that allow our AI Agent or Applicatoin to discover and use `external Tools` in a consistent way.
 
 External capabilities like
 
@@ -1206,7 +1251,7 @@ V
 Tools
 ```
 
-1. AI Agent : It has
+1. AI Agent Components are:
    - Assistant
    - Planner
    - Memory
@@ -1222,6 +1267,8 @@ Tools
    The Client knows how to speak to the MCP Server
 
    The Agent does not need to worry about protocol details.
+
+   `AI Agent <--> MCP Client <--> MCP Server <--> Tools`
 
 3. MCP Server : It owns the tools
    - Weather tool
@@ -1409,14 +1456,18 @@ So AI Agent
 
 `Our AI Agent Perform 6 Steps`
 
-1. Connect to MCP Server
-2. Discover all available tools
-3. Call Planner :
-   - Pass it : User Input , Tools List
-   - Planner creates tools_description
+1. Connect to MCP Server via MCP Client
+2. Discover List of available tools
+3. Call Planner (User Input , List of available tools)
    - return the best fit tool based on question using `LLM`
-4. Execute the best fit tool
+4. Agent then Execute the best fit tool
 5. Pass Result to `LLM` to generate natural response.
+
+`AI Agent`
+![alt text](images/{B0078579-1506-4FDA-8B34-D973A7855236}.png)
+
+`Planner`
+![alt text](images/planner.png)
 
 `Problem Statement`
 
@@ -1428,9 +1479,10 @@ Autonomous AI Agent , that use multiple tools (via `multi-stage planner`)
 
 ## Autonomous AI Agent
 
-Autonomous AI Agent , that use multiple tools (via `multi-stage planner`)
+It has `multi-stage planner`, where each stage might use a different tool`)
 
 After everystep you look at the result, and decide `what to do next`.
+
 It should continue until the task is completed.
 
 This process of repeatedly thinking, acting, and observing is exactly how humans solve complex problems
@@ -1498,33 +1550,36 @@ Loop over
 The Planner receives 3 pieces of information
 
 - Question
-- Previous Action
-- Previous Observation
+- Agent State
+  - Previous Action
+  - Previous Observation
 
 Based on that the planner decides the next action.
 
-The AI Agent stores the result
+The AI Agent stores the result in
 
-`Action State`
+`Agent Loop`
+
+`Iteration 1: Agent State` include
 
 - Current Step: 1
 - Actions: generate_password
 - Observations: K#8Lm@4Pq
 - Finished: False
 
-`Action State`
+`Iteration 2: Agent State` include
 
 - Current Step: 2
 - Actions: current_time
 - Observations: 09/10/2026 10:12:21 PM
 - Finished: False
 
-`Action State`
+`Interation 3: Action State` include
 
 - Current Step: 3
 - Actions: current_time
 - Observations: 09/10/2026 10:12:21 PM
-- Finished: True
+- Finished: `True`
 
 Finally all the observations are combined into a user friendly response.
 
@@ -1743,25 +1798,31 @@ So our Agent :
 User Request
 |
 V
-Decompose Goal
+Task Decomposition
 |
 V
 Create Task
 |
 V
-Maintain State
+Agent State
 |
 V
-Plan
 |
 V
-Execute
+Agent Loop
 |
 V
-Observe
+(P E O U) - Called `Dynamic Planning`
+Plan (P - > Planner)
 |
 V
-Update
+Execute (E -> Tools)
+|
+V
+Observe (O -> State - Observations)
+|
+V
+Update (U -> Stop (Finished=True or Max-Steps reached) or Iterate again)
 |
 V
 Plan Again
@@ -1779,19 +1840,19 @@ This is called `Dynamic Planning`
 
 ![alt text](images/{3869B625-60A1-42EB-9B1B-4B944D35A00B}.png)
 
-- An autonomous agent must have a stopping condition, to avoid it running forever.
+- An autonomous agent must have a stopping condition, to avoid it running forever (Finished = True or Max_iterations reached.).
 - The decomposer breaks a large request into smaller tasks
 - The tasks are stored inside the agent state
-- The planner look at the tasks , previous actions and observatios, and decides what should happen next.
-- The planner does not execute the tool, just decide what to do
-- The executor and MCP layer decide how to execute it.
-- After executor, the result becomes an observation.
+- The planner look at the tasks , state/actions and state/observatios, and decides what should happen next.
+- The planner does not execute the tool, just decide what to do next (So Planner just return the next action)
+- The executor execute the action via MCP/RAG/LLM.
+- After executor, the result updated in state/observations.
 - The state is updated
   - action
   - observations
   - results
   - current step
-- The planner run again.
+- The planner run again with (tasks,state) return next action(call Tool/Exit Loop on Finished)
 
 This gives us a `goal-oriented autonomous loop`
 
@@ -1803,35 +1864,52 @@ This gives us a `goal-oriented autonomous loop`
 
 - Breaking documents into small pieces or chunks, create the embedding for each, and retrieve only the relevent chunks
 
-- We should not split the documents randonly.
+- We should not split the documents randomly.
 
   ![alt text](images/{28787FA0-8854-407E-BFF0-E163359FCD49}.png)
 
+## Chunking Strategy
+
 - Different chunking strategies
-  - Fixed size chunking with overlap.
-    ![alt text](images/{568E3513-0E83-415B-A362-54E3ECC8EE12}.png)
+  1. `Fixed size chunking with overlap`.
+     ![alt text](images/{568E3513-0E83-415B-A362-54E3ECC8EE12}.png)
 
-    ![alt text](images/{726A9C75-3465-4621-BC36-C9CAACA1C857}.png)
+     ![alt text](images/{726A9C75-3465-4621-BC36-C9CAACA1C857}.png)
 
-  - Paragraph based chunking
-  - Heading based chunking
+  2. `Paragraph based chunking`
+  3. `Heading based chunking`
 
-## Building a document chunking strategy with metadata
+## Fixed Size chunking with Overlap
+
+Fixed Size chunking with Overlap strategy with metadata
 
 - Chunk Size : 200
 - Overlap : 50
 
 So
 
+- Chunk :{
+  data: <Chunk Content>,
+  source: <FileName>,
+  chunkID: <Chunk Content>,
+  Embedding: <Embedding>,
+  metadata: <Tag VALUE>}
+
 - Chunk1 :{0-200,"file1.txt",1}
 - Chunk2 :{150-350,"file1.txt",2}
-- Chunk3 :{250-450,"file1.txt",3}
+- Chunk3 :{300-400,"file1.txt",3}
+
+![alt text](images/{6D01AE40-A71C-4D06-872F-BBC835AA78A9}.png)
+
+![alt text](images/{7B93E7A4-A6FB-4BEA-9EE6-EDA786FD50F3}.png)
+
+![alt text](images/{C44C8E9C-2F14-48F1-9193-3AF25FD344AA}.png)
 
 ![alt text](images/{F0FC986A-9ECC-4114-82AB-239FDFC675CF}.png)
 
 ![alt text](images/{AB40D52F-3086-482E-AEC0-2B9913979BCC}.png)
 
-## Generating embeddings for Document chunks
+## Generating embeddings for chunks
 
 ![alt text](images/chunk_embedding.png)
 
@@ -1839,10 +1917,12 @@ So we will do embedding of each chunk and store the vector in its chunk itself.
 
 So the chunk will have
 
-- Text
-- Document Name
-- Chunk_ID
-- Embedding
+- Text (Called `Chunk`)
+- Document Name (Called `metadata` )
+- Chunk_ID (Called `metadata` )
+- Embedding (Called `metadata` )
+
+`Metadata ` Data about the data
 
 ![alt text](images/{715E238F-30DA-4F31-9CC2-AAD20D3F5080}.png)
 
@@ -1850,10 +1930,12 @@ So the chunk will have
 
 ![alt text](images/{2DE53FFE-7933-470D-9B40-2464761B2759}.png)
 
+We dont give only one chunk, we should return top 3-5 chunks
+
 `NumPy`
 
 - `cosine similarity` is directly related to `NumPy` in AI and RAG applications.
-- `NumPy` helps you calculate how similar two vectors are mathematically.
+- `NumPy` helps you calculate how similar Score between two vectors are mathematically.
 - For more advanced text chunking, you might use `LangChain` or `LlamaIndex`
 
 ## Sementic Search
@@ -1869,6 +1951,8 @@ So the chunk will have
 - Model Contex Protocol
 
 ![alt text](images/{AA37EC5D-7434-44BF-A7B0-A318B9B6DFA6}.png)
+
+![alt text](images/RAGSearches.png)
 
 ## Hybrid Search (Keyword Search + Sementic Search)
 
@@ -1928,22 +2012,172 @@ Final_Score = Keyword_weight * keyword_search_score
 
 ![alt text](images/{1537D645-92B9-4455-AB5B-89304A52B35A}.png)
 
-Language Model is doing
+Components use LLM Models:
 
-1. Planning
-2. Task Decomposition
-3. Giving the Answer Naturally
+1. Task Decomposition
+2. Planning
+3. Assistant - Giving the Answer Naturally
 4. Re-Ranking
 
-![alt text](images/{E1E58413-34B8-4A6E-AF40-31223D223036}.png)
+`reranker.py`
+
+![alt text](images/{041C1F4F-28CD-4F98-B81F-6599707C8C01}.png)
 
 ![alt text](images/{EC097B9E-EA32-454E-A195-A53CF2FE069F}.png)
 
 ![alt text](images/{438A0F9C-943C-4BEC-8191-F6BEFDA11BAE}.png)
 
+![alt text](images/{CF5E4F0A-D196-45B2-9B7F-6D996676C318}.png)
+
+![alt text](images/{D36B358F-D32A-4E6E-A424-6B1F6A337AFC}.png)
+
 ![alt text](images/{A7AC1902-A57B-47BF-AAFF-6E37EC6270EE}.png)
 
 ## Building a vector store with ChromaDB and FAISS
+
+![alt text](images/{10EB9AE1-C864-4FB9-90EA-63DD6B779F71}.png)
+
+![alt text](images/{097B8776-3B53-4648-AC1E-CCA6031A2926}.png)
+
+![alt text](images/ollamatest.png)
+
+![alt text](images/{D584772D-64EC-4BEE-9ACE-C1EE3E5A07C3}.png)
+
+![alt text](images/{58806819-ECD7-41E4-B4A2-D4E03B579ED6}.png)
+
+![alt text](images/{814FFF88-3FE0-4AA3-A7FE-E316987E6EAE}.png)
+
+![alt text](images/{0C9154B7-5DD8-41F7-AA70-937A7513488D}.png)
+
+![alt text](images/{30191C7B-CC02-4884-8424-0E9E1406C7F4}.png)
+
+![alt text](images/{5D7ED57A-987E-4DC5-B88E-405B85B3D9F4}.png)
+
+![alt text](images/{226A5762-0177-4131-A68C-732C4C752909}.png)
+
+![alt text](images/{2334D6D7-77E7-4BB0-A015-13E805EAF8D0}.png)
+
+![alt text](images/{9960E2D1-264E-4304-8576-34FCD3FA1304}.png)
+
+![alt text](images/{EF0395D6-BE11-45F3-ACB6-ADC22370C767}.png)
+
+## Building Sementic Search with Chromadb
+
+![alt text](images/{0064E348-45C2-4986-94BC-A345B7CA6A7A}.png)
+
+![alt text](images/{2344E59F-34A8-43BE-96FE-F66C910345E7}.png)
+
+![alt text](images/{292C5561-266C-4D09-AA6A-199B598EFB0B}.png)
+
+![alt text](images/{43A92159-3900-4BC6-B2FD-F597EB6AE416}.png)
+
+![alt text](images/{C10E7A94-ED9C-4F86-B233-276D46AEFD68}.png)
+
+## Evaluating and Improving RAG Retrival Quality
+
+![alt text](images/{CCFCEAF6-B974-4A25-B617-1A875E5E0D2A}.png)
+
+![alt text](images/{D2C0262D-B389-41D4-A017-75210E2BFF23}.png)
+
+![alt text](images/{BCEF26A6-8521-44F8-B228-49EF6DB0A04F}.png)
+
+![alt text](images/{E4E36AC0-7BF6-499F-8D0E-1A2020BCDE0E}.png)
+
+![alt text](images/{FB9967D6-B173-43DA-97A8-754D532C0B96}.png)
+
+![alt text](images/{121B6DE2-3706-4750-9E1D-FA5AC9D849C7}.png)
+
+So in Production, `Evaluation Dataset` is created in advance for testing, where they know the answer of a particular questions lies in this chunkID
+
+This is done to calibrate the values
+
+- Top_K : How many candidate we should select
+- Keyword_Weight and Sementic_Weight
+- Size of chunk
+- Overlap Size
+
+![alt text](images/{2BE36A6E-0FEF-4FB1-AE32-E340FDEF4620}.png)
+
+![alt text](images/{D6160936-0BE0-4945-873B-BDA39B9710D9}.png)
+
+## Build the complete Advance RAG Retrieval Pipeline
+
+![alt text](images/{F82922D5-C240-4F45-A1B7-C1D0E3D10943}.png)
+
+![alt text](images/{FDB68927-991D-4096-8B5B-3FFDB50E8515}.png)
+
+![alt text](images/{DFC741D8-C0A5-4C5B-85A3-FD23CEAD1BA5}.png)
+
+![alt text](images/{918A5487-E302-4208-AC2F-BA6FF6591844}.png)
+
+![alt text](images/{4112AEAB-0C60-4ECB-9D60-26219043BADB}.png)
+
+![alt text](images/{45D601AB-F791-4A2D-81BD-AD7129D910F2}.png)
+
+![alt text](images/{7622D901-9BC4-40A7-B4EE-4ACEB47E3379}.png)
+
+![alt text](images/{11CDA222-DA8A-49F8-855A-5F610798EDAC}.png)
+
+![alt text](images/{01353221-4841-455C-86FE-AC0AFC487A1C}.png)
+
+![alt text](images/{8A1C7526-A83A-435E-9A00-BC691A7E755E}.png)
+
+![alt text](images/{D3C92B8D-2577-4851-B97C-762770320CFA}.png)
+
+`reverse=True` in decending Order
+
+During Reranking we always provide the lesser number of items.
+
+- Hybrid Search : Provide us the candidates
+- Reranking : Narrows it further
+
+## Build the final Generator for Advanced RAG
+
+![alt text](images/{2512A32E-57C8-4DD4-8FFB-4D78F965CDA0}.png)
+
+![alt text](images/{B3DA2235-6200-46FB-AE55-B8879DE97204}.png)
+
+![alt text](images/{D7AE9F11-46F4-41F5-97F9-89C1716837A3}.png)
+
+![alt text](images/{1FBD9135-CA42-47AC-B6FA-7103492FE95D}.png)
+
+![alt text](images/{56D886A3-B735-4045-A2EF-0753CAEF3CE9}.png)
+
+## Final Runner
+
+![alt text](images/{3827616F-4725-461D-87B2-0AE152458D72}.png)
+
+![alt text](images/{15D07259-8CD5-46A4-BE2E-711F9078E1D4}.png)
+
+![alt text](images/{F0C792BA-70D8-481B-8DBD-64AFF713630E}.png)
+
+![alt text](images/{1E441D7E-84D2-4AE8-8538-A968DB29F137}.png)
+
+![alt text](images/{65FEA2E1-CF37-4B06-8703-65470BA7FBD2}.png)
+
+![alt text](images/{ACBC4B79-DEFA-4BAC-B692-4FE20F6242EA}.png)
+
+![alt text](images/{228FFFED-E324-4156-8029-BEEB9A343150}.png)
+
+![alt text](images/{419EEC4C-303E-4272-BCEA-48C06B7DD1F0}.png)
+
+![alt text](images/{2F29F31F-CED7-4F90-AA01-C00F4DAC2855}.png)
+
+![alt text](images/{664D1CB8-8D86-4910-84C2-62B9B9ABAD9A}.png)
+
+![alt text](images/{7B15DC99-56C1-4940-B595-1F1E789AAFAA}.png)
+
+![alt text](images/{46A5304D-677F-447F-9678-A9C603B715DE}.png)
+
+![alt text](images/{99835B6F-F967-4AE4-B8C9-83487B0079CC}.png)
+
+![alt text](images/{DA9CCEBE-6021-4FF1-A50A-5C23EC43E01E}.png)
+
+![alt text](images/{1B051140-1AD8-4D33-ABE9-B8A5B7F60D9B}.png)
+
+![alt text](images/{68CF1F39-3394-4A2F-81CE-D3A9D952DED0}.png)
+
+![alt text](images/{4DC2148C-B40C-4B2F-BF4B-AA75E58B99D6}.png)
 
 Other better Options:
 
@@ -2008,3 +2242,97 @@ END (Node)
 ```
 
 So the workflow is converted into Graph in LangGraph.
+
+## Multi Agent Systems and Orchestration
+
+We have two components:
+
+- Manager : For Orchestration(Management). It decides
+  - Which agent should work
+  - What should happen next
+- Worker: The Agent responsible for actually performing the task.
+
+It is similart to, in a autonomous/Single Agent
+
+- Planner : who decides
+- Tools/MCP/RAG - Respobsile for actual task.
+
+## Building specialized AI Worker Research, Coding, Review Agents
+
+`ResearchAgent.py`
+![alt text](images/{20F6F5EC-6514-4C93-923B-FC9A4483799C}.png)
+
+`CodingAgent.py`
+
+![alt text](images/{A3359413-9C26-41A7-B456-93EAF62BD3A4}.png)
+
+![alt text](images/{BCC7DBDE-1DF1-43F6-8519-2DB74B112A3F}.png)
+
+![alt text](images/{3A80FBC5-5E8D-4B19-82C6-7DC9C98EE4E1}.png)
+
+`ReviewerAgent.py`
+
+![alt text](images/{8EDD8705-3416-406B-B3E3-75A435BD5297}.png)
+
+![alt text](images/{92402265-61B1-4F35-A35A-024FCC142C3A}.png)
+
+![alt text](images/{3A80FBC5-5E8D-4B19-82C6-7DC9C98EE4E1}.png)
+
+## Building Manager Agent - For Orchestration
+
+`Manager.py`
+
+![alt text](images/multiagentmanager.png)
+
+![alt text](images/{C4AC45FC-E168-40A9-8AD5-9C1A36D9C32C}.png)
+
+![alt text](images/{F8084D1B-4AB8-4FD1-A7F7-12FAB01C3908}.png)
+
+![alt text](images/multiagentflow.png)
+
+## Build Executor, that call the manager
+
+![alt text](images/{32A06F65-3C19-41E3-9B87-167DB7975AC3}.png)
+
+![alt text](images/{0DF87C14-EE3A-4E02-B8F8-41181D8C3F30}.png)
+
+![alt text](images/{FBE9EABD-D96E-4AA4-8712-04A2B9451F9F}.png)
+
+![alt text](images/{A8F8649E-457B-4A07-ADEC-B6596E7EF422}.png)
+
+## Making Multi-Agent Intelligent
+
+`ManagerState`
+
+![alt text](images/{EA740DB0-DE9A-4A18-BAD2-A1242A07F7E1}.png)
+
+![alt text](images/{2CC6C7DA-8EB1-434B-B4D2-1559FA87CA34}.png)
+
+![alt text](images/{43822BD4-FF47-4D87-83E7-26EB79D2B0FF}.png)
+
+![alt text](images/{28787FA0-8854-407E-BFF0-E122359FCD49}.png)
+
+![alt text](images/{6E491EC9-9BD0-4B8C-92E0-456EE993085A}.png)
+
+![alt text](images/{48A38620-ACC5-4B78-8E1C-B6AE8C77B409}.png)
+
+`Manager`- Chooses among agents
+`Planner`- Chooses among tools
+
+## Manager Loop
+
+![alt text](images/{A35ABA4E-E1AC-45B3-8585-3D3BA7C17A4D}.png)
+
+![alt text](images/{F29126C5-9EFE-406C-9461-2B218501F78D}.png)
+
+![alt text](images/{DE3C62E8-79E3-47A6-B673-2F8269448B1C}.png)
+
+![alt text](images/{CC1EFE23-2053-495E-BF77-B524E9187FC0}.png)
+
+`main.py`
+
+![alt text](images/{7B67A6CA-6364-40BF-A6BE-F036FB700174}.png)
+
+![alt text](images/{8CC22431-4C40-41A7-A062-13BCDD640FA8}.png)
+
+![alt text](images/{89C56FEA-4E81-40E6-99FB-1D8AF08C9195}.png)
