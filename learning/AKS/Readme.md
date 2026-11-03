@@ -143,6 +143,12 @@ Create a test file in the disk
 
 ![alt text](images/{85E1DB73-7109-49E3-A958-E6F9ABE09CF4}.png)
 
+Two pods running on the same Kubernetes node can use the same PVC, but it depends on the PVC's access mode and the storage driver.
+
+![alt text](images/{50836C81-321D-4F52-B586-E504FC314325}.png)
+
+Azure Managed Disks do not support RWX (ReadWriteMany) in the standard AKS Azure Disk CSI driver. They support RWO (ReadWriteOnce)
+
 ## 126. Create Snapshot and restore PVC - Azure Disk
 
 `VolumeSnapshotClass` and `VolumeSnapshot` are Kubernetes resources used to manage point-in-time snapshots of persistent storage volumes.
