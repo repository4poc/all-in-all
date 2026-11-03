@@ -129,7 +129,7 @@ k get storageclasses managed-csi -o yaml
 
 ![alt text](images/{F4DCE2AA-E96F-4DD0-BB3A-EF078C4A0D70}.png)
 
-A pvc is creates in the infrastructure resource group
+An Azure Disk is creates in the infrastructure resource group
 
 ![alt text](images/{E3C3FBA0-11D2-40A7-812F-C319418ACAAE}.png)
 
@@ -142,3 +142,86 @@ To check the Pod's Node
 Create a test file in the disk
 
 ![alt text](images/{85E1DB73-7109-49E3-A958-E6F9ABE09CF4}.png)
+
+## 126. Create Snapshot and restore PVC - Azure Disk
+
+`VolumeSnapshotClass` and `VolumeSnapshot` are Kubernetes resources used to manage point-in-time snapshots of persistent storage volumes.
+
+They are useful for backing up application data, restoring data, and creating storage copies.
+
+A `VolumeSnapshotClass` defines
+
+- how Kubernetes should create a snapshot.
+- what snapshot driver to use and deletion policy of the snapshot.
+
+It is similar to a `StorageClass`, but instead of defining how to provision a disk, it defines the snapshot behavior.
+
+![alt text](images/{DDD6D03E-3D5E-4110-B502-64B1A5327D37}.png)
+
+Important fields:
+
+- driver: CSI driver responsible for creating snapshots.
+- deletionPolicy: Determines what happens to the underlying snapshot when the Kubernetes VolumeSnapshot is deleted.
+  - Delete: Delete the storage snapshot.
+  - Retain: Keep the storage snapshot.
+
+A `VolumeSnapshot` represents a request for a snapshot of an existing PersistentVolumeClaim (PVC).
+
+![alt text](images/{44F90FCC-EA5D-41DA-A92E-348D68AA49DD}.png)
+
+Here:
+
+- volumeSnapshotClassName: Specifies which snapshot class to use.
+- persistentVolumeClaimName: Identifies the PVC whose data should be captured.
+  Kubernetes creates the snapshot through the CSI driver.
+
+`Create PVC from the snapshot, instead of storageClass (For Autocreate the azure disc)`
+
+![alt text](images/{8B4EC3D4-5A6D-4247-9826-8EC42CC568A6}.png)
+
+`Attach the PVC to the Pod`
+
+![alt text](images/{E350C197-3534-471B-A033-D085436BC0FC}.png)
+
+![alt text](images/{8A515911-012C-4A46-A5E5-59AD564C3B0E}.png)
+
+![alt text](images/{E902A34B-E3EF-4734-94A0-0CC4EE4A0524}.png)
+
+![alt text](images/{E96950F6-5CB2-4821-8CEE-1BFB679B67AB}.png)
+
+So we have new disk and snapshot
+
+![alt text](images/{67C610E9-E6CB-4F3A-A8AD-B248AF75E3E1}.png)
+
+Based on the configuration shown, the snapshot is taken only once when you create the VolumeSnapshot resource.
+
+Neither VolumeSnapshotClass nor VolumeSnapshot defines a snapshot frequency or schedule.
+
+```
+kubectl apply -f volumesnapshot.yaml
+```
+
+This triggers a snapshot creation request.
+
+If you want snapshots every hour, every day, or every week, you need an additional scheduling mechanism, such as:
+
+- Kubernetes CronJob – periodically creates VolumeSnapshot resources.
+- Velero – supports scheduled backups of Kubernetes resources and persistent volumes.
+
+`Important`: Creating another snapshot with the same name will not create a new snapshot. You need to create a new VolumeSnapshot resource with a unique name each time.
+
+## 127. Resize Azure Disk
+
+![alt text](images/{6C1E6B8A-9B5D-4539-9CF2-24234B058F1C}.png)
+
+If Azure disk is full
+
+![alt text](images/{C0D9538F-6814-4B72-9CDA-26A71020E01C}.png)
+
+![alt text](images/{99CCFBBD-D90B-436C-A985-049D3F4CB02D}.png)
+
+![alt text](images/{0F28C880-2D12-42DE-A7B0-3C4104505FD8}.png)
+
+![alt text](images/{A868E1EF-1B94-41C7-B8F0-FDD730C12533}.png)
+
+![alt text](images/{57FC1733-347D-46E2-BFC2-3D8F3C5DFA8A}.png)
