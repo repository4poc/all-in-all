@@ -225,3 +225,5 @@ If Azure disk is full
 ![alt text](images/{A868E1EF-1B94-41C7-B8F0-FDD730C12533}.png)
 
 ![alt text](images/{57FC1733-347D-46E2-BFC2-3D8F3C5DFA8A}.png)
+
+The Disk created out of the previous snapshot will not have any affect in size.
