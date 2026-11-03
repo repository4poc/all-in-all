@@ -1477,7 +1477,238 @@ What if we need to use two tools to respond to our questions.
 
 Autonomous AI Agent , that use multiple tools (via `multi-stage planner`)
 
+## Build Multiple MCP Servers
+
+![alt text](images/{C80100F6-CA75-4A9F-9E33-D897232B911E}.png)
+
+![alt text](images/{B89DBB87-FD03-44AE-B892-728681730EAC}.png)
+
+![alt text](images/{E9FD41EA-847D-45D2-BB24-505CDEB1F893}.png)
+
+![alt text](images/{5FC23916-9614-4786-8128-7963B48A4F6B}.png)
+
+![alt text](images/{FD0B2D76-45BA-4F66-BDC1-519E71EE9854}.png)
+
+![alt text](images/{C897D6A7-1B1E-484E-8C51-B6112A890CFF}.png)
+
+## Build fexible MCP Client
+
+![alt text](images/{2C8801B8-86DE-4980-9A40-48E2D86A0909}.png)
+
+![alt text](images/multipleMCP.png)
+
+![alt text](images/{040FF96E-BF58-4A26-911B-4B2011109C65}.png)
+
+![alt text](images/{4D0BE894-1CEC-4ED3-BB33-7F1753823AA3}.png)
+
+![alt text](images/{5815C02B-2B72-49F7-BBEF-AA0A962C9335}.png)
+
+## Building Flexible MCP Client Registry with Multiple Servers
+
+![alt text](images/{05AA0B30-4D43-4636-BA48-770F60915F53}.png)
+
+![alt text](images/{2AE1042E-3954-443C-A5E7-7E45F3C6E988}.png)
+
+![alt text](images/{6E58E368-B257-48BE-B5C9-464DD0BF7050}.png)
+
+![alt text](images/{0A7444C0-5841-41D5-870B-1E683727BA7E}.png)
+
+![alt text](images/{5A074063-180C-44DC-8970-B9EF5468114A}.png)
+
+![alt text](images/{EF3FCDEE-CBD1-402E-A54C-0F77B4377E94}.png)
+
+![alt text](images/{A7C65D80-EB6C-4FB0-A82D-24E5A33BAA69}.png)
+
+![alt text](images/{76672EF6-655A-480B-8835-1312F5CDD022}.png)
+
+![alt text](images/{EE010B71-9070-4DF7-AA04-02DFD95DF3AE}.png)
+
+![alt text](images/{F8AF707D-BFF9-4AB1-A8BD-42EF1C31BDDA}.png)
+
+## Demo
+
+![alt text](images/{5D39D89C-0559-46DF-A96B-2233A5B9637F}.png)
+
+![alt text](images/{245D24B1-B41C-4838-8C1F-FE6EE85FB76C}.png)
+
+![alt text](images/{7F2AE726-460A-4268-88EF-9C7E3D53509B}.png)
+
+![alt text](images/{2F926F0E-55EC-4C06-BF96-47DF51700358}.png)
+
+![alt text](images/{88367E8C-9F1F-408B-87BB-9FF819AAEC01}.png)
+
+## Upgrade Planner to handle tool arguments
+
+![alt text](images/{F0250DC6-1C7B-4044-945A-BC75A2D741DB}.png)
+
+![alt text](images/{5DDEC286-56CC-4093-ABBC-223A0FA6E825}.png)
+
+![alt text](images/{A5BC2B25-803F-480C-B98F-63D1AD95F36B}.png)
+
+So here the planner will return a dictionary, instead of just a tool name.
+
+![alt text](images/{F7253EC6-672C-4A15-9591-2ACB4E99F713}.png)
+
+![alt text](images/{76A86CEC-F948-42FD-A687-FCC1C827DAD7}.png)
+
+![alt text](images/{D58ED969-942F-42E0-B87A-B913C3124410}.png)
+
+![alt text](images/{EBA5CF4F-99F4-410D-B049-25A39D394552}.png)
+
+![alt text](images/{DA3B4028-F742-42B3-BF20-C5DE9FE9112A}.png)
+
+![alt text](images/{6D339D02-7B75-4AAA-B563-EF9AA3DE5CF3}.png)
+
+![alt text](images/{4C8EF051-C686-4DAB-8E9A-16D7A5708A82}.png)
+
+![alt text](images/{2F4422CF-468B-48E5-A764-470514D0B8CA}.png)
+
+![alt text](images/{1A1ADEE0-CA68-4838-91F5-B409FD69AD9D}.png)
+
+![alt text](images/{802848FF-37D4-44C7-8409-12A000F7D643}.png)
+
+### `{{expression}} vs {expression} Inside the prompt`
+
+Inside the prompt the single curly braces expression will be evaluated, the first will be used as a JSON.
+
+`{expression}` => Value
+
+`{{expression}}` => {Value}
+
+so
+
+`{{key:value,key:value}}` => {key:value,key:value}
+
+![alt text](images/{81DC2A21-BC79-4FFE-8569-9B5F982E040C}.png)
+
+So intead of retunig "Finnish" we are returning JSON.
+
+![alt text](images/{1EBA5168-01D3-4F40-B14D-182C3F1348B3}.png)
+
+![alt text](images/keywordSearch.png{7AF1C83D-7EC5-4D67-A074-F7B86351E1A9}.png)
+
+![alt text](images/{2192C8BB-25D6-4CF8-99B7-21A593A9B905}.png)
+
+![alt text](images/{AEEA704D-1C4C-4A12-88E7-DAFB466EA5AF}.png)
+
+Earlier it was taking tools instead of tool_Registry
+`action` : returned by the planner - tool - argument
+
+![alt text](images/{7DA45643-8E74-4868-BA77-BEFEE4947FAF}.png)
+
+![alt text](images/{1AA871D3-7EC4-4769-BA04-FFB8B1E6A5C2}.png)
+
+### Upgrade Agent Loop
+
+![alt text](images/{09D236A4-82FA-4F42-A5DD-6C5077CD7BCC}.png)
+
+![alt text](images/{C8474A32-81D8-425B-B360-F2B1DABDD1A6}.png)
+
+![alt text](images/{90F6B1D8-F0F3-4CAD-AFF7-D40039E40E03}.png)
+
+![alt text](images/{AD8A6BB8-4A7A-4AF3-B9DF-8F87F3B00903}.png)
+
+### Upgrade Runner
+
+![alt text](images/{4425AFF8-3713-49F7-ADE8-D331EF4DA5AD}.png)
+
+![alt text](images/{269A91AE-220A-4CAD-B895-B9C1BD03C9A7}.png)
+
+![alt text](images/{CB0CA67D-411F-4142-9405-AFF3F6C5883F}.png)
+
+![alt text](images/{9CBB1184-A1F7-4273-A4D6-8F0181C8021A}.png)
+
+![alt text](images/{D125C80E-0D7E-4DC8-8F8D-D3532B248BB9}.png)
+
+![alt text](images/{9C75B1ED-EE79-4FA3-A536-993B4D131CEA}.png)
+
+![alt text](images/{5286865A-443C-4F74-88BA-9E865DDE202B}.png)
+
+![alt text](images/{920FF23B-1EEE-43BD-858F-ABB1459687B2}.png)
+
+![alt text](images/{0DF5FDAE-EF20-4E34-9332-1B88963EA80B}.png)
+
+## Understand MCP Tools and Resources
+
+There are 3 MCP primitives (tool, resource, prompt)
+
+1. Tool
+
+![alt text](images/{1A3794CE-DCBC-4368-B0F0-A217291CE6D6}.png)
+
+2. Resource
+
+![alt text](images/{13D8E126-E237-4180-859E-ED88ABC2B981}.png)
+
+![alt text](images/{102806F8-41BA-4908-BFAD-7D5089AB3623}.png)
+
+![alt text](images/{1E33523C-0FCB-4B5E-A501-DAF74FBA0F5E}.png)
+
+![alt text](images/{6D8E1788-2CB5-467C-B759-C812A69301A3}.png)
+
+![alt text](images/{60B812AC-F05C-4658-8D7A-857F032CD622}.png)
+
+![alt text](images/{98648E2C-FFD6-42F8-95BF-F68549522457}.png)
+
+Ensure the close the server, so use finally{}
+
+![alt text](images/{B28F427B-A31D-405C-982E-4C7084336A7E}.png)
+
+3. Prompt
+
+![alt text](images/{2D0EFCB9-8562-4D74-8FCB-09F2D45F8540}.png)
+
+![alt text](images/{D3F8CDA3-0323-4E8D-9329-1B4022235D6D}.png)
+
+![alt text](images/{A715CFBD-9315-491C-A4F4-97D981C5D2CA}.png)
+
+![alt text](images/{7373D313-C1C2-4F86-8774-55666102A62D}.png)
+
+## Understanding Remote MCP and HTTP Transport
+
+![alt text](images/{D89302F2-87A9-4559-B5D5-FF24B4E75EB6}.png)
+
+![alt text](images/{AA8444B8-510F-4CDE-94D8-F9D8B0816E98}.png)
+
+![alt text](images/{DE881795-8A1B-4E69-A2DC-9CFB266909E1}.png)
+
+![alt text](images/{8929A2F8-19D6-4731-A5F5-8DFAC593291C}.png)
+
+![alt text](images/{2600E764-2D07-4165-8217-84450F926C93}.png)
+
+![alt text](images/{8A258799-B1E0-480B-BA90-552EE1474968}.png)
+
+![alt text](images/{8548E945-82B2-469E-B045-05014365DD92}.png)
+
+![alt text](images/{D7C2B694-C8A9-44CD-9CC9-3AEA653228FC}.png)
+
+![alt text](images/{A558B037-E91E-443E-86C1-BB74990AE3AA}.png)
+
+## Demo
+
+![alt text](images/{A14EA31C-2D07-40CE-97F0-7E1FB6C6B279}.png)
+
+![alt text](images/{A44BC1DC-EDA4-4C6A-9BEA-51FDD040239C}.png)
+
+![alt text](images/{15CF94CF-BA9E-4D04-9AA7-D5013E5BC333}.png)
+
+## Authentication and Authorization in Remote MCP
+
+![alt text](images/{32764091-1C57-49CD-A002-83FA91A3CC32}-1.png)
+
+![alt text](images/{AF32ED16-2412-432D-9D31-CA6546F5A540}.png)
+
+![alt text](images/{5AD67F3D-4196-4E40-A690-07A7ACAD7819}.png)
+
+![alt text](images/{9AD1B14D-0988-47BF-A448-DC97AAEACCC2}.png)
+
+![alt text](images/{9958222A-6B6E-4FE8-9CE3-17BF478501C4}.png)
+
+![alt text](images/{CE2DA418-C87C-4526-82A0-89CC18EA396E}.png)
+
 ## Autonomous AI Agent
+
+![alt text]({32764091-1C57-49CD-A002-83FA91A3CC32}.png)
 
 It has `multi-stage planner`, where each stage might use a different tool`)
 
@@ -1872,6 +2103,7 @@ This gives us a `goal-oriented autonomous loop`
 
 - Different chunking strategies
   1. `Fixed size chunking with overlap`.
+
      ![alt text](images/{568E3513-0E83-415B-A362-54E3ECC8EE12}.png)
 
      ![alt text](images/{726A9C75-3465-4621-BC36-C9CAACA1C857}.png)
