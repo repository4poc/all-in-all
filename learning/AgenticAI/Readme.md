@@ -1061,11 +1061,11 @@ Agentic AI is fundamentally about
 
   Not just adding more tools and powerful language models
 
-## Building the Agent Brain
+## Building the Agent Brain (Planner)
 
 The Agent brain job is `planning` - how to solve the problem
 
-The brain does not solve the problem, it decide how to solver the problem
+The LLM does not solve the problem, it is `Planner` who decide `how to solver the problem`
 
 - Should I call a specific Tool,MCP
 - Should I send the question to language model
@@ -1101,13 +1101,15 @@ Final Result
 
 So you go to LLM twice, first for asking the tool and second to give answer in a natural way.
 
-`Planner` Decides what to do
+`Planner` Decides what to do next (Or which tool to call next)
 
 `Assistant` Explain the result to the user (Behaviour)
 
+So `Planner` and `Assistant` use LLM and uses
+
 - Different Prompts
-- Different Responsibilities
-- Same Underlying Model
+- Have different responsibilities
+- use same Underlying Model
 
 This demonstrate one of the strengths of LLM, the LLM Model can perform multiple roles depending on the instructions it receives.
 
