@@ -21,6 +21,8 @@ A software application that understand your instructions and provide useful resp
 
 AI Assistant don't take decide or action on its own
 
+![alt text](images/{4D5F703A-8D2C-4F06-94E3-904E975E3A88}.png)
+
 ## AI Agent
 
 AI Agent is an AI Assistant with additional abilities:
