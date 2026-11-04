@@ -233,3 +233,31 @@ If Azure disk is full
 ![alt text](images/{57FC1733-347D-46E2-BFC2-3D8F3C5DFA8A}.png)
 
 The Disk created out of the previous snapshot will not have any affect in size.
+
+## Statically Creating Azure Files
+
+1. Create a Storage Account and File share in it
+2. Create Kubernetes secret
+   ![alt text](images/{51C63BFB-9C7E-4891-939A-49275CB03D91}.png)
+3. Create Persistent Volume
+
+   ![alt text](images/{10C750B4-EE04-4484-8074-C7681D3442F5}.png)
+
+   Update Volume Handle to point to the file share
+
+   ![alt text](images/{C3C8B631-289B-4299-98EC-DF44345F94A6}.png)
+
+   ![alt text](images/{A45C4441-2CED-4481-A565-4273F0CCF604}.png)
+
+4. Create Persistent Volume Claim
+   ![alt text]({5C6A0A50-14A1-4EAC-ACE4-801A5FAAE0DE}.png)
+5. Attach PVC to the Pod
+   ![alt text](images/{5F8F3227-0395-4594-8468-E8FF64974AF6}.png)
+
+   ![alt text](images/{463C7D27-4792-4B26-A67D-D4F1D3CFCEA9}.png)
+
+![alt text](images/{813564DE-B20A-48C2-BE4F-110D1DEC9371}.png)
+
+## Use Custom StorageClass to dynamically provision private endpoint for the Azure Fileshare with GRS
+
+![alt text](images/{9CF01AD5-5161-4559-8101-D2C5E38E1D76}.png)

@@ -1708,7 +1708,7 @@ Ensure the close the server, so use finally{}
 
 ## Autonomous AI Agent
 
-![alt text]({32764091-1C57-49CD-A002-83FA91A3CC32}.png)
+![alt text](images/{32764091-1C57-49CD-A002-83FA91A3CC32}.png)
 
 It has `multi-stage planner`, where each stage might use a different tool`)
 
@@ -2089,9 +2089,51 @@ This gives us a `goal-oriented autonomous loop`
 
 - We also introduced `Dynamic replanning`: if something goes wrong, the agent should not blindly continue with the outdated plan, it should reconsider the situation and decide what to do next.
 
+## Memory
+
+![alt text](images/{18FA89E0-E0AF-4A0F-BFAD-3EFF2158E897}.png)
+
+![alt text](images/{788E1FA6-3B8E-4778-9203-AFFE8F08BF12}.png)
+
+![alt text](images/{23EE769A-E20F-44D4-B7C8-85C92ADF74E0}.png)
+
+### Memory Engineering
+
+![alt text](images/{34C89C32-6B7D-4373-8626-E8F7488FDD91}.png)
+
+![alt text](images/{5780D512-0863-4FCE-9917-EE220976C076}.png)
+
+![alt text](images/{A969D0DD-4AB2-4F5B-AE99-B5494ABA201E}.png)
+
+![alt text](images/{4463232E-3937-4C4D-A09D-E5DFA6A8644B}.png)
+
+![alt text](images/{481BF431-F8DC-47AA-8207-DDD5BDA90536}.png)
+
+![alt text](images/{AC3E9741-885A-4450-BC83-FDAA3F5C160B}.png)
+
+### Building Persistent Memory with SQLite
+
+![alt text](images/{80A6B264-D4DF-42E7-917D-0C045E8E2082}.png)
+
+![alt text](images/{29A4F051-6D81-4B9F-BA20-410E64B4C823}.png)
+
+![alt text](images/{C29AE2DA-D886-4402-98F6-7AEEE0A6FEBB}.png)
+
+![alt text](images/{878CBFB8-6857-432A-A734-7A1228CBEA4F}.png)
+
+![alt text](images/{6AB8FFC0-ED8B-4573-8B75-3BB2EB4295EE}.png)
+
+![alt text](images/{D115D34F-40CB-47AD-B473-D29117A6C61C}.png)
+
+![alt text](images/{E4538664-A2E6-4570-ACE6-76868FAF07F4}.png)
+
+![alt text](images/{3BBDC39C-3583-404B-B817-730D0616A2B4}.png)
+
+![alt text](images/{EE919B7E-7CAF-4DA0-BE04-797B2BD337B8}.png)
+
 ## Advanced RAG
 
-## Chunking
+### Chunking
 
 - Breaking documents into small pieces or chunks, create the embedding for each, and retrieve only the relevent chunks
 
@@ -2568,3 +2610,163 @@ It is similart to, in a autonomous/Single Agent
 ![alt text](images/{8CC22431-4C40-41A7-A062-13BCDD640FA8}.png)
 
 ![alt text](images/{89C56FEA-4E81-40E6-99FB-1D8AF08C9195}.png)
+
+## Making your AI Agent Production Ready
+
+![alt text](images/{89247FDD-A7ED-4A9A-942E-B2AE5F14F8C4}.png)
+
+![alt text](images/{DE9388A2-9EB3-4739-B821-8E7BB9A72AB1}.png)
+
+![alt text](images/{F73AEEE1-3E34-46FE-A094-28129C591CA0}.png)
+
+## Centralized Configuration
+
+![alt text](images/{F0C95566-16BA-4192-A80E-660C94F49F89}.png)
+
+![alt text](images/{1CD1E476-BFE9-4944-859D-A2853551AC85}.png)
+
+![alt text](images/{5815E1B4-4A2B-4CBF-90D8-D740EA60A29E}.png)
+
+![alt text](images/{B4E49EEB-3B1E-46FD-9833-22FBA489B407}.png)
+
+![alt text](images/{8006F0D3-AF1E-4D44-BD78-9A679B074164}.png)
+
+## Centralizing LLM Access in AI Agent
+
+![alt text](images/{4C3780EB-7290-4C33-A4CC-CAFE1FCD78EB}.png)
+
+![alt text](images/{E26AB203-5E82-4148-850D-BCDBF59DBB39}.png)
+
+![alt text](images/{B55F7E23-8BC0-4E29-8A6A-C5EB97BAF878}.png)
+
+![alt text](images/{2DB46710-C492-4251-AF26-7A493E341F48}.png)
+
+![alt text](images/{B9A9C748-9913-4FF4-A8E2-1DDE0333B1B3}.png)
+
+![alt text](images/{4586B750-A147-4D40-94CD-183B583A1A58}.png)
+
+![alt text](images/{2112B7C5-7CE4-4155-9093-439739E16A79}.png)
+
+## Building Observability with Logging
+
+![alt text](images/{891E7399-E545-473F-A17C-A90FBDC05709}.png)
+
+![alt text](images/{637DEA79-E956-434F-B8DA-8DEEC118341E}.png)
+
+![alt text](images/{FB4C3E5F-D5DE-4341-805E-845BADD995C6}.png)
+
+![alt text](images/{322BC2F3-895C-42E7-8030-5A5F6946714C}.png)
+
+## Building Reliability with LLM Retries, Backoff and Timeouts
+
+![alt text](images/{A03DF773-C6A7-44D7-A0C1-FE2A0377A406}.png)
+
+![alt text](images/{5C965BB5-FDF4-4B88-9174-B4A70901996D}.png)
+
+![alt text](images/{700E8045-141D-4EA8-8079-D6FA3448FDA4}.png)
+
+![alt text](images/{A8E220C2-0B38-4160-B656-9B39C4834F5D}.png)
+
+![alt text](images/{77F5D368-184F-44EA-B658-D2E31627F306}.png)
+
+![alt text](images/{B7C636B5-B840-4B44-9264-18F6F9CD73B8}.png)
+
+![alt text](images/{038F6C62-63F2-4B25-9CA7-638058007D29}.png)
+
+![alt text](images/{47BEFA41-C4AD-458E-B645-B1C7B7311D09}.png)
+
+![alt text](images/{6CB91B4D-84C7-4D6F-90FB-C412B6DFA443}.png)
+
+![alt text](images/{BE7D45BC-7903-4C3B-9FDF-F937912F9EF4}.png)
+
+![alt text](images/{1012C202-887E-4904-B2E5-73B950EE88CA}.png)
+
+TIMEOUT is in seconds
+
+![alt text](images/{2B57BF5C-99C6-4737-B12B-33EFB878EDDC}.png)
+
+![alt text](images/{71C243B9-C0CB-48E7-8DA3-590F7D0DA3FE}.png)
+
+![alt text](images/{56DB9D44-0B86-4608-800D-B4997B8078C2}.png)
+
+## Security
+
+![alt text](images/{13B72A77-A680-47FA-AF92-478F22F59924}.png)
+
+![alt text](images/{211ED50C-6CDF-4BDC-A32F-85CB65523958}.png)
+
+![alt text](images/{52B30228-3A5A-45AB-89F4-131C7B04F277}.png)
+
+![alt text](images/{0D9110D0-159B-43BF-B7DF-0988164B2F8F}.png)
+
+![alt text](images/{5537EB45-7B33-40E5-836F-61C2818D03BD}.png)
+
+![alt text](images/{E4DBA6F3-56E6-4E4F-974B-C6316B1986C2}.png)
+
+![alt text](images/{0E643F4B-A16E-4392-8078-D24A66EE0338}.png)
+
+![alt text](images/{0249AADB-221B-41DC-8FA2-A819220311BA}.png)
+
+![alt text](images/{1F123247-0357-489D-9532-3FA89DE4F0F2}.png)
+
+![alt text](images/{131A9746-CEBA-40BD-B885-7545ACDA480D}.png)
+
+![alt text](images/{07064843-A862-43F5-8162-A2FCCE28856C}.png)
+
+## Safe File Access and Prompt Injection
+
+![alt text](images/{A91E302C-84B5-426A-9269-1DBC94865FE8}.png)
+
+![alt text](images/{4AB771B6-56DB-484A-A089-A9CA53B2025E}.png)
+
+![alt text](images/{8E0049A0-C13A-4962-9BFB-26E8483B4DE4}.png)
+
+![alt text](images/{9B8F0D7C-5AE9-4383-B9F7-734E73F87100}.png)
+
+![alt text](images/{2EB5A81D-D733-4F00-AD42-E5DD3072797F}.png)
+
+## Performance
+
+### Parallel Execution
+
+![alt text](images/{7DFA2EB4-5828-444B-8265-95494761C6E4}.png)
+
+![alt text](images/{CF82D71E-3EA2-468D-8B86-7BD9683FE61A}.png)
+
+### LLM Calls
+
+![alt text](images/{07A46A2C-C2A4-4C01-A8CF-6D6FF60B375B}.png)
+
+### Context
+
+![alt text](images/{AE37CC97-DD92-4A8E-804B-B02E5501EDAD}.png)
+
+![alt text](images/{4985102D-82AE-471D-BF60-B2F325921097}.png)
+
+![alt text](images/{2DE58980-FC14-41E4-8F18-8E92B9815956}.png)
+
+![alt text](images/{7E1B7E98-A78D-4D0E-B9D6-33032F59B475}.png)
+
+### Refactoring
+
+![alt text](images/{81A4B971-B15F-4B12-8AE1-9D07D058987F}.png)
+
+![alt text](images/{BC9F4D30-EECA-4E27-A6D6-4BBC5046D9E1}.png)
+
+![alt text](images/{FF1FD5C5-99CD-42A4-8D28-397553E8121C}.png)
+
+## Final Production Architecture
+
+![alt text](images/{212FB007-BBB2-4FA1-8ABB-F3511E7F132D}.png)
+
+![alt text](images/{8D3B01A6-DA5E-488F-8EEC-497A2A019673}.png)
+
+![alt text](images/{488ADBF6-C23C-42C0-BC93-2E9C10CDF917}.png)
+
+![alt text](images/{C4093E0F-6B85-4A8D-89E0-CBE24DD66A9E}.png)
+
+![alt text](images/{AE15B1DE-47CF-4CCE-AE56-48403ECB0DDE}.png)
+
+![alt text](images/{E10B599C-1938-422D-9556-B2EB2EEB9F5F}.png)
+
+![alt text](images/{792EFF0A-825A-4BA9-90F3-4ACA562571C7}.png)
