@@ -804,9 +804,9 @@ Once text becomes number, we can answer questions like
 - What all documents have these two sentences?
 - What document is closest to the user's question
 
-`Keyword Search` - Compare Keywords
+`Keyword Search` - Match Keywords
 
-`Embedding Search` - Compare vectors
+`Sementic Search` - Compare vectors
 
 ### Do we create embeddings ourselves
 
@@ -919,6 +919,10 @@ def cosine_similarity(vector1, vector2):
     return np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))
 ```
 
+![alt text](images/{148BC262-80BB-4A6C-BD87-62E6D9868B1C}.png)
+
+![alt text](images/{9EB79E5C-E621-47AB-963E-4D3EF652136E}.png)
+
 ## Sementic Search
 
 ```
@@ -928,11 +932,11 @@ Embedding
 |
 Compare with
 |
-Document 1 (Cosine Similarity Score : 0.40)
+Document 1 Embedding (Using Cosine Similarity Score : 0.40)
 |
-Document 2 (Cosine Similarity Score : 0.80)
+Document 2 Embedding (Using Cosine Similarity Score : 0.80)
 |
-Document 3 (Cosine Similarity Score : 0.70)
+Document 3 Embedding (Using Cosine Similarity Score : 0.70)
 |
 V
 Choose document 2
@@ -941,19 +945,19 @@ Choose document 2
 So there are diff. search types
 
 - Keyword search
-- Sementic search (comparing the embeddings)
+- Sementic search (comparing the Vectors)
 
 In production environement, you might use Vector Databases like:
 
 - FAISS
-- ChromaDB
-- Qdrant
+- ChromaDB (POC grade)
+- QdrantDB (Production grade)
 
 But the basic idea is same
 
-1. Convert text into embeddings using `Embedding Model`
-2. Compare the embeddings
-3. Retrieve the closest matches
+1. Convert text into Vectors (Embeddings) using `Embedding Model`
+2. Compare the Vectors ( using Cosine Similarity )
+3. Retrieve the closest matches (using Similarity Score)
 4. Give those matches to the `Language Model`
 
 ### Key Points
@@ -977,7 +981,7 @@ Our application follow these steps
 
 Till now our program is deciding to call a specific tool, based on the question
 
-In, AI Agent, Language Model decide which tool to call.
+In, AI Agent, Planner (via Language Model decide which tool to call)
 
 ![alt text](images/{8080BAE4-9998-443F-B826-3468DF8BF39D}.png)
 
@@ -986,12 +990,11 @@ AI Agent - Decides
 
 Our Application has
 
-1. Memory
-2. Personality
-3. Tools
-4. File Reading
-5. RAG
-6. Decision Making (Still Missing) - AI Should decide which tool to call
+1. Memory (Long Term Memory)
+2. Personality (System Prompt)
+3. Tools (MCP)
+4. RAG (Knowledge Base)
+5. Decision Making (Planner - Still Missing) - AI Should decide which tool to call
 
 `Problem Statement`
 
