@@ -49,6 +49,7 @@ AI Agent is an AI Assistant with additional abilities:
 - Types of AI Model
   - Language Models
   - Embedding Models
+  - Reranking Models
 
 ## Where does the AI Model runs
 
@@ -110,11 +111,17 @@ once the AI Model is downloaded, it need not to download again
 
 The virtual environment keep libraries separate from other python project libraries on your computer.
 
+`Project Structure`
+
+![alt text](images/{53F8592B-2A5D-4A38-9258-96C5F2D9AD8F}.png)
+
 1. Create virtual environment
 
    ```
    python -m venv .venv
    ```
+
+   ![alt text](images/{4A4CDF68-495A-44C3-8BC7-3E57F6D9CE66}.png)
 
 2. Activate virtual environment
 
@@ -577,7 +584,7 @@ Your AI Model does not read a file, its your AI Assistant who reads the file and
 
 ## Reading your first text file with Python
 
-`Professional software should fail gracefully`, users appreciate clear error messages much more than long technical error traces.
+`Professional software should fail gracefully`, users appreciate `clear error messages` much more than `long technical error traces`.
 
 So we use `Exception Handling`
 
@@ -658,13 +665,13 @@ messages = [{
 
 Don't `hallucinate`
 
-To ensure reliability of AI Assistant, ensure you explicitly mention if it does not find the answer, don't guess. Just say "I dont know.."
+To ensure `Reliability` of AI Assistant, ensure you `explicitly mention if it does not find the answer, don't guess. Just say "I dont know.."`
 
 In AI Engineering, the process is same for all kind of files.
 
 1. Read the data
 2. Prepare a good prompt
-3. Send data + prompt to AI Model
+3. Send Question + File content to AI Model
 4. Let the AI reason/think over the data
 5. Presend the result
 
@@ -682,7 +689,7 @@ If you have a document size 750 pages to answer from. We can not send the entire
 
 RAG (Retrieval Argumented Generation)
 
-It is one of the most foundational techniques in modern AI application.
+It is one of the most foundational techniques in modern AI application, to answer your queries from a set of documents.
 
 Here instead of sending the entire document to the AI Model, we retrieve only the most ` relevant pieces of information` before asking the model to answer.
 
@@ -698,8 +705,13 @@ Terms like
 For `Retrieval`, we use
 
 - `Embeddings`
+- `Vectors`
 - `Vector Database`
-- `Similarity Search`
+- `Similarity Search` and `Cosine Similarity`
+
+  ![alt text](images/{CFF0B22F-670F-41B7-8544-E1222183BFD7}.png)
+
+  ![alt text](images/{8E9A1A14-372B-4916-8CDB-F9DAB7642A50}.png)
 
 ## Building a Knowledge base with multiple documents.
 
@@ -714,9 +726,9 @@ For `Retrieval`, we use
 
 ## Search Types
 
-- Key Based Search - Exact word matching
-- Context/Meaning Based Search - Meaning matching
-- Hybrid Search
+- Keyword Search - Exact word matching
+- Sementics Search - Meaning matching (Using Similarity Search - That uses Cosine Similarity Formula)
+- Hybrid Search (Both)
 
 ## Simple Key-based Retriever
 
