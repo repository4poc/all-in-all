@@ -1224,6 +1224,22 @@ Multi-Step Planner
 
 `Multi-Step Planner` plans a sequence of actions and behave much like humans solving complex problems.
 
+`AI Agent`
+
+![alt text](images/{B0078579-1506-4FDA-8B34-D973A7855236}.png)
+
+`Planner`
+
+![alt text](images/planner.png)
+
+`Problem Statement`
+
+What if we need to use two tools to respond to our questions.
+
+`Fix`
+
+Autonomous AI Agent , that use multiple tools (via `multi-stage planner`)
+
 ## MCP (Model Context Protocol)
 
 To use `external Tools` in our AI Agent.
@@ -1271,11 +1287,12 @@ Tools
 ```
 
 1. AI Agent Components are:
-   - Assistant
+   - Main Runner
+   - MCP Client
    - Planner
+   - Assistant
    - Memory
    - RAG
-   - Tools Selection
 
    The Agent never call external tools directly, instead it talks to `MCP Client`.
 
@@ -1483,20 +1500,6 @@ So AI Agent
    - return the best fit tool based on question using `LLM`
 4. Agent then Execute the best fit tool
 5. Pass Result to `LLM` to generate natural response.
-
-`AI Agent`
-![alt text](images/{B0078579-1506-4FDA-8B34-D973A7855236}.png)
-
-`Planner`
-![alt text](images/planner.png)
-
-`Problem Statement`
-
-What if we need to use two tools to respond to our questions.
-
-`Fix`
-
-Autonomous AI Agent , that use multiple tools (via `multi-stage planner`)
 
 ## Build Multiple MCP Servers
 
