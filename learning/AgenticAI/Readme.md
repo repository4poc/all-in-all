@@ -1606,8 +1606,6 @@ So intead of retunig "Finnish" we are returning JSON.
 
 ![alt text](images/{1EBA5168-01D3-4F40-B14D-182C3F1348B3}.png)
 
-![alt text](images/keywordSearch.png)
-
 ![alt text](images/{7AF1C83D-7EC5-4D67-A074-F7B86351E1A9}.png)
 
 ![alt text](images/{2192C8BB-25D6-4CF8-99B7-21A593A9B905}.png)
