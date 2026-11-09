@@ -103,6 +103,8 @@ ollama run qwen3:4b
 Ctrl+C
 ```
 
+![alt text](images/{770200ED-8EA8-44F6-985B-08A6729B861C}.png)
+
 ![alt text](images/ollamatest.png)
 
 once the AI Model is downloaded, it need not to download again
@@ -709,6 +711,8 @@ For `Retrieval`, we use
 - `Vector Database`
 - `Similarity Search` and `Cosine Similarity`
 
+  ![alt text](images/{1DD39BA2-9470-4522-A6ED-CEF4B8098A33}.png)
+
   ![alt text](images/{CFF0B22F-670F-41B7-8544-E1222183BFD7}.png)
 
   ![alt text](images/{8E9A1A14-372B-4916-8CDB-F9DAB7642A50}.png)
@@ -1304,7 +1308,8 @@ Tools
 
    The Agent does not need to worry about protocol details.
 
-   `AI Agent <--> MCP Client <--> MCP Server <--> Tools`
+   `AI Agent <--> MCP Client <--> MCP Server
+<--> Tools`
 
 3. MCP Server : It owns the tools
    - Weather tool
@@ -2491,55 +2496,11 @@ For a Python multi-agent orchestrator with RAG, I would shortlist these three:
 - pgvector — if your enterprise already uses PostgreSQL.
 - FAISS or hnswlib — if you want to build and manage your own vector-search layer.
 
-## LangGraph
+![alt text](images/{1D36B72C-D164-4C12-A1CE-8DF6F88A7C95}.png)
 
-It represents a workflow as a Graph.
+![alt text](images/{6279CEBD-4B6B-42E5-BDEF-5B9955D42FF4}.png)
 
-There are 3 concepts you should remember
-
-1. State : The information travelling through our workflow
-2. Node : A piece of work performed by the workflow and update the state
-3. Edge : The connection that determines what heppens next.
-
-![alt text](images/{6AA10510-034C-41A2-9498-B9554DAC58D9}.png)
-
-![alt text](images/{DE4C3959-747A-4B09-9771-7E8353893A25}.png)
-
-`State Schema`
-
-## Install langgraph
-
-```
-pip install langgraph
-
-pip show langgraph
-```
-
-`TypedDict` to describe the structure of the dictionary that travel through the graph.
-
-![alt text](images/{2F7674B2-23D5-4CCC-BFE3-698BA212585A}.png)
-
-`Node` : A function that receives current state and return updated state, so Node take only state as input not other argument.
-
-## Create Planner node
-
-`StateGraph` :The is main LangGraph class used to create a graph based on a shared state.
-
-`START` This represents the entry point of the LangGraph. The graph starts from the START and moves to the first node.
-
-`END` This represents the termination point
-
-```
-START (Node)
-|
-V
-PLANNER
-|
-V
-END (Node)
-```
-
-So the workflow is converted into Graph in LangGraph.
+![alt text](images/{53E34DAE-67EB-4B86-A601-DF80139F9380}.png)
 
 ## Multi Agent Systems and Orchestration
 
@@ -2794,3 +2755,380 @@ TIMEOUT is in seconds
 ![alt text](images/{E10B599C-1938-422D-9556-B2EB2EEB9F5F}.png)
 
 ![alt text](images/{792EFF0A-825A-4BA9-90F3-4ACA562571C7}.png)
+
+## 199. LangGraph
+
+![alt text](images/{7E521AF9-27B1-4CCC-AF28-07C08BF496B1}.png)
+
+![alt text](images/{9D9BA076-1F5B-4786-A76D-8A0E5C052691}.png)
+
+![alt text](images/{6AA10510-034C-41A2-9498-B9554DAC58D9}.png)
+
+## Edge Types
+
+    - Straight Edge
+    - Conditional Adge
+
+## 200. Convert existing Agent using LangGraph.
+
+![alt text](images/{4DBF2BE3-D2A5-44E7-9D5B-93B24D331052}.png)
+
+![alt text](images/{DE4C3959-747A-4B09-9771-7E8353893A25}.png)
+
+`State Schema`
+
+## Install langgraph
+
+```
+pip install langgraph
+
+pip show langgraph
+```
+
+![alt text](images/{372BF112-7D6E-48F4-BF15-353C836CE924}.png)
+
+![alt text](images/{7FA3E393-CD3A-45AB-A384-884ED291AC23}.png)
+
+`TypedDict` to describe the structure of the dictionary that travel through the graph.
+
+![alt text](images/{2F7674B2-23D5-4CCC-BFE3-698BA212585A}.png)
+
+![alt text](images/{D61D1676-BDCE-49D0-B967-D6C792423A26}.png)
+
+![alt text](images/{411837C7-F063-40C9-BDD3-A820A9F826AD}.png)
+
+![alt text](images/{0F10D3AF-DDDE-41B7-9BCB-28D10994A359}.png)
+
+![alt text](images/{94EFAD63-73AF-4F15-A3E0-73CD3B9A4473}.png)
+
+![alt text](images/{AF04EF1C-FEC4-48E8-8CCD-11DE981CD2C1}.png)
+
+## Create Planner node
+
+![alt text](images/{B51F0C22-C938-4FCC-8A67-66F480C48E5B}.png)
+
+`StateGraph` :The is main LangGraph class used to create a graph based on a shared state.
+
+`START` This represents the entry point of the LangGraph. The graph starts from the START and moves to the first node.
+
+`END` This represents the termination point
+
+The below flow is called `WorkFlow`
+
+- `LangGraph` is a workflow framework
+
+```
+START (Node)
+|
+V
+PLANNER
+|
+V
+END (Node)
+```
+
+So the workflow is converted into Graph in LangGraph.
+
+`graph.py`
+
+![alt text](images/{2C5D0A23-A974-4E45-A7B9-6C93CE9FE238}.png)
+
+![alt text](images/{2F69ED1A-4701-47CE-84AD-EA3B6914BC2D}.png)
+
+![alt text](images/{CC03C37C-D840-4157-A102-56AD6619FB29}.png)
+
+![alt text](images/{003330DB-C1CE-4258-A1DD-136A03130B93}.png)
+
+![alt text](images/{A7459BA3-EAA5-47A1-9571-1DFE679DCDFE}.png)
+
+![alt text](images/{4BCD7B51-5614-496E-9051-C404B8102432}.png)
+
+![alt text](images/{CEFA8186-7721-43FD-9DB0-DD6B0BA19026}.png)
+
+## 202. Building LangGraph Runner with MCP Tools
+
+![alt text](images/{1EFD74F1-644B-4AB2-8335-9FB58B10E7E2}.png)
+
+![alt text](images/{46D6064A-1E1F-4C71-839A-13F550EC368E}.png)
+
+![alt text](images/{EA46C33D-1642-4ACB-BE39-AA73D938019E}.png)
+
+![alt text](images/{03A48835-CCFF-4F98-96B4-74076AC0D438}.png)
+
+![alt text](images/{3A645F74-8220-4D01-B120-B54ED41EF992}.png)
+
+![alt text](images/{8AB0C322-932C-499F-A200-A72EE7CC6825}.png)
+
+![alt text](images/{DCF9433E-D459-4C8C-8517-3122D1299A15}.png)
+
+## Building Conditional Edges in LangGraph for intelligent routing
+
+![alt text](images/{58FC9751-056C-49AF-8566-0AD414E82B65}.png)
+
+![alt text](images/{1FEB8DAE-F270-474F-96E8-A479596AB271}.png)
+
+![alt text](images/{B423F35D-0D03-4BBD-BB7B-35B4F7E5AC10}.png)
+
+![alt text](images/{0F9E3CE4-6044-455D-9F04-DC6F6961D449}.png)
+
+![alt text](images/{EB4ED5B6-089C-4417-8144-768487CAA32F}.png)
+
+![alt text](images/{084DBDA2-F86F-41C2-AD25-40F5AE55F55A}.png)
+
+![alt text](images/{AE9CF404-EED0-4D21-8CBB-31DE5FD52929}.png)
+
+![alt text](images/{3CD354A6-A5EB-479A-9DC5-14E8D9CB3634}.png)
+
+![alt text](images/{482308B3-9F74-4F20-86EF-6131D797B5BA}.png)
+
+![alt text](images/{A47A7DCE-4BBF-4B62-A6E7-A278F5525022}.png)
+
+## Building Tool Node
+
+![alt text](images/{64632BFE-E864-427D-8B26-FD8B5B41DDE9}.png)
+
+![alt text](images/{0751DFD2-F0B9-4D40-B546-90A331D9FCC8}.png)
+
+![alt text](images/{4AB6B928-0956-4226-B146-132449A27D5A}.png)
+
+![alt text](images/{0BF0A990-DEFB-4B8C-A2CA-AFD1CBCD3679}.png)
+
+![alt text](images/{90986D33-7DA3-4292-9459-E53378067EC9}.png)
+
+![alt text](images/{24FCFBC6-F756-412E-9F5C-F6CBD3A85BBF}.png)
+
+![alt text](images/{F9B1845D-8A38-4215-B043-EE8DA134FD57}.png)
+
+![alt text](images/{684765DB-DEA6-4182-AC27-01241819713A}.png)
+
+![alt text](images/{15F91C72-1CAF-40C3-B886-EB735A0FFF22}.png)
+
+![alt text](images/{029F0E86-26E6-49B4-A11D-589F9DEDD129}.png)
+
+## Preventing an infinite Agent loop using Max_Steps in Graph
+
+![alt text](images/{F279F57A-C1A2-4C08-95FA-BC6C8BFE3A7B}.png)
+
+![alt text](images/{138569E7-8083-4B24-9A74-9C5D785B1FDF}.png)
+
+![alt text](images/{85B4FDE4-89E3-4290-80EF-9C9870F3E687}.png)
+
+![alt text](images/{37444149-67AE-464E-B2E9-6251BD0222DA}.png)
+
+![alt text](images/{C0A2F8CA-6775-493B-91C1-3FA792EC6AE4}.png)
+
+![alt text](images/{57FCE001-6B3B-49DA-AAEC-9E2B0FDCB4C5}.png)
+
+![alt text](images/{8C3A1A21-213C-42F9-9013-C5711B93B532}.png)
+
+![alt text](images/{BBF5B4DE-FE0E-4F4F-A52E-AEA953065FC1}.png)
+
+![alt text](images/{012CFA49-E044-40C0-AFDB-9183F6F8EAA8}.png)
+
+![alt text](images/{511E9A48-EF51-4223-AB13-4A5EA270D372}.png)
+
+![alt text](images/{72B675FE-AFF1-4F19-9F80-F6C5128B0B34}.png)
+
+![alt text](images/{7D23D3BA-C7F0-447B-8C1B-8920E77A86B2}.png)
+
+![alt text](images/{96BF3170-20F7-4189-856B-FF84DEB14855}.png)
+
+![alt text](images/{97EC0185-791B-4EB5-AEF6-A3A7F63BD9E2}.png)
+
+![alt text](images/{60B24AA7-290A-4926-A6C7-7D88BC892554}.png)
+
+![alt text](images/{D06BB91B-5CAD-4341-847B-E6E18693FB5F}.png)
+
+## Building Assistant Node to generate final answer
+
+![alt text](images/{11FD7167-F305-4387-A605-2C5D70A0BBDC}.png)
+
+![alt text](images/{479790BB-121F-489F-B576-4AF7F293D693}.png)
+
+![alt text](images/{7B591A5D-D732-4600-8C7F-495D1A1DF5E8}.png)
+
+![alt text](images/{9A7B93D9-47B1-47FF-847F-27A288DBBEB1}.png)
+
+![alt text](images/{46BA3331-6C67-4913-B370-DBE879154729}.png)
+
+![alt text](images/{110A2021-D655-41FD-8548-7717D7D171A1}.png)
+
+![alt text](images/{3F9F2C54-80D0-4366-B556-E937B6458FE6}.png)
+
+![alt text](images/{93FB1F04-0258-4C9D-8327-DE4A452F5EF7}.png)
+
+![alt text](images/{CA35A7B7-2BD2-4B88-B8F3-CED5424B0181}.png)
+
+![alt text](images/{869AC285-F122-4BC8-BC87-302F3A1B7766}.png)
+
+![alt text](images/{408E7110-01E8-41BC-8424-31EF02B8DFE5}.png)
+
+## Building Human-in-the-loop Agents with Approval and Checkpoints
+
+![alt text](images/{4AD1F655-3D42-42BF-B9E6-37594D5EE96A}.png)
+
+![alt text](images/{F3D9A78A-87F9-435B-8817-DE94914BA47D}.png)
+
+![alt text](images/{D8731520-EC96-479D-BA2D-235029A63E76}.png)
+
+![alt text](images/{FBD5DDBB-55D4-4EA3-A713-B501BAD9FFEA}.png)
+
+![alt text](images/{89F08415-DDCA-4B68-B1CD-53DB104303A9}.png)
+
+![alt text](images/{4DAD28AB-B8A1-4C75-9D8D-622AD3888CBF}.png)
+
+![alt text](images/{861F40F0-D667-4EE8-80B6-640615F95818}.png)
+
+![alt text](images/{8FC00AF1-7302-4D10-8356-3CCD3A5CD208}.png)
+
+![alt text](images/{B5054FEA-05AF-41E7-A0F6-412DA9889C2E}.png)
+
+![alt text](images/{7ED7A0A2-2593-4C73-82E2-CDC94090DE91}.png)
+
+![alt text](images/{B648617B-AF74-4EEA-AB96-477D93C34CE3}.png)
+
+![alt text](images/{75A5F6FA-2D65-40C3-B325-ED5E14856DD3}.png)
+
+![alt text](images/{8976A346-3514-432B-B184-49AAECA7BC9C}.png)
+
+![alt text](images/{2E056924-BC53-4E33-AE52-5A9351C92323}.png)
+
+![alt text](images/{FB56216F-2815-4239-A9A8-17FFE133FF2B}.png)
+
+## Final Main.py
+
+![alt text](images/{98B492D3-C21B-4764-B9EC-10FB0C37BCC5}.png)
+
+![alt text](images/{1469F620-FAE5-48F4-AB26-EDA687833056}.png)
+
+![alt text](images/{A173CC5B-288A-422D-9E59-C3D3C6712C79}.png)
+
+![alt text](images/{D0C77AC5-5D81-423A-93FE-F68660A40571}.png)
+
+![alt text](images/{5B729BF9-1BB3-47C4-B08D-B0A651D101CA}.png)
+
+![alt text](images/{06DEA256-6C37-4896-A5AF-FC3F55CCBF14}.png)
+
+![alt text](images/{98EC8877-0838-4F5E-874C-30B7E18629FF}.png)
+
+![alt text](images/{3AFD8187-B7C4-45C4-BC58-2987DFFB6D8E}.png)
+
+## LangChain
+
+![alt text](images/{7FFFF832-CD29-496B-BCA7-269B4C590DD9}.png)
+
+![alt text](images/{7BB4F3D8-7208-49CB-A945-6BFAF5710683}.png)
+
+![alt text](images/{C64061BB-A6D2-43D7-A270-3A9F06E49DE9}.png)
+
+![alt text](images/{8476A2C8-3601-419E-9DA6-660C52FAA652}.png)
+
+![alt text](images/{57F2161E-6C74-4754-91C8-8E1ABB901B9D}.png)
+
+![alt text](images/{E84C900D-18B2-4567-9382-6A978C30CC00}.png)
+
+## Building Reusable Prompt Template with LangChain
+
+![alt text](images/{E72A374A-7200-4626-97FC-94EFC7140298}.png)
+
+![alt text](images/{CB128923-6712-41C0-A267-92B29AEC11EB}.png)
+
+![alt text](images/{664EF4DF-3BF7-4384-86BC-BFAEF4F2B290}.png)
+
+![alt text](images/{45690785-3916-44BA-8CD9-D319DA0B9C12}.png)
+
+![alt text](images/{4C523ACA-A500-4ED2-B78F-225FE1C56E44}.png)
+
+## AI Agent Deployment
+
+## From Python Program to Production Service
+
+![alt text](images/{CDE72F56-C837-4F14-AAE1-327EC4109160}.png)
+
+![alt text](images/{994B0617-8A4D-4F84-AA74-9242870BB86C}.png)
+
+![alt text](images/{EBCD5101-9E20-4955-B8DD-3C7C394825C1}.png)
+
+![alt text](images/{C16E9ABB-89C1-4EE3-9845-D79429689742}.png)
+
+![alt text](images/{D7759328-F467-4E55-A850-4AFAE6CB98D2}.png)
+
+![alt text](images/{C5771480-5FC0-47D2-A5E1-C5FAC4C50F76}.png)
+
+![alt text](images/{594FF528-6245-4471-BE0B-B4CA8AD2E585}.png)
+
+![alt text](images/{B3A327EB-EB65-4441-B34E-74A32C96C253}.png)
+
+![alt text](images/{DE37F159-01BA-4BB6-B5ED-456F15CDF2A4}.png)
+
+## Building a FastAPI AI Agent
+
+![alt text](images/{BD6C133B-8A9C-488E-950F-37BE6331F320}.png)
+
+![alt text](images/{E9990E71-8C6A-434B-8F0E-D5AA73DFF130}.png)
+
+![alt text](images/{CD95F50F-511C-4FDE-B7D7-258401262432}.png)
+
+![alt text](images/{94813171-7794-42EE-9825-C74445097C6A}.png)
+
+![alt text](images/{1EF81664-ABBD-42E1-9401-9D97D40111CB}.png)
+
+![alt text](images/{E8060C69-BDB7-4100-B6A7-7F787364F5C3}.png)
+
+![alt text](images/{F411615F-BC17-4FC0-8A2A-9111CC81C403}.png)
+
+![alt text](images/{9019C4B3-FC27-46CE-9677-663952C6B35F}.png)
+
+![alt text](images/{262DEB9B-6645-4BB6-B5C3-F04714F34986}.png)
+
+![alt text](images/{739F3FA7-AE5F-49D4-A5BE-CB82DAF8F561}.png)
+
+![alt text](images/{8B301AB5-854B-4B9D-94FF-34B9F28CEC8B}.png)
+
+![alt text](images/{BE22AE84-D8E8-458D-B3D5-5D7FCEA4BC73}.png)
+
+![alt text](images/dsfsf2284.png)
+
+![alt text](images/fsfsfsf.png)
+
+![alt text](images/{98BE3292-9592-4DF5-A956-25AA5E3B9A3F}.png)
+
+![alt text](images/{02053FB0-8EB7-422B-8937-2237042188D5}.png)
+
+![alt text](images/{C9092491-F1C3-4BF1-BF91-5ACA90D04876}.png)
+
+## Build Robust FastAPI with Pydantic and Configuration
+
+![alt text](images/{266DC0BE-2AEA-4D23-B542-96CFDAFE0C1C}.png)
+
+![alt text](images/{6399D23B-4078-4F5B-B65E-C383BA247DE8}.png)
+
+![alt text](images/{4BBD3FC5-CD01-44B7-8D09-02CA9E77A8D5}.png)
+
+![alt text](images/{786797E2-A4AC-489E-AC7E-31CE76CBDD24}.png)
+
+![alt text](images/{0E2D621C-E61D-4353-AE86-E157FDBC577B}.png)
+
+![alt text](images/{A173E664-CECA-40E6-AA0C-F6B484436974}.png)
+
+![alt text](images/{914568F2-E04E-45DE-8A45-BFAA06A53F84}.png)
+
+![alt text](images/{05217548-FD08-4529-8598-F0B28F615B67}.png)
+
+![alt text](images/{DCFD5010-2559-457A-BEBD-D6441D2287B0}.png)
+
+![alt text](images/{D33CAF32-588A-40E8-90A3-8DC633C18397}.png)
+
+## Error Handling
+
+![alt text](images/{F8251914-87DD-40DD-B981-8EFE1074230F}.png)
+
+![alt text](images/{7E298C67-C380-410C-911A-E2B63602498F}.png)
+
+![alt text](images/{EAC1877D-3E05-4A0C-AE60-B86B8D7396D1}.png)
+
+![alt text](images/{5259919A-43AB-468B-8381-D87169A7C0ED}.png)
+
+![alt text](images/{E9D736CB-ADA8-45E6-A092-390779DB17D4}.png)
+
+![alt text](images/{9E32AE47-B3DE-4706-9E4A-1BB3C7772B5A}.png)
