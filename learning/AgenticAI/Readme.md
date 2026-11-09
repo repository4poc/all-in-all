@@ -1292,17 +1292,18 @@ Tools
 
 1. AI Agent Components are:
    - Main Runner
-   - MCP Client
    - Planner
+   - MCP Client (Tools and RAG )
+   - Executor
    - Assistant
+
    - Memory
-   - RAG
 
    The Agent never call external tools directly, instead it talks to `MCP Client`.
 
 2. MCP Client : Its Job is to call MCP Server to
    1. Discover available tools and ask for tool description
-   2. Send Tool request and Receive tool result
+   2. Send Tool request and Receive tool result ( Runner <-> Executor <-> MCP Client <-> MCP Server )
 
    The Client knows how to speak to the MCP Server
 
@@ -1957,21 +1958,101 @@ This is one of very important idea in `Agent Engineering`
 
 ![alt text](images/{A8027F57-BACA-4844-A114-50BC341F0D90}.png)
 
+![alt text](images/{B0B2F2A4-3D22-4FF1-8142-162048A8DE62}.png)
+
+![alt text](images/{F0EBAA0A-92BE-46AB-BCA2-13B99DA91A49}.png)
+
+Tools Registry
+
+```
+tool_registry = {
+    "search_documents": {
+        "description": "Search internal enterprise documents",
+        "parameters": {
+            "query": "string",
+            "top_k": "integer"
+        }
+    },
+
+    "send_email": {
+        "description": "Send an email to a recipient",
+        "parameters": {
+            "recipient": "string",
+            "subject": "string",
+            "body": "string"
+        }
+    },
+
+    "create_ticket": {
+        "description": "Create an IT support ticket",
+        "parameters": {
+            "title": "string",
+            "description": "string",
+            "priority": "string"
+        }
+    }
+}
+
 ```
 
+```
+available_tools = [
+    {
+        "name": "search_documents",
+        "description": "Search internal enterprise documents"
+    },
+    {
+        "name": "send_email",
+        "description": "Send an email"
+    },
+    {
+        "name": "create_ticket",
+        "description": "Create an IT support ticket"
+    }
+]
+```
+
+#### Task decomposition Prompt
+
+```
+You are an enterprise AI task decomposition agent.
+
+Your responsibility is to analyse the user's request and convert it into an executable task plan.
+
+Available tools:
+{available_tools}
+
+Instructions:
+
+1. Understand the user's objective.
+2. Break the request into logical subtasks.
+3. Identify the appropriate tool for each subtask.
+4. Define dependencies between subtasks.
+5. Specify the expected output of each subtask.
+6. Identify tasks that can execute in parallel.
+7. Do not select tools that are not available in the tool registry.
+8. Do not invent tool capabilities or parameters.
+9. Identify any missing information that requires clarification.
+10. Flag actions with external side effects, such as sending emails, for appropriate authorization.
+
+Return a structured execution plan in JSON format.
+
+User request:
+{user_query}
+
+```
+
+```
 def decompose_task(user_request):
-    prompt = f"""
+prompt = f"""
             You are an AI task Planner.
             Break the user's request into smaller tasks
-            Instructions:
-            1. Create only the task necessary to complete the request.
-            2. Put the task in the correct execution order.
-            3. Each task should be a short action.
-            4. Return only task per line
-            5. Do not number the tasks
-            6. Do not explain anything.
+            Instructions: 1. Create only the task necessary to complete the request. 2. Put the task in the correct execution order. 3. Each task should be a short action. 4. Return only task per line 5. Do not number the tasks 6. Do not explain anything.
             User Request
             {user_request}
+
+            Available Tools
+            {tools_description}
             """
 
     client = OpenAI(
@@ -2011,19 +2092,19 @@ def decompose_task(user_request):
 ```
 
 def add_task(state,task):
-    state["task"].append({
-        "task":task,
-        "state":"pending"
-    })
+state["task"].append({
+"task":task,
+"state":"pending"
+})
 
 def complete_task(state,task):
-    for item in state["tasks"]:
-        if item["task"] == task:
-            item["task"] = "completed"
-        return
+for item in state["tasks"]:
+if item["task"] == task:
+item["task"] = "completed"
+return
 
 def add_result(state,result):
-    state["results"].append(result)
+state["results"].append(result)
 
 def get_pending_tasks(state):
 
@@ -2034,10 +2115,11 @@ def get_pending_tasks(state):
     ]
 
 def all_tasks_completed(state):
-    return all(
-        item["status"] == "completed"
-        for item in state["tasks"]
-    )
+return all(
+item["status"] == "completed"
+for item in state["tasks"]
+)
+
 ```
 
 ![alt text](images/{7E71BECC-B726-4B71-8ABD-F2E7AC32F6B7}.png)
@@ -2055,6 +2137,7 @@ So our Agent :
 ![alt text](images/{AF283D4F-1B90-4451-8004-64FB35FE69C8}.png)
 
 ```
+
 User Request
 |
 V
@@ -2094,6 +2177,7 @@ V
 |
 V
 Finish
+
 ```
 
 This is called `Dynamic Planning`
@@ -2264,16 +2348,20 @@ We dont give only one chunk, we should return top 3-5 chunks
 `Keyword Score`
 
 ```
+
 Query : 50 words
 Chunk Size: 200 words
 Keyword matched: 10
 Keyword Score = 10/50 = 0.2
+
 ```
 
 `Sementic Score`
 
 ```
+
 Score given by the cosine similarity between 0-1 both inclusive
+
 ```
 
 ![alt text](images/keywordSearch.png)
@@ -2299,10 +2387,11 @@ So we can sort on the bases of any of these and get top_k chunks.
 `Sementic_weight` and `Keyword_weight` in Hybrid Search
 
 ```
-Final_Score = sementic_weight * sementic_search_score
 
+Final_Score = sementic_weight \* sementic_search_score
 
-Final_Score = Keyword_weight * keyword_search_score
+Final_Score = Keyword_weight \* keyword_search_score
+
 ```
 
 ![alt text](images/{1D971972-E7CE-4B34-B8C4-580B3B595480}.png)
@@ -2780,9 +2869,11 @@ TIMEOUT is in seconds
 ## Install langgraph
 
 ```
+
 pip install langgraph
 
 pip show langgraph
+
 ```
 
 ![alt text](images/{372BF112-7D6E-48F4-BF15-353C836CE924}.png)
@@ -2818,6 +2909,7 @@ The below flow is called `WorkFlow`
 - `LangGraph` is a workflow framework
 
 ```
+
 START (Node)
 |
 V
@@ -2825,6 +2917,7 @@ PLANNER
 |
 V
 END (Node)
+
 ```
 
 So the workflow is converted into Graph in LangGraph.
@@ -3132,3 +3225,11 @@ So the workflow is converted into Graph in LangGraph.
 ![alt text](images/{E9D736CB-ADA8-45E6-A092-390779DB17D4}.png)
 
 ![alt text](images/{9E32AE47-B3DE-4706-9E4A-1BB3C7772B5A}.png)
+
+```
+
+```
+
+```
+
+```
