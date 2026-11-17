@@ -426,3 +426,264 @@ More Tolerance in case of false positive, than false negative
 ![alt text](images/{7A374D88-3314-451E-9A13-512373B1B56F}.png)
 
 ![alt text](images/{CB78FAFD-19B2-4858-8385-F0E430EAEE9B}.png)
+
+## 18. Recap
+
+![alt text](images/{33B64140-23BF-46B5-8B07-1D2E4C59BD0B}.png)
+
+![alt text](images/{C0B24C0C-9F0F-43BB-93B5-EBFBF35D9375}.png)
+
+## 19. Vibe Coding, The Coding Agent Landscape and the rise of Claude Code
+
+### Vibe Coding
+
+A way of building software by describing what you want in normal language and letting AI write much of the code for you.
+
+![alt text](images/{D46B9457-5285-4968-AEFB-E01D17D596F0}.png)
+
+![alt text](images/{0FF08905-A044-4B2B-99B4-CD7C87F5E870}.png)
+
+## 20. Choosing and installing Coding Agent
+
+![alt text](images/{5591F315-8EE2-42FE-BCBC-335683CD34C7}.png)
+
+![alt text](images/{AFF7E3B1-EC28-4578-A84C-1025F281D55F}.png)
+
+![alt text](images/{7E2FE7AE-9E90-4074-8B37-002032EA2CB7}.png)
+
+https://academy.claude.com/courses/claude-code-101/installing-claude-code
+
+![alt text](images/{76895D04-11C3-4F19-B2A3-D2B27B1D3993}.png)
+
+![alt text](images/{AD380CF1-4E6A-4F89-A5BF-59BE2457C060}.png)
+
+## 21. Working with Coding Agent
+
+![alt text](images/{4CD54A40-0DA4-46DA-8672-C6C4CCA5D1AE}.png)
+
+All coding agent look for file `AGENTS.md`
+
+![alt text](images/{75E745A6-B1B7-4E8F-8A8D-92931406B85E}.png)
+
+Instead of putting in coding standards, just mention where it can find it like
+
+`For Coding standards look into docs directory and look into codestandards.md file`
+`For Frontend look into the frontend-codingstandards.md`
+`For Backend look into the backend-codingstandards.md`
+
+This strategy is called `Progressing disclosure`, break down files rahter than having everything in one file.
+
+![alt text](images/{AACB408F-FA19-4707-83E8-EF1AC0D6F8B6}.png)
+
+`Decision Fatigue` : Manual Mode leads to that
+
+## 22. Working with Claude Code
+
+![alt text](images/{2038E37C-21C8-47E2-8457-1DDB8EC73B36}.png)
+
+![alt text](images/{1D0E05B7-011F-43C4-ADC0-AA2408790D9C}.png)
+
+![alt text](images/{F450E6A5-90DC-4EB2-92CB-E9B731B782DE}.png)
+
+![alt text](images/{5B30A475-B040-4E1F-AD41-3E0A5D1C7365}.png)
+
+![alt text](images/{752F9632-00BB-44C9-8FFF-32D3CACDE5EC}.png)
+
+![alt text](images/{C3F01355-11D4-4930-8A05-C7C9247906A3}.png)
+
+```
+        servers = [
+            "time-mcp-server",
+            "web-mcp-server",
+            "https://learn.microsoft.com/api/mcp",
+            {
+                "name": "playwright",
+                "url": "https://eastus.mcp.playwright.microsoft.com/playwrightworkspaces/7a707f88-790d-45bf-9cb5-a501a6ae2135/mcp",
+                "headers": {
+                    "x-api-key": os.getenv("PLAYWRIGHT_WORKSPACE_TOKEN")
+                }
+            }
+        ]
+```
+
+## 23. ADLC (Agentic Development LifeCycle)
+
+![alt text](images/{CC1B1ABA-8D79-4773-B807-F119C9E9E0B5}.png)
+
+![alt text](images/{641C45A8-AB87-4DCF-BEF9-58C97D2903A3}.png)
+
+![alt text](images/{25136543-DDF8-4284-877A-467D6F870415}.png)
+
+![alt text](images/{6DFD64E4-63E7-4FC5-B97E-AE41A4D4CE6D}.png)
+
+`AGENT.md`
+
+![alt text](images/{E591141A-4BA2-486D-B0B0-BCF367F992B2}.png)
+
+![alt text](images/{4A6CAA44-ACD5-4878-B93D-10D317E0410F}.png)
+
+![alt text](images/{16358448-586E-4A17-B352-3BD2629D704F}.png)
+
+### Spec Driven Development
+
+`spec.md`
+
+![alt text](images/{362B4C7A-84EF-4DA4-9045-A4D44421A57B}.png)
+
+![alt text](images/{8E384316-F5D8-4941-8AB0-18545BCBBC6F}.png)
+
+`brand.md`
+
+![alt text](images/{AF73E949-717E-41B3-BB6A-4283BADB6A27}.png)
+
+`techstack.md`
+
+![alt text](images/{A64DC916-2FD2-4471-8F0A-6C0928A5FAC6}.png)
+
+`process.md`
+
+![alt text](images/{766B1166-E353-4052-8BB0-30F1394F5FBD}.png)
+
+![alt text](images/{38C35D5F-CD59-40E7-B911-B696F8175047}.png)
+
+`codestandards.md`
+
+![alt text](images/{70846F50-9FEA-4EE6-B7A7-312238ABE64C}.png)
+
+## 24. Hardening the repo
+
+![alt text](images/{C4B7C298-70B2-4854-85D7-43A36F7FCEF3}.png)
+
+![alt text](images/{9D740F3B-7778-4367-A2D8-45298D9050D9}.png)
+
+![alt text](images/{0BA5F3FD-4E1E-4CC0-A73C-F9B4E67D5A58}.png)
+
+![alt text](images/{B7B56498-65A9-4102-B083-9AD73551E9FE}.png)
+
+## 25. Spec Driven LifeCycle
+
+![alt text](images/{604D644A-2583-462A-B39E-E7FC3CF378A6}.png)
+
+![alt text](images/{06E8F349-4364-4D8C-80CA-437510DC2D49}.png)
+
+![alt text](images/{E359A7ED-8CA7-457E-97D1-96AF7A1B8372}.png)
+
+## 27. Inference Basics
+
+![alt text](images/{C0914D28-78A0-42FB-9CD7-0828B2E511DF}.png)
+
+![alt text](images/{1E5CCD7D-0453-4AC5-A620-A49659D056A8}.png)
+
+![alt text](images/{1C27BD9E-C1F3-4792-A294-C36326BF3884}.png)
+
+![alt text](images/{CA2F0500-3809-4637-BCA3-DE60C1CCCB71}.png)
+
+## 38. Proprietary vs Open-Source and Open-Weight LLMs
+
+![alt text](images/{7C5DFC3B-ED57-4AEB-BB92-5B82D32DB7FD}.png)
+
+`Groq` : Inteferance Provider, run open-source model on your behalf.
+`Grok` : Elon Musk LLM from X.ai from spaceX
+
+`Openrouter`, does not run the inference itself, Just provide an API. It forward your request to one of many providers - one is Groq
+
+![alt text](images/{CB5297D5-7D3A-44F4-B2FF-674445940DCD}.png)
+
+- Workday
+- MS Office365 for Company emails
+  These are 3rd Party services like LLMs, so sercurity audit teams can audit these things to ensure they have proper controls in place to safeguard your data.
+
+So its a technology dependency, so we have to trust like AWS. and if in case we cant tolerage our data leaving our site, then it is good ground to run Open-Source Model on premise.
+
+![alt text](images/{26D66CF7-A0B8-4D47-9D6B-045CAB6B101A}.png)
+
+![alt text](images/{E2579C45-0A3C-416C-B41E-5CC148B4551D}.png)
+
+## Dense vs MOF (Mixture Of Experts) Models and Active Parameters
+
+![alt text](images/{E182C7BD-BFE6-4098-955C-0190450E46E5}.png)
+
+![alt text](images/{86245245-114D-4A26-BC19-622654CE4A11}.png)
+
+![alt text](images/{41A3A498-9AEE-42E2-9021-EF6BB5F1B56E}.png)
+
+MOE model are faster then Dense LLM
+
+## 31. Ollama, LM Studio, IIama.cpp,vLLM and Choose Hardware to Run LLM Locally
+
+![alt text](images/{93237EB1-7E9E-46E3-97B7-F567B98F1F84}.png)
+
+![alt text](images/{58786257-5CB3-4487-9B96-6D71F02C7D83}.png)
+
+![alt text](images/{78EC96C2-EFF9-4B03-89B5-32FACF72733A}.png)
+
+![alt text](images/{E76DAAFA-FCEE-4339-97BC-B483AC66A735}.png)
+
+![alt text](images/{6576EC6A-9E36-484E-867F-0B2C06393789}.png)
+
+![alt text](images/{B69ACA48-695C-4DCB-AE8B-6F80EAC5C46F}.png)
+
+Mac Mini - Qwen-27B ($ 2500)
+Mac Mini - Alternative - Qwen-27B ($ 2000)
+
+## 32. Install Ollama and Chat with Qwen 3.5 and Gemma 4 on your own computer
+
+![alt text](images/{511C9E90-18B4-48CF-A6AA-F294DDD9CEE3}.png)
+
+![alt text](images/{A8DE23A8-DBCD-4EE9-BFA5-3D9A326C8706}.png)
+
+![alt text](images/{3A889264-D81F-481A-B138-192CC0534087}.png)
+
+![alt text](images/{9FA7FBC0-C235-4344-A0A9-DEB497AA519C}.png)
+
+![alt text](images/{7AFEEA22-988B-4F73-B0EE-5A365CC69161}.png)
+
+## 33. OpenRouter Provider Routing, Token Pricing and the cost per claim
+
+![alt text](images/{4A8E888F-5632-4999-B71A-72933E09E7E1}.png)
+
+![alt text](images/{D86AB268-E0DF-4D8A-A267-9F05FCAD53F7}.png)
+
+![alt text](images/{5416126E-99F9-4ED9-BC5F-484458354AF8}.png)
+
+![alt text](images/{78DD0849-D611-4333-8B9E-0A063969A16B}.png)
+
+![alt text](images/{ADCCDC10-AA8D-496D-AA0A-DBB23F38E19D}.png)
+
+![alt text](images/{B38C2F1B-6190-4775-AC4E-8635CCF606B1}.png)
+
+## 34. Testing DeepSeek, Kimi K3, GLM, MiMo, Nemotron and Mistral on Claims
+
+![alt text](images/{2913741A-815A-47BB-8002-1BFDC7DBEEB5}.png)
+
+![alt text](images/{9E4EEAED-643B-4188-8E42-17264AC188D5}.png)
+
+![alt text](images/{3FDC0CBF-FCEA-4923-8CB5-8A3082E90EE4}.png)
+
+![alt text](images/{66AE56B8-EFA4-4BCB-930D-AFA17B295D5B}.png)
+
+![alt text](images/{BB384B32-B60E-4295-AB23-51F30CDCC28B}.png)
+
+![alt text](images/{99D69FD4-62B9-4C8A-8A0E-4E8748B279EC}.png)
+
+![alt text](images/{4A0B2EC4-9DB8-44DE-8456-111A489D5967}.png)
+
+![alt text](images/{E6290FA5-AD14-4107-A824-ABBE083CF5E7}.png)
+
+![alt text](images/{1CE4604F-1B4E-4047-819E-D95C3E161720}.png)
+
+## 35. Practical Example must revisit
+
+TDB
+
+# 36. Recap of Open-Weight vs Proprietary Models, Distillation and Token Cost
+
+![alt text](images/{F335B8F9-85D4-4C6A-9498-04C592F616E4}.png)
+
+![alt text](images/{186857F6-D8AF-4606-A943-0E1D8CF7A37A}.png)
+
+![alt text](images/{559110FA-5AE5-4A57-9684-4B3B91587DDD}.png)
+
+![alt text](images/{739CB638-CBA3-4009-9CFA-72983FC4C689}.png)
+
+## 37. Harness Engineering
