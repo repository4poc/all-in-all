@@ -686,4 +686,90 @@ TDB
 
 ![alt text](images/{739CB638-CBA3-4009-9CFA-72983FC4C689}.png)
 
-## 37. Harness Engineering
+## 37. Harness Engineering,Context Engineering and Recursive Self-improvement
+
+![alt text](images/harnessengineering.png)
+
+![alt text](images/contextengineering.png)
+
+![alt text](images/{159B8217-526F-4D52-892A-7DF83A671CBD}.png)
+
+![alt text](images/{E90BC6AF-F5E0-4AF7-B0AC-53D761553566}.png)
+
+Recursive-Self-Improvment - Improve.md (Just an idea)
+
+Incremental-Improvement - RSI focus majorly
+
+## 38. Build or Buy Agent Harness , LangChain, DeepAgents or Claude Agent SDK
+
+![alt text](images/{6EFF88CA-567B-42FF-B584-8C8928713F0F}.png)
+
+![alt text](images/{96DFE295-8A7F-4597-A811-930CBDB5FFF9}.png)
+
+![alt text](images/{55A381E3-E6F7-4F44-B128-23FF0FD2D517}.png)
+
+## 39. The Claims Desk lab: Configure the claude agent SDK with a sub-agent
+
+![alt text](images/{59455258-C7B4-4078-9725-EE113170B3E3}.png)
+
+![alt text](images/{F49D4DDB-C5C4-47BB-B84C-60C1E61C56F2}.png)
+
+![alt text](images/{CE308382-D85A-486A-8279-AF9D6A1EEF86}.png)
+
+## 46. Three Traps to Avoid when designing an AI Agent Architecture
+
+![alt text](images/{6C2FDACB-A896-4332-871D-6D5E0BF24AAC}.png)
+
+![alt text](images/{3A58AB4B-077A-42AB-B181-9F5D690824FE}.png)
+
+![alt text](images/{5C161AE0-284A-4EBE-9549-8E24193A98A4}.png)
+
+![alt text](images/{5288A593-AD75-4DB4-850E-20C6E4BBF735}.png)
+
+## 47. When to Add Sub-Agent and When Business Logic Belongs a Code
+
+![alt text](images/{87B584DF-935A-4122-9E03-D0B8EA176A88}.png)
+
+![alt text](images/{9C8B7F97-C6DD-4DF8-8D90-195DA3831BED}.png)
+
+![alt text](images/{6B2B3ED3-7DA1-4429-9859-B37EC956B483}.png)
+
+## 48. Agent Evals, LLM as a Judge, The Confusion Materix, Precision and Recall
+
+![alt text](images/{78643CF4-630A-4B2B-9029-997BFC3E8FA5}.png)
+
+![alt text](images/{B3407200-D243-4ABF-A27E-B54B6D9A47A5}.png)
+
+False Negative result into damaging brand image, and customer retention
+
+## 49. The Cost of mistakes
+
+![alt text](images/{E122684F-6305-4CDF-9B18-7A949BB15973}.png)
+
+Cohen´s Kappa : Correct by chance (Should be considered as 0) - You say Yes to all the questions, 3 out of 10 are correct, But you should score it 0
+
+![alt text](images/{A6DD6DF6-872D-4D2B-8534-E8C25D337261}.png)
+
+![alt text](images/{541F787D-0AA2-4468-ABA9-15364B39CFD0}.png)
+
+## 50. Agent Observability with Langfuse, Traces , Experiments and Account Setup
+
+- LangSmith is another Tool for observability
+
+![alt text](images/{C24549AD-F2D8-46EE-9DBE-AFE225A16267}.png)
+
+![alt text](images/{2AC25D3B-FCD3-40B0-87C4-6D4B4901A32A}.png)
+
+Create Account in Langfuse
+
+![alt text](images/{2FB138D6-3351-4D94-BF46-6D755D09E080}.png)
+
+![alt text](images/{73E3909A-1DFB-4CB4-B5D5-FD85CFF60937}.png)
+
+## 51. Tracing a LangChain Agent in Langfuse
+
+![alt text](images/{E0A3F14E-7AF6-4FDC-A815-4BF0AB0B36DF}.png)
+
+![alt text](images/{F5547A79-8E6F-4969-883B-F996606063A9}.png)
+
+## 52. Lab
