@@ -214,10 +214,113 @@ for name, age in zip(name, age):
 Name: varinder | Age: 42
 Name: rajinder | Age: 35
 
+![alt text](images1/{44BC5CD3-2488-4396-9B91-CCFCA2E11A00}.png)
+
+![alt text](images1/{6946C1F8-90C9-4FCD-881A-8E3F27D90829}.png)
+
 ![alt text](images1/{DDE850C9-AB4E-42E0-8827-3A670A72FEAB}.png)
 
-Ensure use different model for LLM as a Judge (Evalutor-Optimizer Design Pattern)
+![alt text](images1/{895DFDAF-F552-489E-9D22-EFFB83351DFB}.png)
+
+Ensure use different model for LLM as a Judge (Evaluator-Optimizer (EO) Design Pattern)
 
 ![alt text](images1/{6156D84C-AD44-4174-899E-6B8CEE118470}.png)
 
 ![alt text](images1/{3FA5F4D0-C12C-48D1-9099-8962AC77F84C}.png)
+
+## 17. The Agent Landscape Frameworks, Runtimes, Tools and Builders
+
+![alt text](images1/{8EE8DC48-AB8B-4943-96B0-AFE66BA4598A}.png)
+
+![alt text](images1/{B6AF35B4-6940-4C51-A1C9-B3FA10C24A67}.png)
+
+![alt text](images1/{BDEC0134-8A39-4C09-B039-4BA1A81E3457}.png)
+
+## 18. How Tool Calling Works : The Truth Behind AI Agent Autonomy
+
+![alt text](images1/{71DDE83A-8586-41D9-9917-FA465007D03F}.png)
+
+![alt text](images1/{1C22AE78-3337-453D-9E92-7ABCDE416F00}.png)
+
+![alt text](images1/{C6D711F4-17C4-4FCE-925B-187FCC267255}.png)
+
+![alt text](images1/{103B1234-D646-4D62-8E69-2CD41D7885EF}.png)
+
+## 19. Start the Digital Twin : Read a PDF and Master System Prompts
+
+![alt text](images1/{6DBBFC0E-A1ED-4672-988D-40EB0A3CB557}.png)
+
+![alt text](images1/{CBF01A99-D3E3-4B91-8E80-355B89D6168D}.png)
+
+![alt text](images1/{4EDAE6E2-915B-441D-BF34-FFC4FEA7A675}.png)
+
+![alt text](images1/{3CEBBDEA-4B58-4510-A349-FE16D51B8A95}.png)
+
+## 20. Build a Chat UI with Gradio and Define your First Agent Tool
+
+![alt text](images1/{B145666D-FFC5-40E8-9A54-F0D4E6CBD7F3}.png)
+
+![alt text](images1/{369050A8-1421-44C9-A80A-800A4223353D}.png)
+
+```
+
+from openai import OpenAI
+from dotenv import load_dotenv
+import os
+import gradio as gr
+
+load_dotenv()
+
+client = OpenAI(
+    base_url=os.getenv("BASE_URL"),
+    api_key=os.getenv("API_KEY")
+)
+
+
+def chat(message, history):
+    messages = [
+        {
+            "role": "system",
+            "content": "You are an AI Agent"
+        }
+    ]
+
+    # Add previous conversation history
+    for item in history:
+        if isinstance(item, dict):
+            messages.append({
+                "role": item["role"],
+                "content": item["content"]
+            })
+        else:
+            # Older Gradio history format: (user, assistant)
+            user_message, assistant_message = item
+            messages.append({"role": "user", "content": user_message})
+            if assistant_message:
+                messages.append({"role": "assistant", "content": assistant_message})
+
+    # Add current user message
+    messages.append({
+        "role": "user",
+        "content": message
+    })
+
+    response = client.chat.completions.create(
+        model=os.getenv("MODEL"),
+        messages=messages
+    )
+
+    return response.choices[0].message.content
+
+
+demo = gr.ChatInterface(
+    fn=chat,
+    title="My Chatbot",
+    description="Ask me anything!"
+)
+
+demo.launch(inbrowser=True, share=True)
+
+```
+
+![alt text](images1/{FC9A7882-78C4-4464-ADD1-FD8A83115449}.png)
