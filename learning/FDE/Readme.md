@@ -771,5 +771,3 @@ Create Account in Langfuse
 ![alt text](images/{E0A3F14E-7AF6-4FDC-A815-4BF0AB0B36DF}.png)
 
 ![alt text](images/{F5547A79-8E6F-4969-883B-F996606063A9}.png)
-
-## 52. Lab
