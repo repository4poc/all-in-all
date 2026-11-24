@@ -1,3 +1,5 @@
+Source :: Master AI Agents in 30 days: build 8 real-world projects with OpenAI Agents SDK, CrewAI, LangGraph, AutoGen and MCP.
+
 ## 1. Build your first Autonomous AI Agent with n8n (Low Code or No-Code Tool)
 
 - n8n platform on web for AI Agentic development with low/no code
@@ -26,7 +28,7 @@
 
 AI Engineer wear two hats
 
-- SOftware Engineer
+- Software Engineer
 - Data scientist
 
 ## 5. Windows Setup - VSCode, Run UV
@@ -58,9 +60,18 @@ Use Jupyter Notebooks (.ipynb) - The excecution order matters,
 
 ![alt text](images1/{1221FB88-8FF1-4782-B466-81E23C5F359F}.png)
 
-## 9. What is AI Agent? Definition, Workflows vs Agents Explained
+## 9. What is AI Agent? Definition
 
 ![alt text](images1/aidefinition.png)
+
+### Agentic Sytem types
+
+- Workflows
+  - Static in nature
+  - predefined code path of execution
+- Agents
+  - Dynamic in nature
+  - Open ended, no fixed path of execution
 
 ![alt text](images1/{2BD82283-6048-474C-8B7F-C645F681AED9}.png)
 
@@ -69,9 +80,14 @@ Example :
 - Deep Research Workflow : Research-Review-Report
 - GPT Agent : Openended in nature
 
-## 10. AI Agentic Design Patterns - Chaining, Routing and Orchestrator
+## 10. AI Agentic Design Patterns
 
 - 5 Design Patterns for workflows
+  - Prompt Chaining
+  - Routing
+  - Parallelization
+  - Orchestrator-Worker
+  - Evaluator-Optimizer
 - 1 Design Pattern for Agents
 
 Help you design the solution, How to solve the problem
@@ -102,37 +118,41 @@ Also Called `LLM as a Judge`
 
 Risk Mitigations Techniques:
 
-- Observability
-- Evals : Using Evaluator-Optimizer design pattern(Also called - LLM as a Judge) can be used
-- Guardrails :
-
-![alt text](images1/{6AEE27C7-28DC-43BC-9CEC-DB9D689513F0}.png)
+- Monitoring (Observability & Evals - Using Evaluator-Optimizer design pattern Also called - LLM as a Judge)
+- Guardrails
 
 ### Problem : LLMs are good at generating believable content
 
-- `Focus on the Business Problem`, rather than providing the solution. Many can be solved without Agentic AI Solution
+1. `Focus on the Business Problem`, rather than providing the solution. As many business problems can be solved without Agentic AI Solution
 
-- LLMs are good at generating believable content, that might be incorrect. So to measure the success of our Agent, we have to run it against a metrix. So besides `Focus on the Business Problem`, we also have to understand how we will evaluate the `Success`
+2. `Focus to how the uccess will be measured`: LLMs are good at generating `plausible` believable content, that might be incorrect. So to measure the success of our Agent, we have to run it against a confusion metrix.
 
-`LLM` are Models that generate plossable (Believable) tokens
-
-![alt text](images1/{8E4FF14E-3EC7-47E0-BB33-7A90AC608A7D}.png)
-
-Start with
-
-- 1 LLM
-- 1 Agent
-- 1 Goal
-
-![alt text](images1/{19AB26C1-D05E-4347-91EE-B6671BC54D35}.png)
+3. Start Simple with
+   - 1 Agent
+   - 1 LLM
+   - 1 Goal
 
 We are developing AI Agents, not using Agents (claude code), so can not complaint for hallusination, we have to code for it.
 
 ![alt text](images1/{6667262F-5DED-45B4-883E-F892A671AAD0}.png)
 
-## 12. LLM Providers: OpenAI, Anthropic, Google, DeepSeekAI, Groq & Inferance Providers : Ollama, OpenRouter
+## 12. LLM Providers:
 
-![alt text](images1/{6FF9FA90-F7B1-4CE5-978E-92270D828667}.png)
+LLM Providers:
+
+- OpenAI - GPT
+- Anthropic - Claude
+- Google - Gemini
+- DeepSeek -
+- Groq
+- Ollama - Qwen
+
+Inferance Providers
+
+- Ollama
+- OpenRouter
+
+Note
 
 - Grok is a LLM by xAI
 
@@ -179,6 +199,8 @@ print(response.choices[0].message.conent)
 
 `reasoning_effort`
 
+![alt text](images1/{9711CEE4-3243-41EB-8912-1F6B111DFED3}.png)
+
 ![alt text](images1/{952CC33F-013C-4BE9-8B5F-E97CEF44B619}.png)
 
 ## 15. Install Ollama and run Local LLMs : Qwen, Llama, GPT-OSS, Gemma
@@ -224,6 +246,8 @@ Name: rajinder | Age: 35
 
 Ensure use different model for LLM as a Judge (Evaluator-Optimizer (EO) Design Pattern)
 
+![alt text](images1/{1776D44E-3A37-4AD0-92C1-1B41E9C0F2F7}.png)
+
 ![alt text](images1/{6156D84C-AD44-4174-899E-6B8CEE118470}.png)
 
 ![alt text](images1/{3FA5F4D0-C12C-48D1-9099-8962AC77F84C}.png)
@@ -253,6 +277,11 @@ Ensure use different model for LLM as a Judge (Evaluator-Optimizer (EO) Design P
 ![alt text](images1/{CBF01A99-D3E3-4B91-8E80-355B89D6168D}.png)
 
 ![alt text](images1/{4EDAE6E2-915B-441D-BF34-FFC4FEA7A675}.png)
+
+- System Prompt
+- Tools
+- Memory
+- Conversational History
 
 ![alt text](images1/{3CEBBDEA-4B58-4510-A349-FE16D51B8A95}.png)
 
@@ -326,6 +355,14 @@ demo.launch(inbrowser=True, share=True)
 ![alt text](images2/{FC9A7882-78C4-4464-ADD1-FD8A83115449}.png)
 
 ## 22. Context Engineering for AI Agents : Memory, Tools and RAG
+
+Context Includes:
+
+1. Prompts - System & User & Assistant
+2. Structured Output
+3. Tools
+4. RAG
+5. Memory - Short/Long Term
 
 ![alt text](images1/{E7E9A52A-CC71-4BFD-9B55-42BDDE97D7D1}.png)
 

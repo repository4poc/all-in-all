@@ -695,7 +695,19 @@ It is one of the most foundational techniques in modern AI application, to answe
 
 Here instead of sending the entire document to the AI Model, we retrieve only the most ` relevant pieces of information` before asking the model to answer.
 
-## Why do we need RAG
+## 71. Why do we need RAG
+
+![alt text](images/{3A8C0F46-AD58-4EAE-A605-B3BD72ED64C0}.png)
+
+![alt text](images/{5811E8A5-0A0F-4DEA-8404-D2A145E805AB}.png)
+
+![alt text](images/{B32C77F5-F212-4F23-BA1E-D835B35C3EF2}.png)
+
+![alt text](images/{553BDDDD-4361-4F3F-9049-9BB5F1D05D92}.png)
+
+![alt text](images/{341F86AE-76BC-4A84-95DC-F0444AABBD05}.png)
+
+##
 
 1. `Prompting` : User sends Question
 2. `Retrieval` : Get the relavant pieces of Information
@@ -717,24 +729,21 @@ For `Retrieval`, we use
 
   ![alt text](images/{8E9A1A14-372B-4916-8CDB-F9DAB7642A50}.png)
 
-## Building a Knowledge base with multiple documents.
+## 72. Building a Knowledge Base with multiple documents.
 
-1. User ask `Question`
-2. RAG
-   - Search the Knoledge base
-   - Find only the relevant information
-3. Send the `Question` + `Relevant Information` to AI Model
-4. AI Model Generate the response and send to User
+![alt text](images/{D72789ED-8AB6-4ACA-AAD5-5D3EE6150C5B}.png)
 
-- Knowledge Base (Set of documents)
+`Knowledge Base` (Set of documents)
 
-## Search Types
+![alt text](images/{EE18A605-3DF4-49FA-BA98-8A587C4AB704}.png)
 
-- Keyword Search - Exact word matching
-- Sementics Search - Meaning matching (Using Similarity Search - That uses Cosine Similarity Formula)
+### Search Types
+
+- Keyword-Based Search - Exact word matching
+- Sementics Search - Meaning matching (via Vactors, Using Similarity Search - That uses Cosine Similarity Formula)
 - Hybrid Search (Both)
 
-## Simple Key-based Retriever
+## 75. Simple Key-based Retriever
 
 So the keywords in the File content and if it is there the documents content is returned.
 
@@ -745,7 +754,7 @@ So the keywords in the File content and if it is there the documents content is 
 
 In professional systems, we use better approaches for `Retrieval`. Instead of searching for exact words, rather searching for Context/Meaning.
 
-## Embedding and Sementic Search
+## 77. Embedding and Sementic Search
 
 - `What is Programming Language`
 - `Explain Coding lanaguage`
@@ -825,7 +834,7 @@ These dimensions describe how many values are in the vector.
 
 [1,2,3] has 3 dimensions
 
-## Generate Embedding with Ollama
+## 79. Generate Embedding with Ollama
 
 Install `Embedding Model`
 
@@ -872,7 +881,7 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
-## From embedding to sementic search
+## 82. From embedding to sementic search
 
 1. Text Embedding of `Question` (1536 dimentional vector)
 2. Text Embedding of each document
@@ -914,7 +923,13 @@ Cosine Similarity Score : 0-1
 
 You dont need to calculate this score yourself, python libraries `pip install Numpy` can do it for you.
 
-## Cosine Similarity Implemantation using Numpy
+## 83. Cosine Similarity Implemantation using Numpy
+
+![alt text](images/{1DD39BA2-9470-4522-A6ED-CEF4B8098A33}.png)
+
+![alt text](images/{CFF0B22F-670F-41B7-8544-E1222183BFD7}.png)
+
+![alt text](images/{8E9A1A14-372B-4916-8CDB-F9DAB7642A50}.png)
 
 ```
 def cosine_similarity(vector1, vector2):
@@ -927,7 +942,7 @@ def cosine_similarity(vector1, vector2):
 
 ![alt text](images/{9EB79E5C-E621-47AB-963E-4D3EF652136E}.png)
 
-## Sementic Search
+### Sementic Search
 
 ```
 Question
@@ -969,7 +984,27 @@ But the basic idea is same
 - `Cosine Similarity` give us a practical way to measure closeness.
 - High `Cosine Similarity Score` indicate more relevent information.
 
-## RAG Application
+## 87. Build your RAG Application
+
+![alt text](images/{98300650-E288-40A6-96C5-657CC9A1F1EE}.png)
+
+![alt text](images/{C6361D3D-40B2-4E69-9655-D18CFEB4902D}.png)
+
+![alt text](images/{A1CB9058-9259-48F2-918E-9E2130F1DCEC}.png)
+
+![alt text](images/{BB6CCEA7-5468-4697-B7DF-C91B75DE1298}.png)
+
+![alt text](images/{2B700DCA-E5A9-4727-A512-755C41F3E61B}.png)
+
+![alt text](images/{37B6F5AA-3930-412F-9A8E-C3CAEE20E61F}.png)
+
+![alt text](images/{5D709D6D-FE41-473A-92D1-725700EA1D90}.png)
+
+![alt text](images/{76D6FBA3-F887-4D8B-93DC-FDB8A5D7D414}.png)
+
+![alt text](images/{435E0B07-A06A-4419-A502-57FC19174C85}.png)
+
+![alt text](images/{AF5CE3F2-F331-4C1A-9BDE-78569CB93227}.png)
 
 Our application follow these steps
 
@@ -981,7 +1016,9 @@ Our application follow these steps
 6. Send `Question` + that `Document` content to `Language Model`
 7. Generate final answer and display it.
 
-## AI Agent
+## Build your first AI Agent
+
+## 90. What is AI Agent
 
 Till now our program is deciding to call a specific tool, based on the question
 
@@ -1065,7 +1102,7 @@ Agentic AI is fundamentally about
 
   Not just adding more tools and powerful language models
 
-## Building the Agent Brain (Planner)
+## 92. Building the Agent Brain (Planner)
 
 The Agent brain job is `planning` - how to solve the problem
 
@@ -1117,7 +1154,7 @@ So `Planner` and `Assistant` use LLM and uses
 
 This demonstrate one of the strengths of LLM, the LLM Model can perform multiple roles depending on the instructions it receives.
 
-## Building our first Planning Agent
+## 93. Building our first Planning Agent
 
 In Agentic AI, the Planner is the component responsible for deciding how to solve a problem, what steps to follow, and which tools to use.
 
@@ -1130,7 +1167,7 @@ The Planner has two important responsibilities:
 
 Think of the Planner as the brain of an AI agent. It does not necessarily execute every task itself. Instead, it creates a strategy and guides other components to complete the task.
 
-AIPlanner.py
+`AIPlanner.py`
 
 ```
 from openai import OpenAI
@@ -1193,7 +1230,7 @@ Output
 get_current_time
 ```
 
-## Let the AI Speak naturally
+## 96. Let the AI Speak naturally
 
 ```
 get_current_time
@@ -1242,9 +1279,13 @@ What if we need to use two tools to respond to our questions.
 
 `Fix`
 
-Autonomous AI Agent , that use multiple tools (via `multi-stage planner`)
+Autonomous AI Agent , that use multiple tools (via `multi-stage planner` using `loop` )
 
-## MCP (Model Context Protocol)
+`Runner` <--> `Loop` <--> `Planner`
+
+## 98. What is MCP
+
+MCP stands for (Model Context Protocol)
 
 To use `external Tools` in our AI Agent.
 
@@ -1253,27 +1294,24 @@ To use `external Tools` in our AI Agent.
 - Stock Market Tool
 - Weather Tool
 
-Think of MCP (Model Context Protocol) a Protocol - `Open standard` that allow our AI Agent or Applicatoin to discover and use `external Tools` in a consistent way.
+MCP (Model Context Protocol) : It is a `Open standard Protocol` that allow AI Agent to
 
-External capabilities like
+- discover and
+- use `external Tools`
 
-- Tools
-- APIs
-- Databases
-- Documents
-- Knowledge Sources
+in a consistent way.
 
 So our Agent will be able to
 
 1. Discover available tools
-2. Understand what each tool does
+2. Understand what each tool does thorugh description
 3. Choose an appropriate tool
-4. Call the tool through a standard interface
+4. Call the tool through MCP standard interface
 5. receive the results.
 
 So tool will be on the remote MCP Server, not in the Agent application.
 
-## Understand MCP Architecture
+## 99. Understand MCP Architecture
 
 Every MCP System has 3 major components
 
@@ -1292,6 +1330,7 @@ Tools
 
 1. AI Agent Components are:
    - Main Runner
+   - Loop
    - Planner
    - MCP Client (Tools and RAG )
    - Executor
@@ -2425,6 +2464,10 @@ Components use LLM Models:
 
 ![alt text](images/{A7AC1902-A57B-47BF-AAFF-6E37EC6270EE}.png)
 
+![alt text](images/{E15A043C-C91F-43DF-9F5D-B6D166739A0E}.png)
+
+![alt text](images/{BE988CF4-D7B5-4F11-9290-F05782B60793}.png)
+
 ## Building a vector store with ChromaDB and FAISS
 
 ![alt text](images/{10EB9AE1-C864-4FB9-90EA-63DD6B779F71}.png)
@@ -2732,6 +2775,8 @@ It is similart to, in a autonomous/Single Agent
 ![alt text](images/{322BC2F3-895C-42E7-8030-5A5F6946714C}.png)
 
 ## Building Reliability with LLM Retries, Backoff and Timeouts
+
+![alt text](images/{88D1D882-D4AD-4F64-8BA6-F5C66B24BD21}.png)
 
 ![alt text](images/{A03DF773-C6A7-44D7-A0C1-FE2A0377A406}.png)
 
@@ -3106,7 +3151,7 @@ So the workflow is converted into Graph in LangGraph.
 
 ![alt text](images/{3AFD8187-B7C4-45C4-BC58-2987DFFB6D8E}.png)
 
-## LangChain
+## 242. LangChain
 
 ![alt text](images/{7FFFF832-CD29-496B-BCA7-269B4C590DD9}.png)
 
@@ -3114,13 +3159,28 @@ So the workflow is converted into Graph in LangGraph.
 
 ![alt text](images/{C64061BB-A6D2-43D7-A270-3A9F06E49DE9}.png)
 
+## 242. Build and run LangChain App : ChatOllam vs ChatOpenAI
+
 ![alt text](images/{8476A2C8-3601-419E-9DA6-660C52FAA652}.png)
 
 ![alt text](images/{57F2161E-6C74-4754-91C8-8E1ABB901B9D}.png)
 
 ![alt text](images/{E84C900D-18B2-4567-9382-6A978C30CC00}.png)
 
-## Building Reusable Prompt Template with LangChain
+```
+import os
+from dotenv import load_dotenv
+from langchain_openai import ChatOpenAI
+
+load_dotenv()
+
+llm = ChatOpenAI(model = os.getenv('MODEL'),base_url=os.getenv('base_url'),api_key=os.getenv('api_key'))
+
+response = llm.invoke('How are you')
+print(response.content)
+```
+
+## 244. Building Reusable Prompt Template with LangChain
 
 ![alt text](images/{E72A374A-7200-4626-97FC-94EFC7140298}.png)
 
@@ -3130,11 +3190,188 @@ So the workflow is converted into Graph in LangGraph.
 
 ![alt text](images/{45690785-3916-44BA-8CD9-D319DA0B9C12}.png)
 
+```
+llm = ChatOpenAI(model = os.getenv('MODEL'),base_url=os.getenv('base_url'),api_key=os.getenv('api_key'))
+
+messages = [
+    SystemMessage("You are an AI Agent"), ## Dic - {role="system",content="..."}
+    HumanMessage("Hi, How are you")       ## Dic - {role="user",content="..."}
+]
+
+response = llm.invoke(messages):
+    print(response.content)
+
+# OR
+
+for response in llm.stream(messages):
+    print(response.content,end="",flush=True)
+```
+
 ![alt text](images/{4C523ACA-A500-4ED2-B78F-225FE1C56E44}.png)
 
-## AI Agent Deployment
+##### LCEL = LangChain Expression Language
 
-## From Python Program to Production Service
+## 245. Building AI Pipelines with LangChain Expression Language
+
+![alt text](images/{6D0F24E6-16DB-4E14-879E-43C5C4B22C6A}.png)
+
+![alt text](images/{CFADD359-392B-4CAF-A0F8-11679DA820CD}.png)
+
+![alt text](images/{856D2596-6D6D-42A4-B0C9-AE88F0A9F7A8}.png)
+
+![alt text](images/{C23C0292-4183-4DF3-B077-C63AFF34DF72}.png)
+
+![alt text](images/{E979E51F-0720-4993-A8E1-91313C03DEB3}.png)
+
+![alt text](images/{9E0B5866-5B66-4913-92E2-B569F0F4624B}.png)
+
+## 248. Building LangChain Tools and Understanding Tool Calling
+
+![alt text](images/{FD9E7F6C-9EDC-4FC4-B4DD-6ED65BCFFED0}.png)
+
+![alt text](images/{80D9BD2D-8AC6-40BE-8728-0A090949B727}.png)
+
+![alt text](images/{B2B0C196-3793-4868-AF97-B8763F985AD6}.png)
+
+![alt text](images/{355387B1-44C7-4827-9518-9DF0A0D7D2EE}.png)
+
+![alt text](images/{3F0356CF-F69B-4D5A-865B-D859A09FD50B}.png)
+
+![alt text](images/{78AC4494-4D28-4686-A28C-BD3A0DE970D2}.png)
+
+![alt text](images/{33410D8D-12B3-48F3-91BD-BB98AA643756}.png)
+
+![alt text](images/{2135A97F-D46B-492E-9122-DFFD1B389FC6}.png)
+
+![alt text](images/{1548C1A5-B50F-4B3D-B3A5-BB39A28C0BED}.png)
+
+## 250. Building a Real LangChain Agent with Tools
+
+![alt text](images/{A2682DAD-8B51-4B2A-BB44-B78C08D91855}.png)
+
+![alt text](images/{C4EBEBF2-711F-4531-A201-FDDA370E68F5}.png)
+
+![alt text](images/{C45FA3B6-C006-4AD6-B16E-BA1A76E3B731}.png)
+
+`agent.invoke` is an agent loop, so you need not to create an explicit agent_loop
+
+Array[-1] : Last item of the array, which contains the final answer, So mean first item from reverse
+
+![alt text](images/{51A20F15-AA27-4008-957F-4160C8981777}.png)
+
+![alt text](images/{6A955702-6903-40ED-B3A9-FEAD136A9D5C}.png)
+
+Type:
+
+- System
+- Human
+- Tool
+
+![alt text](images/{C2630479-5C1C-4AE8-BF16-A60F09A2FF69}.png)
+
+## 253. Building a LangChain Agent with MCP
+
+![alt text](images/{74101DFF-2E36-4F58-8800-B3D3D75239A9}.png)
+
+![alt text](images/{A042F1A4-EA20-43D0-BD4F-09A317C84FD5}.png)
+
+![alt text](images/{A01CCFCE-0E12-4A57-AD6A-84DEF84E2D60}.png)
+
+![alt text](images/{5E0C8F8C-B03D-4504-B3C6-69E8CD5AC881}.png)
+
+![alt text](images/{60B14261-2BEA-4272-AA30-063A5F6291C7}.png)
+
+![alt text](images/{F43EE587-09D5-4F45-8064-3E2D5585A454}.png)
+
+![alt text](images/{8BDE8F2B-E101-4CA2-BAA2-4AD013217228}.png)
+
+`ainvoke` as some functionality is far away as might take time, so asynchronous invoke.
+
+![alt text](images/{213CEA98-D72B-4B6D-B29B-0173D7E4E27D}.png)
+
+![alt text](images/{1902E5DD-67A8-4C60-B131-94A6467BA295}.png)
+
+## 254. Understanding RAG with LangChain
+
+![alt text](images/{FCDFE5FC-917B-480A-A1AF-8008AD4A7C43}.png)
+
+![alt text](images/{1A1813CB-C634-41F3-9608-BB6D743FAC1C}.png)
+
+![alt text](images/{1367CCD6-D068-434A-B7D7-5D362F9A0530}.png)
+
+![alt text](images/{8E1FE223-D133-4F9E-9BEC-475C6F89B947}.png)
+
+![alt text](images/{4406EE53-3DFA-4881-AF5B-EC00A76D2212}.png)
+
+![alt text](images/{336DCCD3-B430-42C7-AE52-74717DD15A66}.png)
+
+![alt text](images/{433CB885-3D15-4F87-8F0B-46C20480C842}.png)
+
+![alt text](images/{7CA63920-95E4-4C9F-A4C5-B35D98A59B03}.png)
+
+![alt text](images/{B2DFC223-7AFC-4DB5-A390-B42DB5930B15}.png)
+
+![alt text](images/{2CB23DF7-BB90-4049-A17B-ACB8350263D0}.png)
+
+![alt text](images/{853282CF-835C-4137-93D6-A20F06A56D77}.png)
+
+![alt text](images/{EB6AD65C-BC9F-40EF-9241-5249D88FE0F0}.png)
+
+## 255. Building a Complete RAG Chain with LangChain
+
+![alt text](images/{A0768325-7B8C-47C4-B45A-375099135671}.png)
+
+![alt text](images/{6628BEE5-3505-40B0-889E-3629FC796DF2}.png)
+
+![alt text](images/{58EAF655-A109-4141-B91F-3811FEB51CA2}.png)
+
+![alt text](images/{79C7778C-E097-48ED-8B35-4407198EDAB0}.png)
+
+![alt text](images/{66C56C07-AF22-4771-AF79-7C3B57064122}.png)
+
+![alt text](images/{CB484C14-8C61-424F-9B5C-02A1B135D3E3}.png)
+
+![alt text](images/{467E65AF-C07A-42D1-A9F1-2D295C7330C2}.png)
+
+## 257. Understanding Agent state and Memory in LangChain
+
+![alt text](images/{9DE9781D-17F2-4329-8919-0E24E947C449}.png)
+
+![alt text](images/{02C5C484-55EE-4A13-B3B8-C6D9CCD1B7A5}.png)
+
+![alt text](images/{DF061A2B-72C7-4038-84B6-A73645D0C560}.png)
+
+![alt text](images/{C45FE63A-245A-4A86-A3D7-E9F2A41138D1}.png)
+
+![alt text](images/{618C24D2-1798-437F-ACA0-744A5829F609}.png)
+
+![alt text](images/{38B004A1-9214-49CD-A367-41B9429B3019}.png)
+
+![alt text](images/{740C11DF-41C0-4D25-8CBF-666DA1179B3A}.png)
+
+![alt text](images/{F603EC39-373D-478D-A709-0FA2754D2C67}.png)
+
+![alt text](images/{63E285B0-7A53-49B1-A284-C53C70FEDC29}.png)
+
+## 259. Building the Final LangChain Agent integration MCP and RAG
+
+![alt text](images/{C9F6D628-9147-4553-8560-263901F151BC}.png)
+
+![alt text](images/{1BE9897D-CBE7-420E-986C-2F43F78B9E1F}.png)
+
+![alt text](images/{B2951990-3A8E-4E1E-9CB0-F4588AB69A17}.png)
+
+![alt text](images/{EB3E1D37-1584-4B4D-A3A0-5D75929E498D}.png)
+
+![alt text](images/{FCC8CD8E-93D9-4A33-B758-2CB622F617D7}.png)
+
+![alt text](images/{AF63C00C-EACF-484B-B64C-6864F085EF27}.png)
+
+![alt text](images/{7A256C67-4E78-4CAF-9CD1-73265D8CFB40}.png)
+
+# AI Agent Deployment
+
+## 261. From Python Program to Production Service
 
 ![alt text](images/{CDE72F56-C837-4F14-AAE1-327EC4109160}.png)
 
@@ -3226,10 +3463,295 @@ So the workflow is converted into Graph in LangGraph.
 
 ![alt text](images/{9E32AE47-B3DE-4706-9E4A-1BB3C7772B5A}.png)
 
+## 267. Liveness and Readiness in AI Service
+
+![alt text](images/{CC9C87CB-53D1-4B93-9363-50536A572F3B}.png)
+
+![alt text](images/{026BD04E-0D31-440C-B743-76A786EB4D89}.png)
+
+## 268. Building lifecycle management in FASTAPI
+
+![alt text](images/{E8A765B1-5DAD-42EE-AEC5-79A6C03AD0C2}.png)
+
+![alt text](images/{76934176-35F9-4B2F-AFB2-B06DABAD7C80}.png)
+
+![alt text](images/{519C68EE-CD24-4CAC-B94C-C680AEB331BE}.png)
+
+![alt text](images/{FBB4976D-36EE-491A-A20F-B18B65EB7358}.png)
+
+![alt text](images/{55BB14E2-E60F-481A-8F38-E33F67C9C9C0}.png)
+
+![alt text](images/{29FAD6A5-3144-4A99-989C-FFD172B7BEF4}.png)
+
+## 269. Dockerizing our AI Agent
+
+![alt text](images/{1F463D72-1898-4B99-A932-D95A28733D95}.png)
+
+![alt text](images/{F68DA1B0-07EC-4F67-938E-958893017A58}.png)
+
+![alt text](images/{64FD4067-64F1-4965-B430-6B56750D6417}.png)
+
 ```
+FROM python:3.12-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+EXPOSE 8000
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
 
 ```
 
+![alt text](images/{9CC39F0E-5518-498C-9551-70CAA1E0CA1F}.png)
+
+![alt text](images/{0D00E4DE-561B-42D4-ACB2-027A92C023F5}.png)
+
+![alt text](images/{1AE5316E-918B-46DC-90CA-2718D0432D7C}.png)
+
+![alt text](images/{A1518D0E-4B80-4719-9111-7878616CF5A8}.png)
+
+![alt text](images/slfjslfjsjfjs6387327427462378562756.png)
+
+![alt text](images/sjfioruwoij78782792489665445453343434343.png)
+
+![alt text](images/wuroiwffhuif63757690998878768766767.png)
+
+## Build a multi-service AI Agent environment
+
+![alt text](images/{4C903B6F-3758-44D1-B48D-5040F9E06654}.png)
+
+![alt text](images/oriyjg673647348783473846565543098.png)
+
+![alt text](images/oriyjg67364734878347384656554309865.png)
+
+![alt text](images/sfsfyuwiyih5637948298846726264.png)
+
+- docker compose up -d
+- docker compose ps
+- docker compose down
+
+## 273. Building Reliability with Timeouts and Retries for AI Agents
+
+![alt text](images/sfjslfjslfj4732647264254.png)
+
+```
+        # Run the loop with state(user_request , tools)
+        state = await asyncio.wait_for(
+            run_agent_loop(
+                user_request,
+                planner,
+                execute_action,
+                format_answer,
+                tools,
+                tool_registry,
+                clients
+            ),
+            timeout=30
+        )
 ```
 
 ```
+    except asyncio.TimeoutError as exec:
+        print(f"Agent execution failed: {exec}")
+
+        raise HTTPException(
+            status_code=504,
+            detail="Agent request timed out."
+        )
+
+```
+
+![alt text](images/{46940F2D-087C-42B9-8293-8B0BD72CFA90}.png)
+
+![alt text](images/{9262D4D8-CF41-469B-AF5D-350D49801E7E}.png)
+
+## Building Rate Limiting for AI Agent APIs
+
+![alt text](images/ratelimiting.png)
+
+`Rate Limiting` How many request you can send in a definite time window
+
+![alt text](images/{CAE244F7-CBA4-4AB2-914E-53E37D12F363}.png)
+
+![alt text](images/sflsjf676.png)
+
+## LangChain and LangGraph
+
+```
+
+from typing import TypedDict
+from langchain.agents import create_agent
+from langchain_openai import ChatOpenAI
+from langgraph.graph import StateGraph, START, END
+
+model = ChatOpenAI(model="gpt-4.1")
+
+# Define agents
+researcher = create_agent(
+    model,
+    tools=[],
+    system_prompt="You are a technical researcher."
+)
+
+coder = create_agent(
+    model,
+    tools=[],
+    system_prompt="You are an expert software developer."
+)
+
+reviewer = create_agent(
+    model,
+    tools=[],
+    system_prompt="Review code for bugs, security and quality. "
+                  "Return APPROVED or REJECTED with feedback."
+)
+
+# Shared workflow state
+class State(TypedDict):
+    task: str
+    research: str
+    code: str
+    review: str
+    approved: bool
+
+def run_agent(agent, task):
+    result = agent.invoke({
+        "messages": [{"role": "user", "content": task}]
+    })
+    return result["messages"][-1].content
+
+def research(state):
+    result = run_agent(researcher, state["task"])
+    return {"research": result}
+
+def code(state):
+    result = run_agent(
+        coder,
+        f"Task: {state['task']}\nResearch: {state['research']}"
+    )
+    return {"code": result}
+
+def review(state):
+    result = run_agent(
+        reviewer,
+        f"Review this code:\n{state['code']}"
+    )
+    return {
+        "review": result,
+        "approved": "APPROVED" in result.upper()
+    }
+
+def route_review(state):
+    return "finish" if state["approved"] else "code"
+
+# Build graph
+builder = StateGraph(State)
+
+builder.add_node("research", research)
+builder.add_node("code", code)
+builder.add_node("review", review)
+
+builder.add_edge(START, "research")
+builder.add_edge("research", "code")
+builder.add_edge("code", "review")
+
+builder.add_conditional_edges(
+    "review",
+    route_review,
+    {
+        "code": "code",
+        "finish": END
+    }
+)
+
+app = builder.compile()
+
+result = app.invoke({
+    "task": "Build a REST API for user authentication",
+    "research": "",
+    "code": "",
+    "review": "",
+    "approved": False
+})
+
+print(result["code"])
+print(result["review"])
+
+```
+
+## With Gradio
+
+```
+
+import gradio as gr
+
+# Your existing LangGraph workflow
+# app = builder.compile()
+
+def run_workflow(user_task):
+    result = app.invoke({
+        "task": user_task,
+        "research": "",
+        "code": "",
+        "review": "",
+        "approved": False
+    })
+
+    return (
+        result["research"],
+        result["code"],
+        result["review"]
+    )
+
+with gr.Blocks(title="Multi-Agent AI System") as demo:
+
+    gr.Markdown("# Multi-Agent AI Assistant")
+    gr.Markdown(
+        "Researcher → Coder → Reviewer"
+    )
+
+    user_input = gr.Textbox(
+        label="Enter your task",
+        placeholder="Build a REST API..."
+    )
+
+    submit = gr.Button("Run Agents")
+
+    research_output = gr.Textbox(
+        label="Researcher Output",
+        lines=8
+    )
+
+    code_output = gr.Code(
+        label="Coder Output",
+        language="python"
+    )
+
+    review_output = gr.Textbox(
+        label="Reviewer Output",
+        lines=8
+    )
+
+    submit.click(
+        fn=run_workflow,
+        inputs=user_input,
+        outputs=[
+            research_output,
+            code_output,
+            review_output
+        ]
+    )
+
+demo.launch()
+
+```
+
+![alt text](images/{BF53182C-4572-401D-8F27-36C70E875465}.png)
+
+![alt text](images/{B5FA1BA6-87CF-4F6B-ADBC-C02AF80882D6}.png)
